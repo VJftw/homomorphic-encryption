@@ -9,4 +9,7 @@ import {APP_DIRECTIVES} from "../../directives";
 })
 export class ComputationIndex {
 
+  protected schemes = [
+    'Pailler'
+  ];
 }
