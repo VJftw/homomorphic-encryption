@@ -7,6 +7,7 @@ from threading import Thread
 from HomomorphicEncryptionBackend.Model.Stage import Stage
 from HomomorphicEncryptionBackend.Model.Step import Step
 from HomomorphicEncryptionBackend.Model.Computation import Computation
+import time
 import datetime
 
 
@@ -42,7 +43,7 @@ class ComputationThread(Thread):
         step = Step()
         step.set_timestamp(datetime.datetime.now())
 
-        step.set_action("{0} x {1} mod {2}".format(
+        step.set_action("Calculate \\(aX \\cdot bX \\bmod n^2 \\) to get \\(cX\\)".format(
             self.__computation.get_a_encrypted(),
             self.__computation.get_b_encrypted(),
             self.__computation.get_public_key().get_n_sq()
@@ -58,6 +59,8 @@ class ComputationThread(Thread):
         stage.add_step(step)
         self.__computation.add_stage(stage)
         self.__computation.set_state(Computation.STATE_COMPLETE)
+
+        time.sleep(4)
 
         self.__socket_manager.send_message(self.__computation)
 
