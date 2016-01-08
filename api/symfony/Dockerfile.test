@@ -1,0 +1,25 @@
+FROM alpine:3.2
+
+# Add testing repo
+RUN echo "@testing http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
+
+# Install PHP
+RUN apk add --update php php-intl php-pdo_mysql php-json php-phar php-ctype php-openssl php-dom phpredis@testing openssl curl git && rm -rf /var/cache/apk
+
+RUN sed -i 's#.*date.timezone=.*#date.timezone=Europe/London#g' /etc/php/php.ini
+
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
+
+RUN mkdir -p /app
+WORKDIR /app
+
+COPY . /app
+
+# Clean up
+RUN rm -rf app/cache app/logs/* vendor bin app/bootstrap.php.cache app/config/parameters.yml
+
+# Install composer
+RUN composer --dev --ansi --no-interaction --prefer-dist -v install
+
+

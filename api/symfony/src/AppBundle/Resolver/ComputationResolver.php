@@ -1,0 +1,50 @@
+<?php
+
+namespace AppBundle\Resolver;
+
+
+use AppBundle\Entity\Computation;
+use AppBundle\Provider\ComputationProvider;
+
+/**
+ * Class ComputationResolver
+ * @package AppBundle\Resolver
+ */
+class ComputationResolver
+{
+
+    /**
+     * @var ComputationProvider
+     */
+    private $computationProvider;
+
+    /**
+     * @param ComputationProvider $computationProvider
+     */
+    public function __construct(ComputationProvider $computationProvider)
+    {
+        $this->computationProvider = $computationProvider;
+    }
+
+    /**
+     * @param array $arr
+     * @param $ipAddress
+     *
+     * @return Computation
+     */
+    public function fromArrayAndIpAddress(array $arr, $ipAddress)
+    {
+        $computation = $this->computationProvider->createComputation();
+
+        $computation
+            ->setScheme($arr['scheme'])
+            ->setAEncrypted($arr['aEncrypted'])
+            ->setBEncrypted($arr['bEncrypted'])
+            ->setPublicKey($arr['publicKey'])
+            ->setStages($arr['stages'])
+            ->setIpAddress($ipAddress)
+        ;
+
+        return $computation;
+    }
+}

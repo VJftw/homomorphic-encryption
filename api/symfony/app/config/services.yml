@@ -1,0 +1,49 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/book/service_container.html
+parameters:
+#    parameter_name: value
+
+services:
+
+  redis_service:
+    class: AppBundle\Service\RedisService
+    arguments:
+      - @snc_redis.default
+      - @jms_serializer
+
+  hashid:
+    class: Hashids\Hashids
+    arguments:
+     - %secret%
+
+  app_computations.provider:
+    class: AppBundle\Provider\ComputationProvider
+    arguments:
+      - @doctrine.orm.default_entity_manager
+
+  app_computations.resolver:
+    class: AppBundle\Resolver\ComputationResolver
+    arguments:
+      - @app_computations.provider
+
+  app_computations.finisher:
+    class: AppBundle\Finisher\ComputationFinisher
+    arguments:
+     - @hashid
+     - @security.secure_random
+
+  app_computations.manager:
+    class: AppBundle\Manager\ComputationManager
+    arguments:
+      - @doctrine.orm.default_entity_manager
+      - @redis_service
+
+  app_computations.controller:
+    class: AppBundle\Controller\ComputationsController
+    arguments:
+      - @validator
+      - @app_computations.resolver
+      - @app_computations.finisher
+      - @app_computations.manager
+      - @request_stack
+

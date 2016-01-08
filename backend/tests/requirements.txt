@@ -1,0 +1,7 @@
+nose
+mock
+rednose
+coverage
+behave
+requests
+pylint
