@@ -23,6 +23,10 @@ export class EncryptionSchemeProvider {
       }
     }, this.schemes);
 
+    if (r == null) {
+      throw new URIError("Encryption Scheme not found.");
+    }
+
     return r;
   }
 }

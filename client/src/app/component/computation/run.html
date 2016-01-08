@@ -1,0 +1,72 @@
+<div class="computation-run">
+    <div class="col-md-10 col-md-offset-1">
+        <div class="panel panel-default animated fadeIn">
+            <div class="panel-heading">{{ encryptionScheme.getName() }} Cryptosystem</div>
+            <div class="panel-body">
+                <form
+                        [ngFormModel]="computationForm"
+                        (submit)="computationForm.valid && submit($event)"
+                        class="form-horizontal"
+                        novalidate
+                >
+                    <div class="row animated fadeIn" *ngIf="encryptionScheme != null">
+                        <div class="col-md-12">
+                            <h4>Enter a sum</h4>
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <div class="input-group col-xs-12">
+                                        <input
+                                                ngControl="a"
+                                                [(ngModel)]="computationModel.a"
+                                                type="number"
+                                                placeholder="3"
+                                                class="text-center col-xs-12 col-sm-5"
+                                                autofocus
+                                                [disabled]="formSubmitted"
+                                        >
+                                        <div class="col-xs-12 col-sm-2 text-center">
+                                            <select class="form-control" [disabled]="formSubmitted" [(ngModel)]="computationModel.operation">
+                                                <option *ngIf="encryptionScheme != null" *ngFor="#operator of capabilities" [value]="operator">
+                                                    {{operator}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <input
+                                                ngControl="b"
+                                                [(ngModel)]="computationModel.b"
+                                                type="number"
+                                                placeholder="5"
+                                                class="text-center col-xs-12 col-sm-5"
+                                                [disabled]="formSubmitted"
+                                        >
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn btn-primary" [disabled]="!computationForm.valid || formSubmitted">
+                                        <span>Execute</span>
+                                    </button>
+                                </div>
+                                <div class="col-md-8">
+                                    <span *ngIf="computationModel.getState() == 2">Result: </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="encryptionScheme && computationModel" class="col-md-10 col-md-offset-1">
+        <div *ngFor="#stage of computationModel.getStages()">
+            <div class="panel panel-default animated fadeIn">
+                <div class="panel-heading">{{ stage.getName() }}</div>
+                <div class="panel-body">
+                    <div *ngFor="#step of stage.getSteps(); #i = index">
+                        <div class="animated fadeInUp" *mathjax>{{ step.action }} <span *ngIf="step.result"> = {{ step.result }}</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

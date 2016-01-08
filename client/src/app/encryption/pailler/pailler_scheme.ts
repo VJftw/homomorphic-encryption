@@ -137,7 +137,7 @@ export class PaillerScheme implements EncryptionScheme {
     );
     this.computation.setAEncrypted(aEncrypted);
     this.computation.getStageByName(stageName).addStep(this.stepProvider.create(
-      "Encrypt A by calculating \\((g^a \\bmod n^2 \\cdot aR^n \\bmod n^2) \\bmod n^2\\)",
+      "Encrypt A by calculating \\((g^a \\bmod n^2 \\cdot aR^n \\bmod n^2) \\bmod n^2\\) to get \\(aX\\)",
       aEncrypted
     ));
 
@@ -153,7 +153,7 @@ export class PaillerScheme implements EncryptionScheme {
     );
     this.computation.setBEncrypted(bEncrypted);
     this.computation.getStageByName(stageName).addStep(this.stepProvider.create(
-      "Encrypt B by calculating \\((g^b \\bmod n^2 \\cdot bR^n \\bmod n^2) \\bmod n^2\\)",
+      "Encrypt B by calculating \\((g^b \\bmod n^2 \\cdot bR^n \\bmod n^2) \\bmod n^2\\) to get \\(bX\\)",
       bEncrypted
     ));
 
@@ -200,20 +200,36 @@ export class PaillerScheme implements EncryptionScheme {
 
       if (this.computation.isComplete()) {
         this.socket.close();
-        
-        //let lastStep = this.computationModel.getSteps()[
-        //  this.computationModel.getSteps().length - 1
-        //];
 
-        //let c = this.pailler.decrypt(
-        //  this.computationModel.getPrivateKey(),
-        //  this.computationModel.getPublicKey(),
-        //  lastStep.getResult()
-        //);
-        console.log(this.computation.toJson());
-
-        //console.log(c.toString());
+        this.decrypt();
       }
     });
+  }
+
+  private decrypt() {
+    let stageName = "Decryption";
+    this.computation.addStage(
+      this.stageProvider.create(stageName)
+    );
+
+    let lastStage = this.computation.getStages()[
+      this.computation.getStages().length - 2
+    ];
+    let lastStep = lastStage.getSteps()[
+      lastStage.getSteps().length - 1
+    ];
+
+    let e: BigInteger = lastStep.getResult();
+    let privateKey = this.computation.getPrivateKey();
+    let publicKey = this.computation.getPublicKey();
+
+    let x: BigInteger = e.modPow(privateKey.getL(), publicKey.getNSq()).subtract(new BigInteger("1"));
+    let m: BigInteger = x.divide(publicKey.getN());
+
+    let c = m.multiply(privateKey.getM()).mod(publicKey.getN());
+    this.computation.getStageByName(stageName).addStep(this.stepProvider.create(
+      "Calculate \\((\\frac{c^lmod(n^2) - 1}{n})\\cdot cX \\bmod n \\) to get \\(c\\)",
+      c
+    ));
   }
 }

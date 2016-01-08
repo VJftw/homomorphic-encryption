@@ -13,7 +13,6 @@
     "src/bootstrap.ts",
     "src/polyfills.ts",
     "src/app/directives.ts",
-    "src/app/component/computation/add.ts",
     "src/app/component/index/index.ts",
     "src/app/directive/mathjax.ts",
     "src/app/encryption/pailler/pailler.ts",
@@ -24,7 +23,9 @@
     "src/app/resolver/step_resolver.ts",
     "src/app/resolver/stage_resolver.ts",
 
-    "src/app/component/computation/add.ts",
+    "src/app/component/computation/index.ts",
+    "src/app/component/computation/run.ts",
+    "src/app/component/computation/computation.ts",
     "src/app/encryption/encryption_scheme.ts",
     "src/app/encryption/pailler/pailler_scheme.ts",
     "src/app/provider/step_provider.ts",

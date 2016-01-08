@@ -6,7 +6,7 @@ import {RouteConfig} from "angular2/router";
 
 
 import {APP_DIRECTIVES} from "./directives";
-import {ComputationAdd} from "./component/computation/add";
+import {ComputationComponent} from "./component/computation/computation";
 
 
 /*
@@ -30,7 +30,7 @@ let template = require("./app.html");
 })
 @RouteConfig([
   { as: "Home", component: Index, path: "/" },
-  { as: "Add", component: ComputationAdd, path: "/add" },
+  { as: "Computation", component: ComputationComponent, path: "/computation/..." },
 ])
 export class App {
   public title: string = "An Implementation of Homomorphic Encryption";

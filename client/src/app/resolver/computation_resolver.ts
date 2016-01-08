@@ -25,7 +25,7 @@ export class ComputationResolver {
       .setState(jsonArr.state)
     ;
 
-    jsonArr.stages.forEach(stageJson => {
+    jsonArr.stages.slice(computation.getStages().length).forEach(stageJson => {
       let stage = this.stageResolver.fromJson(stageJson);
       computation.addStage(stage);
     });

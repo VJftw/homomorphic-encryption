@@ -22,8 +22,9 @@ describe("EncryptionSchemeProvider", () => {
       .toBe(paillerScheme)
     ;
 
-    expect(encryptionSchemeProvider.getEncryptionSchemeByName("abcd"))
-      .toBeNull()
+    expect(() => {
+      encryptionSchemeProvider.getEncryptionSchemeByName("abcd")
+    }).toThrowError()
     ;
   });
 
