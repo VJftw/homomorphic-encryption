@@ -9,5 +9,5 @@ before_install:
  - gem install rake
 
 script:
+ - ruby --version
  - bundle exec rake test
- 
