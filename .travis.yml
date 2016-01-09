@@ -11,6 +11,9 @@ before_install:
 script:
  - ruby --version
  - cd backend && rake test
+ - cd ..
  - cd api && rake test
+ - cd ..
  - cd client && rake test
+ - cd ..
  
