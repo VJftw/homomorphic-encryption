@@ -12,9 +12,10 @@ end
 desc 'Build and run tests'
 task :test do
   github_token = get_github_token
-  test_container = build_container("#{Dir.getwd}/Dockerfile.test --build-arg github_token=#{github_token}", "#{Dir.getwd}", 'homomorphic-encryption:api-test')
+  test_container = build_container("#{Dir.getwd}/Dockerfile.test --build-arg github_token=#{github_token}", "#{Dir.getwd}")
 
-
+  phpspec = 'bin/phpspec run -f pretty'
+  system_command("docker run -t #{test_container} #{phpspec}")
 end
 
 
