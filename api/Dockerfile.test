@@ -1,10 +1,21 @@
-FROM sillelien/base-alpine:0.10
+FROM vjftw/ubuntu:latest
 
 ARG github_token
 
-RUN echo 'http://dl-4.alpinelinux.org/alpine/edge/testing' >> /etc/apk/repositories
-RUN apk add --update nginx php-cli php-phar php-dom php-json php-intl php-pdo_mysql php-opcache php-curl php-bcmath php-openssl php-ctype php-posix php-xdebug openssl curl ca-certificates && update-ca-certificates
-RUN sed -i 's#.*date.timezone=.*#date.timezone=Europe/London#g' /etc/php/php.ini
+RUN apt-add-repository ppa:ondrej/php5-5.6 -y
+RUN apt-add-repository ppa:git-core/ppa -y
+RUN apt-get update && apt-get install -y \
+    git \
+    php5-cli \
+    php5-curl \
+    php5-intl \
+    php5-json \
+    php5-mysql \
+    php5-redis \
+    php5-xdebug
+
+# Configure PHP and PHP-FPM
+RUN sed -i 's#.*date.timezone=.*#date.timezone=Europe/London#g' /etc/php5/cli/php.ini
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
@@ -46,15 +57,4 @@ RUN chmod -R 777 /app/app/cache && chmod -R 777 /app/app/logs && rm -rf /app/app
 # Temp hack to fix Symfony environment parameters
 RUN rm app/config/parameters.yml && mv app/config/config.yml app/config/config.yml.bak && sed '/- { resource: parameters.yml }/d' app/config/config.yml.bak > app/config/config.yml
 
-# Copy NGINX configuration
-COPY nginx.conf /var/nginx.conf
-
-EXPOSE 80
-
-# Copy NGINX service script
-COPY start_nginx.sh /etc/services.d/nginx/run
-RUN chmod 755 /etc/services.d/nginx/run
-
-# Copy PHP-FPM service script
-COPY start_fpm.sh /etc/services.d/php_fpm/run
-RUN chmod 755 /etc/services.d/php_fpm/run
+EXPOSE 8000
