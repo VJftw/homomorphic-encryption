@@ -228,7 +228,7 @@ export class PaillerScheme implements EncryptionScheme {
 
     let c = m.multiply(privateKey.getM()).mod(publicKey.getN());
     this.computation.getStageByName(stageName).addStep(this.stepProvider.create(
-      "Calculate \\((\\frac{c^lmod(n^2) - 1}{n})\\cdot cX \\bmod n \\) to get \\(c\\)",
+      "Calculate \\((\\frac{cX^lmod(n^2) - 1}{n})\\cdot cX \\bmod n \\) to get \\(c\\)",
       c
     ));
   }
