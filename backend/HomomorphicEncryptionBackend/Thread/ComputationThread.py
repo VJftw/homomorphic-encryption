@@ -60,8 +60,6 @@ class ComputationThread(Thread):
         self.__computation.add_stage(stage)
         self.__computation.set_state(Computation.STATE_COMPLETE)
 
-        time.sleep(4)
-
         self.__socket_manager.send_message(self.__computation)
 
         self.__logger.debug("Thread stopped")
