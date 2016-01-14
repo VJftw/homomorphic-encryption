@@ -20,12 +20,13 @@ class ComputationThreadProvider:
         self.__log_manager = log_manager
         pass
 
-    def create(self, computation):
+    def create(self, computation, encryption):
         logger = self.__log_manager.get_logger("{0}-computation".format(computation.get_hash_id()))
         socket_manager = SocketManager(logger)
 
         return ComputationThread(
             computation,
+            encryption,
             logger,
             socket_manager
         )

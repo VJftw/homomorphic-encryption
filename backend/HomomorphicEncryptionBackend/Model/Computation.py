@@ -52,6 +52,8 @@ class Computation:
         """
         self.__scheme = scheme
 
+        return self
+
     def get_scheme(self):
         """
         Returns the scheme
