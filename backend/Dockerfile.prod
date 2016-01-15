@@ -1,20 +1,20 @@
-FROM sillelien/base-alpine:0.10
+FROM vjftw/ubuntu
 
-# Install Python3, pip and openssl
-RUN apk add --update python3 python3-dev wget openssl && rm -rf /var/apk/cache
+# Install pip
+RUN curl -O https://bootstrap.pypa.io/get-pip.py
+RUN python3 get-pip.py
 
-RUN wget https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py && rm get-pip.py
+# Install app deps
+COPY requirements.txt /tmp/requirements.txt
+RUN pip3 install -r /tmp/requirements.txt
 
-RUN mkdir -p /app
-WORKDIR /app
-
-COPY . /app
-
-RUN rm -rf .idea venv tests
-
-RUN pip install -r requirements.txt
-
-EXPOSE 9000
+RUN rm /tmp/requirements.txt
 
 COPY start_backend.sh /etc/services.d/fhe_backend/run
 RUN chmod 755 /etc/services.d/fhe_backend/run
+
+COPY . /app
+RUN rm -rf .idea venv tests
+
+VOLUME /app
+EXPOSE 9000
