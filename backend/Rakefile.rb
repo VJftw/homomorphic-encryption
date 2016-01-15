@@ -19,7 +19,7 @@ task :test do
   # exec tests
   puts 'Running tests'
   nosetests = 'nosetests --rednose --force-color --with-coverage --all-modules --cover-package=HomomorphicEncryptionBackend tests/ -v'
-  test_command = "docker exec -t #{container_id} #{nosetests}"
+  test_command = "docker exec -u app -t #{container_id} #{nosetests}"
 
   system_command(test_command)
   
