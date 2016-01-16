@@ -17,6 +17,7 @@ class Computation:
     def __init__(self):
         self.__hash_id = None
         self.__scheme = None
+        self.__operator = None
 
         self.__a_encrypted = None
         self.__b_encrypted = None
@@ -60,6 +61,23 @@ class Computation:
         :return str:
         """
         return self.__scheme
+
+    def get_operator(self):
+        """
+        Returns the operator
+        :return str:
+        """
+        return self.__operator
+
+    def set_operator(self, operator):
+        """
+        Sets the operator
+        :param str operator:
+        :return self:
+        """
+        self.__operator = operator
+
+        return self
 
     def set_a_encrypted(self, x_encrypted):
         """

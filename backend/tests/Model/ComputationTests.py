@@ -67,6 +67,31 @@ class ComputationTests(unittest.TestCase):
             "pailler"
         )
 
+    def test_get_operator(self):
+        """
+        Computation.get_operator - it should return the operator
+        :return:
+        """
+        self.assertEqual(
+            self.computation.get_operator(),
+            None
+        )
+
+    def test_set_operator(self):
+        """
+        Computation.set_operator - it should set the operator
+        :return:
+        """
+        self.assertEqual(
+            self.computation.set_operator('-'),
+            self.computation
+        )
+
+        self.assertEqual(
+            self.computation.get_operator(),
+            '-'
+        )
+
     def test_get_a_encrypted(self):
         """
         Computation.get_a_encrypted - it should return the encrypted value of a
