@@ -40,7 +40,7 @@ class ComputationResolverTests(unittest.TestCase):
         d = {
             'hashId': "abcdefg",
             'scheme': "Pailler",
-            'operator': "+",
+            'operation': "+",
             'aEncrypted': "123123123",
             'bEncrypted': "456456456",
             'publicKey': {

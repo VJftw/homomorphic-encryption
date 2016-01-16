@@ -39,7 +39,7 @@ class ComputationResolver:
 
         c.set_hash_id(computation_dict['hashId'])
         c.set_scheme(computation_dict['scheme'])
-        c.set_operation(computation_dict['operator'])
+        c.set_operation(computation_dict['operation'])
         c.set_a_encrypted(int(computation_dict['aEncrypted']))
         c.set_b_encrypted(int(computation_dict['bEncrypted']))
 
