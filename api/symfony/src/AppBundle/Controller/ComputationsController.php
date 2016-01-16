@@ -74,6 +74,11 @@ class ComputationsController
      *     allowBlank=false
      * )
      * @FOS\RequestParam(
+     *     name="operation",
+     *     strict=true,
+     *     allowBlank=false
+     * )
+     * @FOS\RequestParam(
      *     name="aEncrypted",
      *     requirements="\d+",
      *     strict=true,

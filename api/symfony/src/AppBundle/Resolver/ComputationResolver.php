@@ -38,6 +38,7 @@ class ComputationResolver
 
         $computation
             ->setScheme($arr['scheme'])
+            ->setOperation($arr['operation'])
             ->setAEncrypted($arr['aEncrypted'])
             ->setBEncrypted($arr['bEncrypted'])
             ->setPublicKey($arr['publicKey'])

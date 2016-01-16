@@ -41,6 +41,13 @@ class Computation
     private $scheme;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="operation", type="string", length=1)
+     */
+    private $operation;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="a_encrypted", type="text")
@@ -130,6 +137,26 @@ class Computation
     public function getScheme()
     {
         return $this->scheme;
+    }
+
+    /**
+     * @param $operation
+     *
+     * @return $this
+     */
+    public function setOperation($operation)
+    {
+        $this->operation = $operation;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOperation()
+    {
+        return $this->operation;
     }
 
     /**

@@ -39,6 +39,10 @@ class ComputationResolverSpec extends ObjectBehavior
             ->shouldBeCalled()
             ->willReturn($computation)
         ;
+        $computation->setOperation("+")
+            ->shouldBeCalled()
+            ->willReturn($computation)
+        ;
         $computation->setAEncrypted("123123")
             ->shouldBeCalled()
             ->willReturn($computation)
@@ -71,6 +75,7 @@ class ComputationResolverSpec extends ObjectBehavior
 
         $jsonObj = [
             "scheme" => "PAILLER",
+            "operation" => "+",
             "aEncrypted" => "123123",
             "bEncrypted" => "143454",
             "publicKey" => [
