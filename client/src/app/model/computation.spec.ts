@@ -260,6 +260,7 @@ describe("Computation", () => {
 
   it("should format to JSON", () => {
     computation.setScheme("Pailler");
+    computation.setOperation("+");
     let aEncrypted = new BigInteger("4");
     computation.setAEncrypted(aEncrypted);
     let bEncrypted = new BigInteger("7");
@@ -279,6 +280,7 @@ describe("Computation", () => {
     expect(computation.toJson())
       .toEqual({
         "scheme": "Pailler",
+        "operation": "+",
         "aEncrypted": "4",
         "bEncrypted": "7",
         "publicKey": {},

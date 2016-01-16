@@ -168,6 +168,7 @@ export class Computation {
     });
     return {
       "scheme": this.getScheme(),
+      "operation": this.getOperation(),
       "aEncrypted": this.getAEncrypted().toString(),
       "bEncrypted": this.getBEncrypted().toString(),
       "publicKey": this.getPublicKey().toJson(),

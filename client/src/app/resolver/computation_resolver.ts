@@ -20,6 +20,7 @@ export class ComputationResolver {
     }
     computation
       .setScheme(jsonArr.scheme)
+      .setOperation(jsonArr.operation)
       .setAEncrypted(new BigInteger(jsonArr.aEncrypted))
       .setBEncrypted(new BigInteger(jsonArr.bEncrypted))
       .setState(jsonArr.state)
