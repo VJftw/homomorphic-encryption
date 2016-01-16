@@ -67,28 +67,28 @@ class ComputationTests(unittest.TestCase):
             "pailler"
         )
 
-    def test_get_operator(self):
+    def test_get_operation(self):
         """
-        Computation.get_operator - it should return the operator
+        Computation.get_operation - it should return the operation
         :return:
         """
         self.assertEqual(
-            self.computation.get_operator(),
+            self.computation.get_operation(),
             None
         )
 
-    def test_set_operator(self):
+    def test_set_operation(self):
         """
-        Computation.set_operator - it should set the operator
+        Computation.set_operation - it should set the operation
         :return:
         """
         self.assertEqual(
-            self.computation.set_operator('-'),
+            self.computation.set_operation('-'),
             self.computation
         )
 
         self.assertEqual(
-            self.computation.get_operator(),
+            self.computation.get_operation(),
             '-'
         )
 
@@ -246,6 +246,7 @@ class ComputationTests(unittest.TestCase):
         j = {
             'hashId': "abcdef",
             'scheme': "pailler",
+            'operation': "+",
             'aEncrypted': "34",
             'bEncrypted': "45",
             'publicKey': public_key,
@@ -255,6 +256,7 @@ class ComputationTests(unittest.TestCase):
         }
         self.computation.set_hash_id("abcdef")
         self.computation.set_scheme("pailler")
+        self.computation.set_operation("+")
         self.computation.set_a_encrypted(34)
         self.computation.set_b_encrypted(45)
         self.computation.set_public_key(public_key)

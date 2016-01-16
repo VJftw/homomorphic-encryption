@@ -64,7 +64,7 @@ class ComputationResolverTests(unittest.TestCase):
         )
 
         self.assertEqual(
-            computation.get_operator(),
+            computation.get_operation(),
             "+"
         )
 

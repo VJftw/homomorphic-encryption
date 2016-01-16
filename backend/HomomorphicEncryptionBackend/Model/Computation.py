@@ -17,7 +17,7 @@ class Computation:
     def __init__(self):
         self.__hash_id = None
         self.__scheme = None
-        self.__operator = None
+        self.__operation = None
 
         self.__a_encrypted = None
         self.__b_encrypted = None
@@ -62,20 +62,20 @@ class Computation:
         """
         return self.__scheme
 
-    def get_operator(self):
+    def get_operation(self):
         """
-        Returns the operator
+        Returns the operation
         :return str:
         """
-        return self.__operator
+        return self.__operation
 
-    def set_operator(self, operator):
+    def set_operation(self, operation):
         """
-        Sets the operator
-        :param str operator:
+        Sets the operation
+        :param str operation:
         :return self:
         """
-        self.__operator = operator
+        self.__operation = operation
 
         return self
 
@@ -189,6 +189,7 @@ class Computation:
         return {
             'hashId': self.get_hash_id(),
             'scheme': self.get_scheme(),
+            'operation': self.get_operation(),
             'aEncrypted': "{0}".format(self.get_a_encrypted()),
             'bEncrypted': "{0}".format(self.get_b_encrypted()),
             'publicKey': self.get_public_key(),
