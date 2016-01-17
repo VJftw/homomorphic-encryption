@@ -43,10 +43,8 @@ class ComputationController:
         :return:
         """
         computation = self.__computation_provider.get_computation_by_hash(data['hashId'])
-        encryption = self.__encryption_provider.get_encryption_provider_by_name(computation.get_scheme())
+        encryption = self.__encryption_provider.get_encryption_by_name(computation.get_scheme())
 
         computation_thread = self.__computation_thread_provider.create(computation, encryption)
         computation_thread.get_socket_manager().add_socket(socket)
         computation_thread.start()
-
-        pass

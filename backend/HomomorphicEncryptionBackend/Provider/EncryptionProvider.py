@@ -18,8 +18,7 @@ class EncryptionProvider:
         self.__pailler_encryption = pailler_encryption
         pass
 
-
-    def get_encryption_provider_by_name(self, name):
+    def get_encryption_by_name(self, name):
         if name == "Pailler":
             return self.__pailler_encryption
         pass
