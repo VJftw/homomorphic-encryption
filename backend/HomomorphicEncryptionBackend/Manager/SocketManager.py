@@ -29,7 +29,7 @@ class SocketManager:
         try:
             message = json.dumps(message, sort_keys=False, cls=JsonEncoder)
         except Exception as exc:
-            self.__logger.critical("JSON ERROR: {0} in {1}".format(exc.message, message))
+            self.__logger.critical("JSON ERROR: {0} in {1}".format(exc, message))
             raise exc
 
         self.__emit_message(message)

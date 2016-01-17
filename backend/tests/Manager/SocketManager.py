@@ -69,4 +69,33 @@ class SocketManagerTests(unittest.TestCase):
         SocketManager.send_message - it should send a message to the web sockets successfully
         :return:
         """
-        pass
+        socket_1 = mock.Mock()
+        socket_1.sendMessage = mock.Mock
+        socket_2 = mock.Mock()
+        socket_2.sendMessage = mock.Mock
+
+        self.socket_manager.add_socket(socket_1)
+        self.socket_manager.add_socket(socket_2)
+
+        message = {}
+
+        self.socket_manager.send_message(message)
+
+        assert socket_1.sendMessage.called
+        assert socket_2.sendMessage.called
+
+    def test_send_message_fail(self):
+        """
+        SocketManager.send_message - it should log json errors when sending a message
+        :return:
+        """
+        socket_1 = mock.Mock()
+        socket_1.sendMessage = mock.Mock
+
+        self.socket_manager.add_socket(socket_1)
+        self.logger.critical = mock.Mock()
+
+        with self.assertRaises(Exception) as cm:
+            self.socket_manager.send_message(object())
+
+        assert self.logger.critical.called
