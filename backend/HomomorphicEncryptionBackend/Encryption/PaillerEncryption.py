@@ -3,11 +3,11 @@ HomomorphicEncryptionBackend.Encryption.PaillerEncryption
 """
 # coding=utf-8
 
-__author__ = "VJ Patel (vj@vjpatel.me)"
-
 from HomomorphicEncryptionBackend.Model.Stage import Stage
 from HomomorphicEncryptionBackend.Model.Step import Step
 import datetime
+
+__author__ = "VJ Patel (vj@vjpatel.me)"
 
 
 class PaillerEncryption:
@@ -16,12 +16,20 @@ class PaillerEncryption:
     """
 
     def compute(self, computation, socket_manager):
+        """
+        :param Computation computation:
+        :param SocketManager socket_manager:
+        :return Computation|None:
+        """
+        operator = computation.get_operation()
+        if operator == '+':
+            return self.__e_add(computation)
 
-        # operator = computation.get_operator()
-        # if (operator == '+'):
-        return self.e_add(computation)
-
-    def e_add(self, computation):
+    def __e_add(self, computation):
+        """
+        :param Computation computation:
+        :return Computation:
+        """
         stage = Stage()
         stage.set_name("Backend")
 
