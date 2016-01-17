@@ -7,7 +7,7 @@ import logging
 __author__ = "VJ Patel (vj@vjpatel.me)"
 
 
-class LogManager(object):
+class LogManager:
     """
     LogManager
     """
