@@ -41,7 +41,3 @@ class ComputationThread(Thread):
         self.__socket_manager.send_message(self.__computation)
 
         self.__logger.debug("Thread stopped")
-        pass
-
-    def stop(self):
-        pass
