@@ -23,11 +23,11 @@ class RedisService
     private $serializer;
 
     /**
-     * @param Client $client
+     * @param $client
      * @param SerializerInterface $serializer
      */
     public function __construct(
-        Client $client,
+        $client,
         SerializerInterface $serializer
     ) {
         $this->client = $client;
