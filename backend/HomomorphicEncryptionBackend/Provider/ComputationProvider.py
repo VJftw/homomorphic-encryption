@@ -31,12 +31,13 @@ class ComputationProvider:
 
     def get_computation_by_hash(self, hash_id):
         computation_json = self.__redis_service.get(hash_id)
+
+        if not computation_json:
+            raise Exception("Computation not Found in Redis.")
+
         computation_dict = json.loads(computation_json)
 
         computation = self.__computation_resolver.from_dict(computation_dict)
         self.__logger.debug(computation.to_json())
-
-        if not computation:
-            raise Exception("Computation not Found in Redis.")
 
         return computation
