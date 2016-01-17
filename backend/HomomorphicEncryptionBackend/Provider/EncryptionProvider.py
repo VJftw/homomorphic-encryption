@@ -3,10 +3,10 @@ HomomorphicEncryptionBackend.Provider.EncryptionProvider
 """
 # coding=utf-8
 
-__author__ = "VJ Patel (vj@vjpatel.me)"
-
 from injector import inject
 from HomomorphicEncryptionBackend.Encryption.PaillerEncryption import PaillerEncryption
+
+__author__ = "VJ Patel (vj@vjpatel.me)"
 
 
 class EncryptionProvider:
