@@ -8,6 +8,7 @@ __author__ = "VJ Patel (vj@vjpatel.me)"
 from injector import inject
 from HomomorphicEncryptionBackend.Encryption.PaillerEncryption import PaillerEncryption
 
+
 class EncryptionProvider:
     """
     EncryptionProvider
