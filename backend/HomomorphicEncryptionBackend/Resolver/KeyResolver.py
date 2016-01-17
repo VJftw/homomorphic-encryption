@@ -12,12 +12,6 @@ class KeyResolver:
     KeyResolver
     """
 
-    def __init__(self):
-        """
-        :return:
-        """
-        pass
-
     def public_from_dict(self, public_key_dict):
         p_k = PublicKey(
             int(public_key_dict['n']),
