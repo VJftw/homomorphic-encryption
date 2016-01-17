@@ -11,27 +11,9 @@ class Step:
     """
 
     def __init__(self):
-        self.__computation = None
         self.__action = None
         self.__result = None
         self.__timestamp = None
-
-    def set_computation(self, computation):
-        """
-        Sets the computation
-        :param Computation computation:
-        :return self:
-        """
-        self.__computation = computation
-
-        return self
-
-    def get_computation(self):
-        """
-        Returns the computation
-        :return:
-        """
-        return self.__computation
 
     def set_action(self, action):
         """
@@ -53,7 +35,7 @@ class Step:
     def set_result(self, result):
         """
         Sets the result
-        :param str result:
+        :param int result:
         :return self:
         """
         self.__result = result
@@ -63,7 +45,7 @@ class Step:
     def get_result(self):
         """
         Returns the result
-        :return str:
+        :return int:
         """
         return self.__result
 
