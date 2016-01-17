@@ -22,7 +22,7 @@ class StageResolverTests(unittest.TestCase):
 
     def test_from_dict(self):
         """
-        StageResolver.public_from_dict - it should return a Stage from a dictionary
+        StageResolver.from_dict - it should return a Stage from a dictionary
         :return:
         """
         stage_dict = {
