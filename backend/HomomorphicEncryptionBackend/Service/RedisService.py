@@ -13,6 +13,7 @@ class RedisService:
 
     def __init__(self):
         ip = "0.0.0.0"
+        print(os.environ)
         if 'REDIS_HOST' in os.environ:
             ip = os.environ['REDIS_HOST']
         self.__r = redis.StrictRedis(
@@ -27,13 +28,3 @@ class RedisService:
         :return:
         """
         return self.__r.get(key).decode('utf8')
-
-    def set(self, key, value):
-        """
-        :param key:
-        :param value:
-        :return:
-        """
-        self.__r.set(key, value)
-
-        return self
