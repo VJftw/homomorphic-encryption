@@ -15,8 +15,12 @@ class SocketManager:
     def add_socket(self, socket):
         self.__sockets.append(socket)
 
+        return self
+
     def remove_socket(self, socket):
         self.__sockets.remove(socket)
+
+        return self
 
     def get_sockets(self):
         return self.__sockets
