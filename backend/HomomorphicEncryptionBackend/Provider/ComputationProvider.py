@@ -27,7 +27,6 @@ class ComputationProvider:
         self.__redis_service = redis_service
         self.__logger = log_manager.get_logger("Redis")
         self.__computation_resolver = computation_resolver
-        pass
 
     def get_computation_by_hash(self, hash_id):
         computation_json = self.__redis_service.get(hash_id)

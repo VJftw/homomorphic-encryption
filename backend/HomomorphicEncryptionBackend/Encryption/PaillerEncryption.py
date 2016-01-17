@@ -15,9 +15,6 @@ class PaillerEncryption:
     PaillerEncryption
     """
 
-    def __init__(self):
-        pass
-
     def compute(self, computation, socket_manager):
 
         # operator = computation.get_operator()

@@ -28,7 +28,6 @@ class ComputationResolver:
         self.__key_resolver = key_resolver
         self.__stage_resolver = stage_resolver
         self.__logger = log_manager.get_logger('ComputationResolver')
-        pass
 
     def from_dict(self, computation_dict):
         """
