@@ -6,7 +6,6 @@ HomomorphicEncryptionBackend.Provider.ComputationThreadProvider
 from injector import inject
 from HomomorphicEncryptionBackend.Manager.LogManager import LogManager
 from HomomorphicEncryptionBackend.Thread.ComputationThread import ComputationThread
-from HomomorphicEncryptionBackend.Manager.SocketManager import SocketManager
 from HomomorphicEncryptionBackend.Provider.SockerManagerProvider import SocketManagerProvider
 
 
