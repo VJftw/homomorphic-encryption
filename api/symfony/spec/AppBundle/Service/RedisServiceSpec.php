@@ -19,7 +19,7 @@ class RedisServiceSpec extends ObjectBehavior
         Redis $client,
         SerializerInterface $serializer
     ) {
-        $this->beConstructedWith($client, $serializer);
+        $this->beConstructedWith($client, $serializer, 600);
     }
 
     function it_is_initializable()
@@ -27,7 +27,7 @@ class RedisServiceSpec extends ObjectBehavior
         $this->shouldHaveType('AppBundle\Service\RedisService');
     }
 
-    function it_should_set_a_key(
+    function it_should_set_a_key_with_expiry(
         Redis $client,
         SerializerInterface $serializer,
         Computation $computation
@@ -39,7 +39,7 @@ class RedisServiceSpec extends ObjectBehavior
             ->willReturn($jsonObj)
         ;
 
-        $client->set("abcdef", $jsonObj)
+        $client->setex("abcdef", 600, $jsonObj)
             ->shouldBeCalled()
         ;
 

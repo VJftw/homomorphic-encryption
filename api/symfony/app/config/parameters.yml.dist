@@ -20,4 +20,5 @@ parameters:
 
     # Redis
     redis_host:         redis://0.0.0.0
+    redis_ttl:          3600
     jms_serializer.camel_case_naming_strategy.class: JMS\Serializer\Naming\IdenticalPropertyNamingStrategy

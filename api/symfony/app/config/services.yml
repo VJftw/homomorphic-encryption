@@ -10,6 +10,7 @@ services:
     arguments:
       - @snc_redis.default
       - @jms_serializer
+      - %redis_ttl%
 
   hashid:
     class: Hashids\Hashids

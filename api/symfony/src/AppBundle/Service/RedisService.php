@@ -23,15 +23,23 @@ class RedisService
     private $serializer;
 
     /**
+     * @var int
+     */
+    private $timeToLive;
+
+    /**
      * @param $client
      * @param SerializerInterface $serializer
+     * @param $timeToLive
      */
     public function __construct(
         $client,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
+        $timeToLive
     ) {
         $this->client = $client;
         $this->serializer = $serializer;
+        $this->timeToLive = $timeToLive;
     }
 
     /**
@@ -43,7 +51,7 @@ class RedisService
     {
         $jsonObject = $this->serializer->serialize($object, "json");
 
-        $this->client->set($key, $jsonObject);
+        $this->client->setex($key, $this->timeToLive, $jsonObject);
 
         return $this;
     }
