@@ -12,12 +12,6 @@ class StepResolver:
     StepResolver
     """
 
-    def __init__(self):
-        """
-        :return:
-        """
-        pass
-
     def from_dict(self, step_dict):
         step = Step()
 
