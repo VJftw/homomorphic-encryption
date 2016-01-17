@@ -42,6 +42,42 @@ class ComputationSpec extends ObjectBehavior
         ;
     }
 
+    function it_should_return_the_scheme()
+    {
+        $this->getScheme()
+            ->shouldReturn(null)
+        ;
+    }
+
+    function it_should_set_the_scheme()
+    {
+        $this->setScheme("Pailler")
+            ->shouldReturn($this)
+        ;
+
+        $this->getScheme()
+            ->shouldReturn("Pailler")
+        ;
+    }
+
+    function it_should_return_the_operation()
+    {
+        $this->getOperation()
+            ->shouldReturn(null)
+        ;
+    }
+
+    function it_should_set_the_operation()
+    {
+        $this->setOperation("+")
+            ->shouldReturn($this)
+        ;
+
+        $this->getOperation()
+            ->shouldReturn("+")
+        ;
+    }
+
     function it_should_return_a_encrypted()
     {
         $this->getAEncrypted()
@@ -93,6 +129,24 @@ class ComputationSpec extends ObjectBehavior
 
         $this->getPublicKey()
             ->shouldReturn('{"a": "123"}')
+        ;
+    }
+
+    function it_should_return_the_stages()
+    {
+        $this->getStages()
+            ->shouldReturn(null)
+        ;
+    }
+
+    function it_should_set_the_stages()
+    {
+        $this->setStages(["aa"])
+            ->shouldReturn($this)
+        ;
+
+        $this->getStages()
+            ->shouldReturn(["aa"])
         ;
     }
 
