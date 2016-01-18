@@ -3,7 +3,6 @@ import {
 } from "angular2/testing";
 
 import {ComputationResolver} from "./computation_resolver";
-import {observableToBeFn} from "rxjs/testing/TestScheduler";
 
 describe("ComputationResolver", () => {
 
