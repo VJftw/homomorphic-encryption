@@ -51,8 +51,7 @@ class ComputationProviderTests(unittest.TestCase):
         """
         self.redis_service.get = mock.Mock(return_value=None)
 
-        self.assertRaises(
-            Exception,
-            self.computation_provider.get_computation_by_hash
-        )
+        with self.assertRaises(Exception):
+            self.computation_provider.get_computation_by_hash("aaa")
+
 
