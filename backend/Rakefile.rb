@@ -1,12 +1,20 @@
 container_name = 'homomorphic-encryption-backend'
 
+if ENV.include? 'CI' and ENV['CI'] == 'true'
+  IS_CI = true
+  puts 'Continuous Integration environment'
+else
+  IS_CI = false
+  puts 'Development environment'
+end
+
 desc 'Run Tests'
 task :test do
   
   puts 'Looking for dev image'
   found = system_command("docker images #{container_name}:dev | grep B")
 
-  if !found
+  unless found
     puts 'Building dev image'
     build_container("#{Dir.getwd}/Dockerfile.dev", "#{Dir.getwd}", "#{container_name}:dev")
   end
@@ -19,7 +27,9 @@ task :test do
   # exec tests
   puts 'Running tests'
   nosetests = 'nosetests --rednose --force-color --with-coverage --all-modules --cover-package=HomomorphicEncryptionBackend tests/ -v'
-  test_command = "docker exec -u app -t #{container_id} #{nosetests}"
+
+  user = IS_CI ? 'root': 'app'
+  test_command = "docker exec -u #{user} -t #{container_id} #{nosetests}"
 
   system_command(test_command)
   
