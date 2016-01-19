@@ -12,18 +12,21 @@ describe("PaillerScheme", () => {
   let pailler: any;
   let stageProvider: any;
   let stepProvider: any;
+  let computationResolver: any;
   let http: any;
 
   beforeEach(() => {
     pailler = jasmine.createSpyObj("pailler", [""]);
     stageProvider = jasmine.createSpyObj("stageProvider", [""]);
     stepProvider = jasmine.createSpyObj("stepProvider", [""]);
+    computationResolver = jasmine.createSpyObj("computationResolver", [""]);
     http = jasmine.createSpyObj("http", [""]);
 
     paillerScheme = new PaillerScheme(
       pailler,
       stageProvider,
       stepProvider,
+      computationResolver,
       http
     );
   });
