@@ -11,6 +11,7 @@ import {Pailler} from "./app/encryption/pailler/pailler";
 import {ComputationResolver} from "./app/resolver/computation_resolver";
 import {StepResolver} from "./app/resolver/step_resolver";
 import {StageResolver} from "./app/resolver/stage_resolver";
+import {ComputationProvider} from "./app/provider/computation_provider";
 import {StepProvider} from "./app/provider/step_provider";
 import {StageProvider} from "./app/provider/stage_provider";
 import {EncryptionSchemeProvider} from "./app/provider/encryption_scheme_provider";
@@ -38,6 +39,7 @@ function main() {
     ComputationResolver,
     StepResolver,
     StageResolver,
+    ComputationProvider,
     StepProvider,
     StageProvider,
     EncryptionSchemeProvider,

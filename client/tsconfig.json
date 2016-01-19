@@ -30,6 +30,7 @@
     "src/app/encryption/pailler/pailler_scheme.ts",
     "src/app/provider/step_provider.ts",
     "src/app/provider/stage_provider.ts",
-    "src/app/provider/encryption_scheme_provider.ts"
+    "src/app/provider/encryption_scheme_provider.ts",
+    "src/app/provider/computation_provider.ts"
   ]
 }

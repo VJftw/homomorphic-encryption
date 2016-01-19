@@ -8,6 +8,7 @@ import {Computation} from "../../model/computation";
 import {RouteParams} from "angular2/router";
 import {EncryptionSchemeProvider} from "../../provider/encryption_scheme_provider";
 import {EncryptionScheme} from "../../encryption/encryption_scheme";
+import {ComputationProvider} from "../../provider/computation_provider";
 
 
 @Component({
@@ -30,24 +31,21 @@ export class ComputationRun {
   constructor(
     protected routeParams: RouteParams,
     protected formBuilder: FormBuilder,
-    protected encryptionSchemeProvider: EncryptionSchemeProvider
+    protected encryptionSchemeProvider: EncryptionSchemeProvider,
+    protected computationProvider: ComputationProvider
   ) {
     this.computationForm = formBuilder.group({
-      "a": ["", Validators.compose([
-        Validators.required
-      ])],
+      "a": ["", Validators.required],
       "b": ["", Validators.required]
     });
 
-    this.computationModel = new Computation();
 
     this.encryptionScheme = encryptionSchemeProvider.getEncryptionSchemeByName(
-      routeParams.get("type")
-    );
+    routeParams.get("type")
+  );
     this.capabilities = this.encryptionScheme.getCapabilities();
 
-    this.computationModel.setScheme(this.encryptionScheme.getName());
-    this.computationModel.setOperation(this.capabilities[0]);
+    this.computationModel = this.computationProvider.create(this.encryptionScheme);
   }
 
   public submit(event: Event): void {
