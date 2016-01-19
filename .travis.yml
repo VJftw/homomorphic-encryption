@@ -6,7 +6,7 @@ before_install:
 - gem install rake
 script:
 - ruby --version
-- cd backend && rake test
+- cd backend && rake test && rake rake publish_coverage
 - cd ..
 - cd api && rake test && rake publish_coverage
 - cd ..
