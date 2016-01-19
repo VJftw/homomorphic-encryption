@@ -40,6 +40,26 @@ task :test do
   system_command("docker rm #{container_id}")
 end
 
+desc 'Publish Coverage'
+task :publish_coverage do
+
+  clone = 'rm -rf site && git clone -b gh-pages --single-branch git@github.com:VJftw/homomorphic-encryption.git site && cd site && git pull && cd ..'
+  system_command(clone)
+  copy = 'mkdir -p site/backend/coverage && cp -R coverage/* site/backend/coverage'
+  system_command(copy)
+  commit = 'cd site && git status && git add . && git commit -m "Updated Backend Coverage Report"'
+  system_command(commit)
+
+  puts 'Pushing!'
+  push = 'cd site && git status && git push origin gh-pages'
+  system_command(push)
+
+  puts 'Cleaning up'
+  cleanup = 'rm -rf site'
+  system_command(cleanup)
+
+end
+
 desc 'Build production container'
 task :build_prod do
   built_container = build_container("#{Dir.getwd}/Dockerfile.prod", "#{Dir.getwd}", 'tutum.co/vjftw/homomorphic-encryption:backend-latest')
