@@ -75,22 +75,47 @@ end
 desc 'Build production container'
 task :build_prod do
 
-  # build in Node container
+  puts 'Looking for dev image'
+  found = system_command("docker images #{container_name}:dev | grep B")
+
+  unless found
+    puts 'Building dev image'
+    build_container("#{Dir.getwd}/Dockerfile.dev", "#{Dir.getwd}", "#{container_name}:dev")
+  end
+
+  # start container
   prod_api_url = 'api.homomorphic-encryption.vjpatel.me'
   prod_backend_url = 'backend.homomorphic-encryption.vjpatel.me'
-  create_build_dir = 'mkdir -p /build && cp -r /app/* /build/ && cd /build && rm -rf /build/__build__ && pwd'
-  fetch_dependencies = 'npm install && node_modules/tsd/build/cli.js install && node_modules/bower/bin/bower --allow-root install'
-  webpack_build = "export NODE_ENV=production && export CLIENT_API_URL=#{prod_api_url} && export CLIENT_BACKEND_URL=#{prod_backend_url} && npm run build && node ./build.dist.js"
-  copy_build = 'cp -r /build/__build__ /app'
-  build_command = "#{create_build_dir} && #{fetch_dependencies} && #{webpack_build} && #{copy_build}"
 
-  command = "docker run -v #{Dir.getwd}:/app -w=/app node:slim /bin/bash -c '#{build_command}'"
-  system_command(command)
+  puts 'Starting dev container'
+  start_command = "docker run -d -v #{Dir.getwd}:/app -e NODE_ENV=production -e CLIENT_API_URL=#{prod_api_url} -e CLIENT_BACKEND_URL=#{prod_backend_url} #{container_name}:dev"
+  container_id = system_command(start_command)[0].strip()
 
+  user = IS_CI ? 'root': 'app'
+
+  puts 'Installing NPM, Bower and TSD dependencies'
+  npm_command = 'npm install && node_modules/.bin/bower install && node_modules/.bin/tsd install'
+  deps_command = "docker exec -t -u #{user} #{container_id} #{npm_command}"
+  system_command(deps_command)
+
+  # Webpack Build
+  webpack_build = 'npm run build'
+  build_command = "docker exec -t -u #{user} #{container_id} #{webpack_build}"
+  system_command(build_command)
+
+  # stop and remove container
+  puts 'Stopping dev container'
+  system_command("docker stop #{container_id}")
+  puts 'Removing dev container'
+  system_command("docker rm #{container_id}")
+
+
+  puts 'Building production container'
   built_container = build_container("#{Dir.getwd}/Dockerfile.app", "#{Dir.getwd}", 'tutum.co/vjftw/homomorphic-encryption:client-latest')
 
   # Remove build folder with docker
   system_command("docker run -v #{Dir.getwd}:/app -w=/app alpine /bin/sh -c 'rm -rf __build__'")
+
 end
 
 def build_container(docker_file, working_dir, tag='test')
