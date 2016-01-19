@@ -39,7 +39,7 @@ export class Step {
   public toJson() {
     return {
       "action": this.action,
-      "result": (this.result ? this.result.toString():null),
+      "result": (this.result ? this.result.toString() : null),
       "timestamp": this.timestamp.toString()
     };
   }

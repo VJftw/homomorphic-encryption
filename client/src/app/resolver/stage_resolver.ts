@@ -1,6 +1,5 @@
 import {Injectable} from "angular2/core";
 import {Stage} from "../model/stage";
-import {BigInteger} from "jsbn";
 import {StepResolver} from "./step_resolver";
 
 @Injectable()
