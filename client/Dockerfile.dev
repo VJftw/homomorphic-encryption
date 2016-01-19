@@ -1,0 +1,25 @@
+FROM vjftw/ubuntu:latest
+
+# Add Home directory for User
+RUN mkhomedir_helper app && chown -R app:app /home/app
+
+RUN curl -sL https://deb.nodesource.com/setup_5.x | bash -
+
+# For PhantomJS installation
+RUN apt-get update && apt-get install -y \
+    bzip2 \
+    git \
+    libfreetype6 \
+    libfreetype6-dev \
+    libfontconfig \
+    libfontconfig-dev \
+    build-essential \
+    python \
+    nodejs
+
+RUN apt-get clean
+
+VOLUME /app
+
+EXPOSE 3000
+

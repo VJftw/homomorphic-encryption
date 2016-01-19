@@ -1,11 +1,75 @@
+container_name = 'homomorphic-encryption-client'
+
+if ENV.include? 'CI' and ENV['CI'] == 'true'
+  IS_CI = true
+  puts 'Continuous Integration environment'
+else
+  IS_CI = false
+  puts 'Development environment'
+end
+
 desc 'Run Tests'
 task :test do
-  # Build base container
-  built_container = build_container("#{Dir.getwd}/Dockerfile.test", "#{Dir.getwd}", 'tutum.co/vjftw/homomorphic-encryption:client-base')
 
-  command = "docker run #{built_container} npm run test"
+  puts 'Looking for dev image'
+  found = system_command("docker images #{container_name}:dev | grep B")
 
-  system_command(command)
+  unless found
+    puts 'Building dev image'
+    build_container("#{Dir.getwd}/Dockerfile.dev", "#{Dir.getwd}", "#{container_name}:dev")
+  end
+
+  # start container
+  puts 'Starting dev container'
+  start_command = "docker run -d -v #{Dir.getwd}:/app #{container_name}:dev"
+  container_id = system_command(start_command)[0].strip()
+
+  user = IS_CI ? 'root': 'app'
+
+  puts 'Installing NPM, Bower and TSD dependencies'
+  npm_command = 'npm install && node_modules/.bin/bower install && node_modules/.bin/tsd install'
+  deps_command = "docker exec -t -u #{user} #{container_id} #{npm_command}"
+  system_command(deps_command)
+
+  puts 'Running tests'
+  node_test = 'npm run test'
+  test_command = "docker exec -t -u #{user} #{container_id} #{node_test}"
+  system_command(test_command)
+
+  # stop and remove container
+  puts 'Stopping dev container'
+  system_command("docker stop #{container_id}")
+  puts 'Removing dev container'
+  system_command("docker rm #{container_id}")
+
+end
+
+desc 'Publish Coverage'
+task :publish_coverage do
+
+  clone = 'rm -rf site && git clone -b gh-pages --single-branch git@github.com:VJftw/homomorphic-encryption.git site && cd site && git pull && cd ..'
+  system_command(clone)
+  copy = 'mkdir -p site/client/coverage && cp -R coverage/* site/client/coverage'
+  system_command(copy)
+  Dir.chdir 'site/client/coverage'
+  dirs = Dir.glob('*').select {|f| File.directory? f}
+  dirs.each do |dir|
+    mv_dir = dir.gsub ' ', '_'
+    puts "#{dir} -> #{mv_dir}"
+    FileUtils.mv dir, mv_dir
+  end
+  Dir.chdir '../../..'
+  commit = 'cd site && git status && git add . && git commit -m "Updated Client Coverage Report"'
+  system_command(commit)
+
+  puts 'Pushing!'
+  push = 'cd site && git status && git push origin gh-pages'
+  system_command(push)
+
+  puts 'Cleaning up'
+  cleanup = 'rm -rf site'
+  system_command(cleanup)
+
 end
 
 desc 'Build production container'
@@ -51,7 +115,11 @@ def system_command(command, failure_message="#{command} failed.")
     end
     io.close
 
-    fail failure_message unless $?.to_i == 0
+    if $?.to_i != 0
+      puts "Warning: #{command} returned: #{$?.to_i}"
+      return false
+    end
+    # fail failure_message unless $?.to_i == 0
   end
 
   output
