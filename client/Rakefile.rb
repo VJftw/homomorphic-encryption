@@ -49,7 +49,7 @@ task :publish_coverage do
 
   clone = 'rm -rf site && git clone -b gh-pages --single-branch git@github.com:VJftw/homomorphic-encryption.git site && cd site && git pull && cd ..'
   system_command(clone)
-  copy = 'mkdir -p site/client/coverage && cp -R coverage/* site/client/coverage'
+  copy = 'mkdir -p site/client/coverage && rm -rf site/client/coverage/* && cp -R coverage/* site/client/coverage'
   system_command(copy)
   Dir.chdir 'site/client/coverage'
   dirs = Dir.glob('*').select {|f| File.directory? f}
