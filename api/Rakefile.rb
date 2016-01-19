@@ -63,24 +63,33 @@ task :test do
   system_command("docker rm #{container_id}")
 end
 
-# desc 'Build and run tests'
-# task :test do
-#   github_token = get_github_token
-#   test_container = build_container("#{Dir.getwd}/Dockerfile.test --build-arg github_token=#{github_token}", "#{Dir.getwd}")
-#
-#   phpspec = 'bin/phpspec run -f pretty'
-#   system_command("docker run -t #{test_container} #{phpspec}")
-# end
+desc 'Publish Coverage'
+task :publish_coverage do
 
+  clone = 'rm -rf site && git clone -b gh-pages --single-branch git@github.com:VJftw/homomorphic-encryption.git site && cd site && git pull && cd ..'
+  system_command(clone)
+  copy = 'mkdir -p site/api/coverage && cp -R symfony/coverage/* site/api/coverage'
+  system_command(copy)
+  commit = 'cd site && git status && git add . && git commit -m "Updated API Coverage Report"'
+  system_command(commit)
+
+  puts 'Pushing!'
+  push = 'cd site && git status && git push origin gh-pages'
+  system_command(push)
+
+  puts 'Cleaning up'
+  cleanup = 'rm -rf site'
+  system_command(cleanup)
+
+end
 
 def get_github_token
   auth_json = File.read(Dir.home + '/.composer/auth.json')
   auth = JSON.parse(auth_json)
 
   auth['github-oauth']['github.com']
-
-
 end
+
 
 def build_container(docker_file, working_dir, tag='test')
 
@@ -105,7 +114,7 @@ def system_command(command, failure_message="#{command} failed.")
     io.close
 
     if $?.to_i != 0
-      puts "Error! #{command} returned: #{$?.to_i}"
+      puts "Warning: #{command} returned: #{$?.to_i}"
       return false
     end
     # fail failure_message unless $?.to_i == 0
