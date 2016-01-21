@@ -2,10 +2,10 @@
     <div class="col-md-10 col-md-offset-1">
         <div class="text-center">
             <h1 *ngIf="!formSubmitted">Enter a Sum</h1>
-            <h1 *ngIf="formSubmitted">
+            <h3 *ngIf="formSubmitted">
                 <span *mathjax>\({{ computationModel.a }} {{ computationModel.operation }} {{ computationModel.b }}\)</span>
                 <span *ngIf="computationModel.isComplete()">\( = {{ computationModel.c }}\)</span>
-            </h1>
+            </h3>
         </div>
         <div class="animated fadeIn" *ngIf="!formSubmitted">
             <div class="panel-body">
