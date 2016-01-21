@@ -13,11 +13,49 @@ end
 
 desc 'Build production container'
 task :build_prod do
+  # 1). create build dir
+  # 2). copy source into __build__ dir
+  # 3). remove bin, vendor, coverage, spec dirs
+  # 4). start dev container
+  # 5). exec composer install
+  # 6). build prod container
+  puts 'Looking for dev image'
+  found = system_command("docker images #{container_name}:dev | grep B")
 
-  # Get github token
-  github_token = get_github_token
+  unless found
+    puts 'Building dev image'
+    build_container("#{Dir.getwd}/Dockerfile.dev", "#{Dir.getwd}", "#{container_name}:dev")
+  end
+  
+  copy = "mkdir -p __build__ && cp -r symfony/* __build__/"
+  clean = "cd __build__ && rm -rf app/cache/* app/logs/* app/bootstrap.php.cache app/config/parameters.yml bin coverage spec vendor"
 
-  built_container = build_container("#{Dir.getwd}/Dockerfile.app --build-arg github_token=#{github_token}", "#{Dir.getwd}", prod_container_name)
+  system_command("#{copy} && #{clean}")
+
+  # start container
+  puts 'Starting dev container'
+  start_command = "docker run -d -v #{Dir.getwd}/__build__:/app #{container_name}:dev"
+  container_id = system_command(start_command)[0].strip()
+
+  puts 'Adding GitHub composer token'
+  if ENV.include? 'GITHUB_AUTH_TOKEN' and ENV['GITHUB_AUTH_TOKEN']
+    github_token = ENV['GITHUB_AUTH_TOKEN']
+  else
+    github_token = get_github_token
+  end
+  composer_config = "composer config --global github-oauth.github.com #{github_token}"
+  config_command = "docker exec -t #{container_id} #{composer_config}"
+  system_command(config_command)
+
+  puts 'Installing Composer dependencies'
+  composer_command = 'composer --no-dev --ansi --no-interaction --prefer-dist -v --optimize-autoloader install'
+  deps_command = "docker exec -t #{container_id} #{composer_command}"
+  system_command(deps_command)
+
+  built_container = build_container("#{Dir.getwd}/Dockerfile.app", "#{Dir.getwd}", prod_container_name)
+
+  # Clean up
+  system_command("docker run -v #{Dir.getwd}:/app -w=/app alpine /bin/sh -c 'rm -rf __build__'")
 end
 
 desc 'Build and run tests'
