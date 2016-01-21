@@ -19,7 +19,7 @@ RUN sed -i 's|.*user =.*|user=root|g' /etc/php/7.0/fpm/pool.d/www.conf
 RUN sed -i 's|.*group =.*|group=root|g' /etc/php/7.0/fpm/pool.d/www.conf
 RUN sed -i -e "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" /etc/php/7.0/fpm/pool.d/www.conf
 
-COPY __build__/ /app
+COPY ./__build__/* /app
 
 WORKDIR /app
 
@@ -40,6 +40,8 @@ ENV SYMFONY__MAILER_HOST 127.0.0.1
 ENV SYMFONY__MAILER_PASSWORD temp
 ENV SYMFONY__MAILER_TRANSPORT smtp
 ENV SYMFONY__MAILER_USER temp
+
+RUN ls -l /app && ls -l /app/app/
 
 # Fix permissions for Symfony cache and logs
 RUN chmod -R 777 /app/app/cache && chmod -R 777 /app/app/logs && rm -rf /app/app/cache/*
