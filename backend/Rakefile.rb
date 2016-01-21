@@ -1,4 +1,5 @@
 container_name = 'homomorphic-encryption-backend'
+prod_container_name = 'tutum.co/vjftw/homomorphic-encryption:backend-latest'
 
 if ENV.include? 'CI' and ENV['CI'] == 'true'
   IS_CI = true
@@ -31,13 +32,15 @@ task :test do
   user = IS_CI ? 'root': 'app'
   test_command = "docker exec -u #{user} -t #{container_id} #{nosetests}"
 
-  system_command(test_command)
+  test_result = system_command(test_command)
   
   # stop and remove container
   puts 'Stopping dev container'
   system_command("docker stop #{container_id}")
   puts 'Removing dev container'
   system_command("docker rm #{container_id}")
+
+  fail 'Tests failed' unless test_result
 end
 
 desc 'Publish Coverage'
@@ -62,8 +65,25 @@ end
 
 desc 'Build production container'
 task :build_prod do
-  built_container = build_container("#{Dir.getwd}/Dockerfile.prod", "#{Dir.getwd}", 'tutum.co/vjftw/homomorphic-encryption:backend-latest')
+  built_container = build_container("#{Dir.getwd}/Dockerfile.prod", "#{Dir.getwd}", prod_container_name)
+end
 
+desc 'CI'
+task :ci do
+  Rake::Task["test"].execute
+  Rake::Task["publish_coverage"].execute
+  Rake::Task["build_prod"].execute
+  Rake::Task["push_prod"].execute
+
+  docker_email = ENV['DOCKER_EMAIL']
+  docker_username = ENV['DOCKER_USERNAME']
+  docker_password = ENV['DOCKER_PASSWORD']
+  registry = "tutum.co"
+  docker_login = "docker login -e #{docker_email} -u #{docker_username} -p #{docker_password} #{registry}"
+  system_command(docker_login)
+
+  docker_push = "docker push #{prod_container_name}"
+  system_command(docker_push)
 end
 
 

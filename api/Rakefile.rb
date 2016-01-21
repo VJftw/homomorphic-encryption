@@ -1,6 +1,7 @@
 require 'json'
 
 container_name = 'homomorphic-encryption-api'
+prod_container_name = 'tutum.co/vjftw/homomorphic-encryption:api-latest'
 
 if ENV.include? 'CI' and ENV['CI'] == 'true'
   IS_CI = true
@@ -16,7 +17,7 @@ task :build_prod do
   # Get github token
   github_token = get_github_token
 
-  built_container = build_container("#{Dir.getwd}/Dockerfile.app --build-arg github_token=#{github_token}", "#{Dir.getwd}", 'tutum.co/vjftw/homomorphic-encryption:api-latest')
+  built_container = build_container("#{Dir.getwd}/Dockerfile.app --build-arg github_token=#{github_token}", "#{Dir.getwd}", prod_container_name)
 end
 
 desc 'Build and run tests'
@@ -54,13 +55,15 @@ task :test do
   puts 'Running tests'
   phpspec_command = 'bin/phpspec run -v -f pretty'
   test_command = "docker exec -t -u #{user} #{container_id} #{phpspec_command}"
-  system_command(test_command)
+  test_result = system_command(test_command)
 
   # stop and remove container
   puts 'Stopping dev container'
   system_command("docker stop #{container_id}")
   puts 'Removing dev container'
   system_command("docker rm #{container_id}")
+
+  fail 'Tests failed' unless test_result
 end
 
 desc 'Publish Coverage'
@@ -81,6 +84,24 @@ task :publish_coverage do
   cleanup = 'rm -rf site'
   system_command(cleanup)
 
+end
+
+desc 'CI'
+task :ci do
+  Rake::Task["test"].execute
+  Rake::Task["publish_coverage"].execute
+  Rake::Task["build_prod"].execute
+  Rake::Task["push_prod"].execute
+
+  docker_email = ENV['DOCKER_EMAIL']
+  docker_username = ENV['DOCKER_USERNAME']
+  docker_password = ENV['DOCKER_PASSWORD']
+  registry = "tutum.co"
+  docker_login = "docker login -e #{docker_email} -u #{docker_username} -p #{docker_password} #{registry}"
+  system_command(docker_login)
+
+  docker_push = "docker push #{prod_container_name}"
+  system_command(docker_push)
 end
 
 def get_github_token
