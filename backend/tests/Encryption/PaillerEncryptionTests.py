@@ -41,7 +41,7 @@ class PaillerEncryptionTests(unittest.TestCase):
 
         self.assertEqual(
             last_stage.get_name(),
-            "Backend"
+            "Server"
         )
 
         self.assertEqual(

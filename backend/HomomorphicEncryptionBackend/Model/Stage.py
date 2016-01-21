@@ -15,7 +15,7 @@ class Stage:
 
     def __init__(self):
         self.__name = None
-        self.__type = Stage.TYPE_SERVER
+        self.__host = None
         self.steps = []
 
     def set_name(self, name):
@@ -35,22 +35,22 @@ class Stage:
         """
         return self.__name
 
-    def set_type(self, t):
+    def set_host(self, host):
         """
-        Sets the type
+        Sets the host
         :param int type:
         :return self:
         """
-        self.__type = t
+        self.__host = host
 
         return self
 
-    def get_type(self):
+    def get_host(self):
         """
-        Returns the type
+        Returns the host
         :return int:
         """
-        return self.__type
+        return self.__host
 
     def add_step(self, step):
         """
@@ -76,6 +76,6 @@ class Stage:
         """
         return {
             'name': self.get_name(),
-            'type': self.get_type(),
+            'host': self.get_host(),
             'steps': self.get_steps()
         }

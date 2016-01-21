@@ -32,7 +32,7 @@ class PaillerEncryption:
         """
         stage = Stage()
         stage.set_name("Server")
-        stage.set_type(Stage.TYPE_SERVER)
+        stage.set_host(Stage.TYPE_SERVER)
 
         step = Step()
         step.set_timestamp(datetime.datetime.now())
