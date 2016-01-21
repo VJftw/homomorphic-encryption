@@ -6,6 +6,7 @@ import {Computation} from "../model/computation";
 export interface EncryptionScheme {
 
   getName(): string;
+  getDescription(): string;
 
   /**
    * Return what calculations the scheme can perform

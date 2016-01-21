@@ -45,6 +45,10 @@ export class PaillerScheme implements EncryptionScheme {
     return "Pailler";
   }
 
+  public getDescription(): string {
+    return "";
+  }
+
   public getCapabilities(): Array<string> {
     return [Operation.ADD];
   }
@@ -80,7 +84,7 @@ export class PaillerScheme implements EncryptionScheme {
         this.stageProvider.create(stageName)
     );
 
-    let bits = 32;
+    let bits = 16;
     let p: BigInteger = this.pailler.generatePrime(bits / 2);
     this.computation.getStageByName(stageName).addStep(this.stepProvider.create(
       "Generate random prime \\(p\\)",

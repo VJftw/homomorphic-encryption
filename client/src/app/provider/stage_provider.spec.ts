@@ -18,5 +18,19 @@ describe("StageProvider", () => {
     expect(stage.getName())
       .toEqual("Workspace")
     ;
+
+    expect(stage.getHost())
+      .toBe(0)
+    ;
+
+    stage = stageProvider.create("Test", 1)
+
+    expect(stage.getName())
+      .toEqual("Test")
+    ;
+
+    expect(stage.getHost())
+      .toBe(1)
+    ;
   });
 });

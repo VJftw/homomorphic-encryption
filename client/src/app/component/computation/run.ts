@@ -49,7 +49,6 @@ export class ComputationRun {
   }
 
   public submit(event: Event): void {
-    console.log(event);
     event.preventDefault();
     this.formSubmitted = true;
     this.encryptionScheme.setComputation(this.computationModel);
