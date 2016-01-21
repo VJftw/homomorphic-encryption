@@ -20,6 +20,7 @@ export class StageResolver {
     }
     stage
       .setName(jsonArr.name)
+      .setType(jsonArr.type)
     ;
 
     jsonArr.steps.forEach(stepJson => {

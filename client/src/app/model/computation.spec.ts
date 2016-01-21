@@ -41,6 +41,23 @@ describe("Computation", () => {
     ;
   });
 
+  it("should return C", () => {
+    expect(computation.getC())
+      .toBeUndefined()
+    ;
+  });
+
+  it("should set C", () => {
+    let c = jasmine.createSpyObj("c", [""]);
+    expect(computation.setC(c))
+      .toBe(computation)
+    ;
+
+    expect(computation.getC())
+      .toBe(c)
+    ;
+  });
+
   it("should return the private key", () => {
     expect(computation.getPrivateKey())
       .toBeUndefined()

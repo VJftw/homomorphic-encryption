@@ -231,5 +231,8 @@ export class PaillerScheme implements EncryptionScheme {
       "Calculate \\((\\frac{cX^lmod(n^2) - 1}{n})\\cdot cX \\bmod n \\) to get \\(c\\)",
       c
     ));
+
+    this.computation.setC(c);
+    this.computation.setState(Computation.STATE_COMPLETE);
   }
 }

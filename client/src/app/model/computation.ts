@@ -22,6 +22,7 @@ export class Computation {
 
   private a: BigInteger;
   private b: BigInteger;
+  private c: BigInteger;
   private privateKey: PrivateKey;
 
   constructor() {
@@ -45,6 +46,16 @@ export class Computation {
 
   public getB(): BigInteger {
     return this.b;
+  }
+
+  public getC(): BigInteger {
+    return this.c;
+  }
+
+  public setC(c: BigInteger): Computation {
+    this.c = c;
+
+    return this;
   }
 
   public setPrivateKey(privateKey: PrivateKey) {

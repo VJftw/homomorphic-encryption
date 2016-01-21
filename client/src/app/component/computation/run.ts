@@ -24,7 +24,7 @@ export class ComputationRun {
   protected computationModel: Computation;
   protected encryptionScheme: EncryptionScheme;
 
-  protected capabilities: Array<string>;
+  protected capabilities: Array<string> = [];
 
   protected formSubmitted = false;
 

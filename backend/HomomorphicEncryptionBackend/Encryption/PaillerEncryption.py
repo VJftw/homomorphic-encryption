@@ -31,7 +31,8 @@ class PaillerEncryption:
         :return Computation:
         """
         stage = Stage()
-        stage.set_name("Backend")
+        stage.set_name("Server")
+        stage.set_type(Stage.TYPE_SERVER)
 
         step = Step()
         step.set_timestamp(datetime.datetime.now())

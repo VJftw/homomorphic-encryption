@@ -25,6 +25,7 @@ class StageResolver:
         stage = Stage()
 
         stage.set_name(stage_dict['name'])
+        stage.set_type(stage_dict['type'])
 
         for step_dict in stage_dict['steps']:
             stage.add_step(

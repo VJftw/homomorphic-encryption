@@ -10,8 +10,12 @@ class Stage:
     Stage
     """
 
+    TYPE_CLIENT = 0
+    TYPE_SERVER = 1
+
     def __init__(self):
         self.__name = None
+        self.__type = Stage.TYPE_SERVER
         self.steps = []
 
     def set_name(self, name):
@@ -30,6 +34,23 @@ class Stage:
         :return:
         """
         return self.__name
+
+    def set_type(self, t):
+        """
+        Sets the type
+        :param int type:
+        :return self:
+        """
+        self.__type = t
+
+        return self
+
+    def get_type(self):
+        """
+        Returns the type
+        :return int:
+        """
+        return self.__type
 
     def add_step(self, step):
         """
@@ -55,5 +76,6 @@ class Stage:
         """
         return {
             'name': self.get_name(),
+            'type': self.get_type(),
             'steps': self.get_steps()
         }

@@ -10,6 +10,7 @@ import {APP_DIRECTIVES} from "../../directives";
 export class ComputationIndex {
 
   public schemes = [
-    'Pailler'
+    'Pailler',
+    'Test'
   ];
 }
