@@ -91,7 +91,6 @@ task :ci do
   Rake::Task["test"].execute
   Rake::Task["publish_coverage"].execute
   Rake::Task["build_prod"].execute
-  Rake::Task["push_prod"].execute
 
   docker_email = ENV['DOCKER_EMAIL']
   docker_username = ENV['DOCKER_USERNAME']
