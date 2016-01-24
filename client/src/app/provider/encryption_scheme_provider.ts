@@ -29,4 +29,14 @@ export class EncryptionSchemeProvider {
 
     return r;
   }
+
+  public getEncryptionSchemes()  {
+    let a = [];
+
+    this.schemes.forEach((value, key) => {
+      a.push(value);
+    });
+
+    return a;
+  }
 }

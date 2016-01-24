@@ -1,5 +1,6 @@
 import {Component} from "angular2/core";
 import {APP_DIRECTIVES} from "../../directives";
+import {EncryptionSchemeProvider} from "../../provider/encryption_scheme_provider";
 
 
 @Component({
@@ -9,7 +10,11 @@ import {APP_DIRECTIVES} from "../../directives";
 })
 export class ComputationIndex {
 
-  public schemes = [
-    'Pailler'
-  ];
+  public schemes: any;
+
+  constructor(
+    protected encryptionSchemeProvider: EncryptionSchemeProvider
+  ) {
+    this.schemes = encryptionSchemeProvider.getEncryptionSchemes();
+  }
 }
