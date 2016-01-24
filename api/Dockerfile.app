@@ -18,6 +18,7 @@ RUN sed -i 's|.*access.log =.*|access.log=/dev/stdout|g' /etc/php/7.0/fpm/pool.d
 RUN sed -i 's|.*user =.*|user=root|g' /etc/php/7.0/fpm/pool.d/www.conf
 RUN sed -i 's|.*group =.*|group=root|g' /etc/php/7.0/fpm/pool.d/www.conf
 RUN sed -i -e "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" /etc/php/7.0/fpm/pool.d/www.conf
+RUN mkdir -p /run/php && chmod -R 755 /run/php
 
 COPY ./__build__ /app/
 
