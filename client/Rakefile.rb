@@ -98,12 +98,12 @@ task :build_prod do
 
   puts 'Installing NPM, Bower and TSD dependencies'
   npm_command = 'npm install && node_modules/.bin/bower install && node_modules/.bin/tsd install'
-  deps_command = "docker exec -t -u #{user} #{container_id} #{npm_command}"
+  deps_command = "docker exec -t #{container_id} #{npm_command}"
   system_command(deps_command)
 
   # Webpack Build
   webpack_build = 'npm run build'
-  build_command = "docker exec -t -u #{user} #{container_id} #{webpack_build}"
+  build_command = "docker exec -t #{container_id} #{webpack_build}"
   system_command(build_command)
 
   # stop and remove container
