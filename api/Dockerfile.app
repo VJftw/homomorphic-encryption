@@ -41,10 +41,8 @@ ENV SYMFONY__MAILER_PASSWORD temp
 ENV SYMFONY__MAILER_TRANSPORT smtp
 ENV SYMFONY__MAILER_USER temp
 
-RUN ls -l /app && ls -l /app/app/
-
 # Fix permissions for Symfony cache and logs
-RUN chmod -R 777 /app/app/cache && chmod -R 777 /app/app/logs && rm -rf /app/app/cache/*
+RUN mkdir -p /app/app/cache && chmod -R 777 /app/app/cache && chmod -R 777 /app/app/logs && rm -rf /app/app/cache/*
 
 # Temp hack to fix Symfony environment parameters
 RUN mv /app/app/config/config.yml /app/app/config/config.yml.bak && sed '/- { resource: parameters.yml }/d' /app/app/config/config.yml.bak > /app/app/config/config.yml
