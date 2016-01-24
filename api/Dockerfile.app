@@ -23,9 +23,6 @@ COPY ./__build__ /app/
 
 WORKDIR /app
 
-# Clean up
-RUN rm -rf app/cache/* app/logs/* app/bootstrap.php.cache app/config/parameters.yml vendor/ bin/
-
 ENV SYMFONY_ENV prod
 ENV SYMFONY__SECRET IAmNotSoSecret
 ENV SYMFONY__DATABASE_HOST db
