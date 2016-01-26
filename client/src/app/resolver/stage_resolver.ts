@@ -19,6 +19,7 @@ export class StageResolver {
     }
     stage
       .setName(jsonArr.name)
+      .setHost(jsonArr.host)
     ;
 
     jsonArr.steps.forEach(stepJson => {

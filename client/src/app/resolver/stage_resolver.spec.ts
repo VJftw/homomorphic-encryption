@@ -21,6 +21,7 @@ describe("StageResolver", () => {
   it("should resolve a Stage from JSON", () => {
     let json = {
       "name": "Workspace",
+      "host": 0,
       "steps": ["aaaa"]
     };
 
@@ -28,6 +29,10 @@ describe("StageResolver", () => {
 
     expect(stage.getName())
       .toBe("Workspace")
+    ;
+
+    expect(stage.getHost())
+      .toBe(0)
     ;
 
     expect(stage.getSteps())

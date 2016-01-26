@@ -28,6 +28,22 @@ describe("Stage", () => {
     ;
   });
 
+  it("should return the host", () => {
+    expect(stage.getHost())
+      .toBeUndefined()
+    ;
+  });
+
+  it("should set the host", () => {
+    expect(stage.setHost(Stage.HOST_CLIENT))
+      .toBe(stage)
+    ;
+
+    expect(stage.getHost())
+      .toBe(Stage.HOST_CLIENT)
+    ;
+  });
+
   it("should return the steps", () => {
     expect(stage.getSteps())
       .toEqual([])
@@ -60,6 +76,7 @@ describe("Stage", () => {
 
     stage
       .setName("Workspace")
+      .setHost(Stage.HOST_CLIENT)
       .addStep(step1)
       .addStep(step2)
     ;
@@ -67,6 +84,7 @@ describe("Stage", () => {
     expect(stage.toJson())
       .toEqual({
         "name": "Workspace",
+        "host": Stage.HOST_CLIENT,
         "steps": [
           {
             "action": "abcdef",

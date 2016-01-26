@@ -24,7 +24,7 @@ export class ComputationRun {
   protected computationModel: Computation;
   protected encryptionScheme: EncryptionScheme;
 
-  protected capabilities: Array<string>;
+  protected capabilities: Array<string> = [];
 
   protected formSubmitted = false;
 
@@ -49,7 +49,6 @@ export class ComputationRun {
   }
 
   public submit(event: Event): void {
-    console.log(event);
     event.preventDefault();
     this.formSubmitted = true;
     this.encryptionScheme.setComputation(this.computationModel);

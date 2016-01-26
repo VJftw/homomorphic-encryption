@@ -1,4 +1,5 @@
 container_name = 'homomorphic-encryption-client'
+prod_container_name = 'tutum.co/vjftw/homomorphic-encryption:client-latest'
 
 if ENV.include? 'CI' and ENV['CI'] == 'true'
   IS_CI = true
@@ -34,13 +35,15 @@ task :test do
   puts 'Running tests'
   node_test = 'npm run test'
   test_command = "docker exec -t -u #{user} #{container_id} #{node_test}"
-  system_command(test_command)
+  test_result = system_command(test_command)
 
   # stop and remove container
   puts 'Stopping dev container'
   system_command("docker stop #{container_id}")
   puts 'Removing dev container'
   system_command("docker rm #{container_id}")
+
+  fail 'Tests failed' unless test_result
 
 end
 
@@ -95,12 +98,12 @@ task :build_prod do
 
   puts 'Installing NPM, Bower and TSD dependencies'
   npm_command = 'npm install && node_modules/.bin/bower install && node_modules/.bin/tsd install'
-  deps_command = "docker exec -t -u #{user} #{container_id} #{npm_command}"
+  deps_command = "docker exec -t #{container_id} #{npm_command}"
   system_command(deps_command)
 
   # Webpack Build
   webpack_build = 'npm run build'
-  build_command = "docker exec -t -u #{user} #{container_id} #{webpack_build}"
+  build_command = "docker exec -t #{container_id} #{webpack_build}"
   system_command(build_command)
 
   # stop and remove container
@@ -111,11 +114,28 @@ task :build_prod do
 
 
   puts 'Building production container'
-  built_container = build_container("#{Dir.getwd}/Dockerfile.app", "#{Dir.getwd}", 'tutum.co/vjftw/homomorphic-encryption:client-latest')
+  built_container = build_container("#{Dir.getwd}/Dockerfile.app", "#{Dir.getwd}", prod_container_name)
 
   # Remove build folder with docker
   system_command("docker run -v #{Dir.getwd}:/app -w=/app alpine /bin/sh -c 'rm -rf __build__'")
 
+end
+
+desc 'CI'
+task :ci do
+  Rake::Task["test"].execute
+  Rake::Task["publish_coverage"].execute
+  Rake::Task["build_prod"].execute
+
+  docker_email = ENV['DOCKER_EMAIL']
+  docker_username = ENV['DOCKER_USERNAME']
+  docker_password = ENV['DOCKER_PASSWORD']
+  registry = "tutum.co"
+  docker_login = "docker login -e #{docker_email} -u #{docker_username} -p #{docker_password} #{registry}"
+  system_command(docker_login)
+
+  docker_push = "docker push #{prod_container_name}"
+  system_command(docker_push)
 end
 
 def build_container(docker_file, working_dir, tag='test')

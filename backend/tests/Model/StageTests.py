@@ -42,6 +42,29 @@ class StageTests(unittest.TestCase):
             "Workspace"
         )
 
+    def test_get_host(self):
+        """
+        Stage.get_host - it should return the host
+        """
+        self.assertEqual(
+            self.stage.get_host(),
+            None
+        )
+
+    def test_set_host(self):
+        """
+        Stage.set_host - it should set the host
+        """
+        self.assertEqual(
+            self.stage.set_host(Stage.TYPE_SERVER),
+            self.stage
+        )
+
+        self.assertEqual(
+            self.stage.get_host(),
+            Stage.TYPE_SERVER
+        )
+
     def test_get_steps(self):
         """
         Stage.get_steps - it should return the steps
@@ -72,10 +95,12 @@ class StageTests(unittest.TestCase):
         """
         j = {
             'name': "Workspace",
+            'host': Stage.TYPE_SERVER,
             'steps': []
         }
 
         self.stage.set_name("Workspace")
+        self.stage.set_host(Stage.TYPE_SERVER)
 
         self.assertEqual(
             self.stage.to_json(),

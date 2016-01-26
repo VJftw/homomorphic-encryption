@@ -27,6 +27,7 @@ class StageResolverTests(unittest.TestCase):
         """
         stage_dict = {
             'name': "Workspace",
+            'host': 1,
             'steps': [
                 "abcd"
             ]

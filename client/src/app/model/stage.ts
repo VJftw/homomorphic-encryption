@@ -5,7 +5,12 @@ import {Step} from "./step";
  */
 export class Stage {
 
+  public static HOST_CLIENT = 0;
+  public static HOST_SERVER = 1;
+
+
   private name: string;
+  private host: number;
 
   private steps: Array<Step>;
 
@@ -28,6 +33,25 @@ export class Stage {
    */
   public setName(name: string): Stage {
     this.name = name;
+
+    return this;
+  }
+
+  /**
+   * getHost
+   * @returns {number}
+   */
+  public getHost(): number {
+    return this.host;
+  }
+
+  /**
+   * setHost
+   * @param type
+   * @returns {Stage}
+   */
+  public setHost(host: number) {
+    this.host = host;
 
     return this;
   }
@@ -57,7 +81,8 @@ export class Stage {
       steps.push(step.toJson());
     });
     return {
-      "name": this.name,
+      "name": this.getName(),
+      "host": this.getHost(),
       "steps": steps
     };
   }

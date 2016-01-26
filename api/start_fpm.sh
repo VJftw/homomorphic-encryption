@@ -19,4 +19,4 @@ chmod -R 777 app/cache
 chmod -R 777 app/logs
 
 # Start PHP-FPM
-/usr/sbin/php5-fpm -R --nodaemonize
+/usr/sbin/php-fpm7.0 -R --nodaemonize
