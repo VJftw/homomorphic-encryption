@@ -14,12 +14,7 @@ import {Headers} from "angular2/http";
  * PaillerScheme
  */
 @Injectable()
-export class PaillerScheme implements EncryptionScheme {
-
-
-  protected socket: WebSocket;
-
-  private computation: Computation;
+export class PaillerScheme extends EncryptionScheme {
 
   constructor(
     private pailler: Pailler,
@@ -28,7 +23,12 @@ export class PaillerScheme implements EncryptionScheme {
     private computationResolver: ComputationResolver,
     private http: Http
   ) {
-    this.socket = null;
+    super(
+      stageProvider,
+      stepProvider,
+      computationResolver,
+      http
+    );
   }
 
   public setComputation(computation: Computation): EncryptionScheme {
@@ -183,16 +183,24 @@ export class PaillerScheme implements EncryptionScheme {
     console.log(data);
     this.computation.setHashId(data.json().hashId);
 
-    this.socket = new WebSocket("ws://" + __BACKEND_URL__);
+    while (this.socket.readyState !== WebSocket.OPEN) {
+      console.log("Waiting");
+    }
+    this.socket.send(JSON.stringify({
+      "action": "computation/compute",
+      "data": {
+        "hashId": this.computation.getHashId()
+      }
+    }));
 
-    this.socket.addEventListener("open", (ev: Event) => {
-      this.socket.send(JSON.stringify({
-        "action": "computation/compute",
-        "data": {
-          "hashId": this.computation.getHashId()
-        }
-      }));
-    });
+    //this.socket.addEventListener("open", (ev: Event) => {
+    //  this.socket.send(JSON.stringify({
+    //    "action": "computation/compute",
+    //    "data": {
+    //      "hashId": this.computation.getHashId()
+    //    }
+    //  }));
+    //});
 
 
     this.socket.addEventListener("message", (ev: MessageEvent) => {
