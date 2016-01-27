@@ -3,6 +3,7 @@ import {Http} from "angular2/http";
 import {ComputationResolver} from "../resolver/computation_resolver";
 import {StepProvider} from "../provider/step_provider";
 import {StageProvider} from "../provider/stage_provider";
+import {Headers} from "angular2/http";
 
 /**
  * EncryptionScheme
@@ -13,12 +14,11 @@ export abstract class EncryptionScheme {
   protected socket: WebSocket;
 
   constructor(
-    protected stageProvder: StageProvider,
+    protected stageProvider: StageProvider,
     protected stepProvider: StepProvider,
     protected computationResolver: ComputationResolver,
     protected http: Http
   ) {
-    this.socket = new WebSocket("ws://" + __BACKEND_URL__);
   }
 
   public setComputation(computation: Computation): EncryptionScheme {
@@ -31,25 +31,71 @@ export abstract class EncryptionScheme {
     return this.computation;
   }
 
+  protected registerComputation(): void {
+    console.log(__API_URL__);
+
+    const JSON_HEADERS = new Headers();
+
+    JSON_HEADERS.append("Accept", "application/json");
+    JSON_HEADERS.append("Content-Type", "application/json");
+    this.http.post("http://" + __API_URL__ + "/api/computations", JSON.stringify(this.computation.toJson()), { headers: JSON_HEADERS})
+      .subscribe(
+        data => this.connectToWebSocket(data),
+        err => console.log(err)
+      )
+    ;
+  }
+
+  protected connectToWebSocket(data): void {
+    console.log(data);
+    this.computation.setHashId(data.json().hashId);
+    this.socket = new WebSocket("ws://" + __BACKEND_URL__);
+
+    this.socket.addEventListener("open", (ev: Event) => {
+      this.socket.send(JSON.stringify({
+        "action": "computation/compute",
+        "data": {
+          "hashId": this.computation.getHashId()
+        }
+     }));
+    });
+
+    this.socket.addEventListener("message", (ev: MessageEvent) => {
+      console.log(ev);
+      this.computation = this.computationResolver.fromJson(
+        JSON.parse(ev.data),
+        this.computation
+      );
+
+      if (this.computation.isComplete()) {
+        this.socket.close();
+
+        this.decrypt();
+      }
+    });
+  }
+
+  protected abstract decrypt(): void;
+
   /**
    * Return the name of the Encryption Scheme
    */
-  abstract getName(): string;
+  public abstract getName(): string;
 
   /**
    * Return a description of the Encryption Scheme
    */
-  abstract getDescription(): string;
+  public abstract getDescription(): string;
 
   /**
    * Return what calculations the scheme can perform
    */
-  abstract getCapabilities(): Array<string>;
+  public abstract getCapabilities(): Array<string>;
 
   /**
    * execute the encryption scheme with the given numbers and operator
    */
-  abstract doScheme(): void;
+  public abstract doScheme(): void;
 
 }
 

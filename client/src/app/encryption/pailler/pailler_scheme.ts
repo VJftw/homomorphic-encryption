@@ -18,10 +18,10 @@ export class PaillerScheme extends EncryptionScheme {
 
   constructor(
     private pailler: Pailler,
-    private stageProvider: StageProvider,
-    private stepProvider: StepProvider,
-    private computationResolver: ComputationResolver,
-    private http: Http
+    stageProvider: StageProvider,
+    stepProvider: StepProvider,
+    computationResolver: ComputationResolver,
+    http: Http
   ) {
     super(
       stageProvider,
@@ -164,61 +164,7 @@ export class PaillerScheme extends EncryptionScheme {
     console.log(this.computation);
   }
 
-  private registerComputation(): void {
-    console.log(__API_URL__);
-
-    const JSON_HEADERS = new Headers();
-
-    JSON_HEADERS.append("Accept", "application/json");
-    JSON_HEADERS.append("Content-Type", "application/json");
-    this.http.post("http://" + __API_URL__ + "/api/computations", JSON.stringify(this.computation.toJson()), { headers: JSON_HEADERS})
-      .subscribe(
-        data => this.connectToWebSocket(data),
-        err => console.log(err)
-      )
-    ;
-  }
-
-  private connectToWebSocket(data) {
-    console.log(data);
-    this.computation.setHashId(data.json().hashId);
-
-    while (this.socket.readyState !== WebSocket.OPEN) {
-      console.log("Waiting");
-    }
-    this.socket.send(JSON.stringify({
-      "action": "computation/compute",
-      "data": {
-        "hashId": this.computation.getHashId()
-      }
-    }));
-
-    //this.socket.addEventListener("open", (ev: Event) => {
-    //  this.socket.send(JSON.stringify({
-    //    "action": "computation/compute",
-    //    "data": {
-    //      "hashId": this.computation.getHashId()
-    //    }
-    //  }));
-    //});
-
-
-    this.socket.addEventListener("message", (ev: MessageEvent) => {
-      console.log(ev);
-      this.computation = this.computationResolver.fromJson(
-        JSON.parse(ev.data),
-        this.computation
-      );
-
-      if (this.computation.isComplete()) {
-        this.socket.close();
-
-        this.decrypt();
-      }
-    });
-  }
-
-  private decrypt() {
+  protected decrypt() {
     let stageName = "Decryption";
     this.computation.addStage(
       this.stageProvider.create(stageName)

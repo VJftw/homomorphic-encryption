@@ -1,6 +1,8 @@
 /// <reference path="../../../typings/jsbn.d.ts" />
 import {BigInteger} from "jsbn";
 import {Injectable} from "angular2/core";
+import {PrivateKeyInterface, PublicKeyInterface} from "../key";
+import {KeyPair} from "../helper";
 
 
 @Injectable()
@@ -14,10 +16,10 @@ export class Pailler {
     let privateKey = new PrivateKey(p, q, n);
     let publicKey = new PublicKey(n);
 
-    return new KeyPair(privateKey, publicKey, p, q);
+    return new KeyPair(privateKey, publicKey);
   }
 
-  public encrypt(publicKey: PublicKey, message: any, r: BigInteger) : BigInteger {
+  public encrypt(publicKey, message: any, r: BigInteger) : BigInteger {
     message = new BigInteger("" + message);
 
     let x: BigInteger = r.modPow(publicKey.getN(), publicKey.getNSq());
@@ -25,7 +27,7 @@ export class Pailler {
     return mx.mod(publicKey.getNSq());
   }
 
-  public generateR(publicKey: PublicKey): BigInteger {
+  public generateR(publicKey): BigInteger {
     let r: BigInteger;
     let k = publicKey.getN().bitLength() - 1;
     console.log(k);
@@ -65,42 +67,7 @@ export class Pailler {
 
 }
 
-export class KeyPair {
-  private privateKey: PrivateKey;
-  private publicKey: PublicKey;
-  private p: BigInteger;
-  private q: BigInteger;
-
-  constructor(
-    privateKey: PrivateKey,
-    publicKey: PublicKey,
-    p: BigInteger,
-    q: BigInteger
-  ) {
-    this.privateKey = privateKey;
-    this.publicKey = publicKey;
-    this.p = p;
-    this.q = q;
-  }
-
-  public getPrivateKey() : PrivateKey {
-    return this.privateKey;
-  }
-
-  public getPublicKey() : PublicKey {
-    return this.publicKey;
-  }
-
-  public getP(): BigInteger {
-    return this.p;
-  }
-
-  public getQ(): BigInteger {
-    return this.q;
-  }
-}
-
-export class PublicKey {
+export class PublicKey implements PublicKeyInterface {
 
   private n: BigInteger;
   private nSq: BigInteger;
@@ -126,7 +93,7 @@ export class PublicKey {
     return this.g;
   }
 
-  public toJson() {
+  public toJson(): {} {
     return {
       "n": this.getN().toString(),
       "nSq": this.getNSq().toString(),
@@ -135,7 +102,7 @@ export class PublicKey {
   }
 }
 
-export class PrivateKey {
+export class PrivateKey implements PrivateKeyInterface {
 
   private l: BigInteger;
   private m: BigInteger;

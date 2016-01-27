@@ -1,4 +1,4 @@
-import {PrivateKey, PublicKey} from "../encryption/pailler/pailler";
+import {PrivateKeyInterface, PublicKeyInterface} from "../encryption/key";
 import {BigInteger} from "jsbn";
 import {Stage} from "./stage";
 
@@ -13,7 +13,7 @@ export class Computation {
   protected _hashId: string;
   protected aEncrypted: BigInteger;
   protected bEncrypted: BigInteger;
-  protected publicKey: PublicKey;
+  protected publicKey: PublicKeyInterface;
   protected timestamp: Date;
   protected scheme: string;
   protected operation: string;
@@ -23,7 +23,7 @@ export class Computation {
   private a: BigInteger;
   private b: BigInteger;
   private c: BigInteger;
-  private privateKey: PrivateKey;
+  private privateKey: PrivateKeyInterface;
 
   constructor() {
     this.state = Computation.STATE_NEW;
@@ -58,23 +58,23 @@ export class Computation {
     return this;
   }
 
-  public setPrivateKey(privateKey: PrivateKey) {
+  public setPrivateKey(privateKey: PrivateKeyInterface) {
     this.privateKey = privateKey;
 
     return this;
   }
 
-  public getPrivateKey(): PrivateKey {
+  public getPrivateKey(): any {
     return this.privateKey;
   }
 
-  public setPublicKey(publicKey: PublicKey) {
+  public setPublicKey(publicKey: PublicKeyInterface) {
     this.publicKey = publicKey;
 
     return this;
   }
 
-  public getPublicKey() : PublicKey {
+  public getPublicKey(): any {
     return this.publicKey;
   }
 

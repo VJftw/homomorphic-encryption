@@ -5,21 +5,28 @@ import {ComputationResolver} from "../../resolver/computation_resolver";
 import {StageProvider} from "../../provider/stage_provider";
 import {Http} from "angular2/http";
 import {StepProvider} from "../../provider/step_provider";
+import {EncryptionHelper} from "../helper";
+import {PrivateKey, PublicKey, ElGamal} from "./el_gamal";
 
 
 @Injectable()
 export class ElGamalScheme extends EncryptionScheme {
 
-  protected socket: WebSocket;
-
-  protected computation: Computation;
+  private y;
 
   constructor(
-    private stageProvider: StageProvider,
-    private stepProvider: StepProvider,
-    private computationResolver: ComputationResolver,
-    private http: Http
+    stageProvider: StageProvider,
+    stepProvider: StepProvider,
+    computationResolver: ComputationResolver,
+    http: Http,
+    private elGamal: ElGamal
   ) {
+    super(
+      stageProvider,
+      stepProvider,
+      computationResolver,
+      http
+    )
   }
 
   getName(): string {
@@ -36,6 +43,10 @@ export class ElGamalScheme extends EncryptionScheme {
 
   doScheme():void {
     this.workspace();
+    this.generateKeys();
+    this.encryptValues();
+
+    this.registerComputation();
   }
 
   private workspace(): void {
@@ -57,7 +68,64 @@ export class ElGamalScheme extends EncryptionScheme {
   }
 
   private generateKeys(): void {
+    let stageName = "Key Generation";
+    this.computation.addStage(
+      this.stageProvider.create(stageName)
+    );
 
+    let bits = 16;
+    let p = EncryptionHelper.generatePrime(bits);
+    let g = EncryptionHelper.findPrimitiveRootOfPrime(p);
+    let x = EncryptionHelper.getRandomArbitrary(1, p.intValue());
+    let h = g.modPow(x, p);
+
+    let privateKey = new PrivateKey(p, g, x);
+    this.computation.setPrivateKey(privateKey);
+
+    let publicKey = new PublicKey(p, g, h);
+    this.computation.setPublicKey(publicKey);
   }
 
+  private encryptValues(): void {
+    let stageName = "Encryption";
+    this.computation.addStage(
+      this.stageProvider.create(stageName)
+    );
+
+    this.y = EncryptionHelper.getRandomArbitrary(0, this.computation.getPublicKey().getP());
+
+    let aX = this.elGamal.encrypt(this.y, this.computation.getA(), this.computation.getPublicKey());
+    this.computation.setAEncrypted(aX);
+    let bX = this.elGamal.encrypt(this.y, this.computation.getB(), this.computation.getPublicKey());
+    this.computation.setBEncrypted(bX);
+  }
+
+  protected decrypt(): void {
+    let stageName = "Decryption";
+    this.computation.addStage(
+      this.stageProvider.create(stageName)
+    );
+
+    let lastStage = this.computation.getStages()[
+      this.computation.getStages().length - 2
+    ];
+
+    let lastStep = lastStage.getSteps()[
+      lastStage.getSteps().length - 1
+    ];
+
+    let e = lastStep.getResult();
+
+    let g = this.computation.getPrivateKey().getG();
+    let p = this.computation.getPrivateKey().getP();
+
+    let brmodp = g.modPow(this.y, p);
+
+    let crmodp = brmodp.modPow(this.computation.getPrivateKey().getX(), p);
+    let d = crmodp.modInverse(p);
+    let ad = d.multiply(e).mod(p);
+
+    this.computation.setC(ad);
+    this.computation.setState(Computation.STATE_COMPLETE);
+  }
 }

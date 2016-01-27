@@ -42,9 +42,7 @@ class ComputationResolver:
         c.set_a_encrypted(int(computation_dict['aEncrypted']))
         c.set_b_encrypted(int(computation_dict['bEncrypted']))
 
-        c.set_public_key(
-            self.__key_resolver.public_from_dict(computation_dict['publicKey'])
-        )
+        self.__key_resolver.from_computation_and_dict(c, computation_dict)
 
         for stage_dict in computation_dict['stages']:
             c.add_stage(

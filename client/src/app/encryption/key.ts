@@ -1,9 +1,9 @@
-export interface PublicKey {
+export interface PublicKeyInterface {
 
-  toJson(): Map;
+  toJson(): {};
 
 }
 
-export interface PrivateKey {
+export interface PrivateKeyInterface {
 
 }

@@ -16,6 +16,8 @@ import {StepProvider} from "./app/provider/step_provider";
 import {StageProvider} from "./app/provider/stage_provider";
 import {EncryptionSchemeProvider} from "./app/provider/encryption_scheme_provider";
 import {PaillerScheme} from "./app/encryption/pailler/pailler_scheme";
+import {ElGamalScheme} from "./app/encryption/elgamal/el_gamal_scheme";
+import {ElGamal} from "./app/encryption/elgamal/el_gamal";
 
 /*
  * App Component
@@ -35,7 +37,6 @@ function main() {
   ];
 
   let app_deps: Array<any> = [
-    Pailler,
     ComputationResolver,
     StepResolver,
     StageResolver,
@@ -43,7 +44,10 @@ function main() {
     StepProvider,
     StageProvider,
     EncryptionSchemeProvider,
-    PaillerScheme
+    PaillerScheme,
+    Pailler,
+    ElGamalScheme,
+    ElGamal
   ];
 
   if (process.env.NODE_ENV !== "development") {
