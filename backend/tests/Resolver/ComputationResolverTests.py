@@ -33,7 +33,7 @@ class ComputationResolverTests(unittest.TestCase):
         :return:
         """
         pub_key = mock.Mock()
-        self.key_resolver.public_from_dict = mock.Mock(return_value=pub_key)
+        self.key_resolver.from_computation_and_dict = mock.Mock()
 
         stage = mock.Mock()
         self.stage_resolver.from_dict = mock.Mock(return_value=stage)
@@ -78,10 +78,7 @@ class ComputationResolverTests(unittest.TestCase):
             456456456
         )
 
-        self.assertEqual(
-            computation.get_public_key(),
-            pub_key
-        )
+        assert self.key_resolver.from_computation_and_dict.called
 
         self.assertEqual(
             computation.get_stages(),

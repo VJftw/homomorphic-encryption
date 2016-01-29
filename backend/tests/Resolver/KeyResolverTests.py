@@ -18,9 +18,9 @@ class KeyResolverTests(unittest.TestCase):
         """
         self.key_resolver = KeyResolver()
 
-    def test_public_from_dict(self):
+    def test_pailler_public_from_dict(self):
         """
-        KeyResolver.public_from_dict - it should return a public key from a dictionary
+        KeyResolver.pailler_public_from_dict - it should return a public key from a dictionary
         :return:
         """
         p_k_dict = {
@@ -29,7 +29,7 @@ class KeyResolverTests(unittest.TestCase):
             'g': "123"
         }
 
-        public_key = self.key_resolver.public_from_dict(p_k_dict)
+        public_key = self.key_resolver.pailler_public_from_dict(p_k_dict)
 
         self.assertEqual(
             public_key.get_n(),

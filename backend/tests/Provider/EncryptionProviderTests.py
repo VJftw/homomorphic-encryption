@@ -18,8 +18,10 @@ class EncryptionProviderTests(unittest.TestCase):
         :return:
         """
         self.pailler = mock.Mock()
+        self.el_gamal_ecc = mock.Mock()
         self.encryption_provider = EncryptionProvider(
-            self.pailler
+            self.pailler,
+            self.el_gamal_ecc
         )
 
     def test_get_encryption_by_name_pailler(self):
@@ -30,4 +32,14 @@ class EncryptionProviderTests(unittest.TestCase):
         self.assertEqual(
             self.encryption_provider.get_encryption_by_name("Pailler"),
             self.pailler
+        )
+
+    def test_get_encryption_by_name_el_gamal_ecc(self):
+        """
+        EncryptionProvider.get_encryption_by_name - it should return the ElGamal ECC encryption
+        :return:
+        """
+        self.assertEqual(
+            self.encryption_provider.get_encryption_by_name("ElGamal_ECC"),
+            self.el_gamal_ecc
         )
