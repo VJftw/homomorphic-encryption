@@ -11,9 +11,13 @@ describe("EncryptionSchemeProvider", () => {
   let paillerScheme = jasmine.createSpyObj("paillerScheme", ["getName"]);
   paillerScheme.getName.and.returnValue("Pailler");
 
+  let elgamalEccScheme = jasmine.createSpyObj("elgamalEccScheme", ["getName"]);
+  elgamalEccScheme.getName.and.returnValue("ElGamal_ECC");
+
   beforeEach(() => {
     encryptionSchemeProvider = new EncryptionSchemeProvider(
-      paillerScheme
+      paillerScheme,
+      elgamalEccScheme
     );
   });
 
