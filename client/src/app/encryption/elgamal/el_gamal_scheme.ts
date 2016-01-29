@@ -5,7 +5,7 @@ import {ComputationResolver} from "../../resolver/computation_resolver";
 import {StageProvider} from "../../provider/stage_provider";
 import {Http} from "angular2/http";
 import {StepProvider} from "../../provider/step_provider";
-import {EncryptionHelper} from "../helper";
+import {EncryptionHelper} from "../encryption_helper";
 import {PrivateKey, PublicKey, ElGamal} from "./el_gamal";
 
 
@@ -18,6 +18,7 @@ export class ElGamalScheme extends EncryptionScheme {
     stageProvider: StageProvider,
     stepProvider: StepProvider,
     computationResolver: ComputationResolver,
+    encryptionHelper: EncryptionHelper,
     http: Http,
     private elGamal: ElGamal
   ) {
@@ -25,6 +26,7 @@ export class ElGamalScheme extends EncryptionScheme {
       stageProvider,
       stepProvider,
       computationResolver,
+      encryptionHelper,
       http
     )
   }
@@ -74,9 +76,9 @@ export class ElGamalScheme extends EncryptionScheme {
     );
 
     let bits = 16;
-    let p = EncryptionHelper.generatePrime(bits);
-    let g = EncryptionHelper.findPrimitiveRootOfPrime(p);
-    let x = EncryptionHelper.getRandomArbitrary(1, p.intValue());
+    let p = this.encryptionHelper.generatePrime(bits);
+    let g = this.encryptionHelper.findPrimitiveRootOfPrime(p);
+    let x = this.encryptionHelper.getRandomArbitrary(1, p.intValue());
     let h = g.modPow(x, p);
 
     let privateKey = new PrivateKey(p, g, x);
@@ -92,7 +94,7 @@ export class ElGamalScheme extends EncryptionScheme {
       this.stageProvider.create(stageName)
     );
 
-    this.y = EncryptionHelper.getRandomArbitrary(0, this.computation.getPublicKey().getP());
+    this.y = this.encryptionHelper.getRandomArbitrary(0, this.computation.getPublicKey().getP());
 
     let aX = this.elGamal.encrypt(this.y, this.computation.getA(), this.computation.getPublicKey());
     this.computation.setAEncrypted(aX);

@@ -16,7 +16,7 @@
     "src/app/component/index/index.ts",
     "src/app/directive/mathjax.ts",
     "src/app/encryption/encryption_scheme.ts",
-    "src/app/encryption/helper.ts",
+    "src/app/encryption/encryption_helper.ts",
     "src/app/encryption/key.ts",
     "src/app/encryption/pailler/pailler_scheme.ts",
     "src/app/encryption/pailler/pailler.ts",

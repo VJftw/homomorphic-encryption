@@ -2,7 +2,7 @@
 import {BigInteger} from "jsbn";
 import {Injectable} from "angular2/core";
 import {PrivateKeyInterface, PublicKeyInterface} from "../key";
-import {KeyPair} from "../helper";
+import {KeyPair} from "../encryption_helper";
 
 
 @Injectable()

@@ -1,16 +1,19 @@
+import {Injectable} from "angular2/core";
 import {BigInteger} from "jsbn";
 import {PrivateKeyInterface} from "./key";
 import {PublicKeyInterface} from "./key";
 
+
+@Injectable()
 export class EncryptionHelper {
 
-  public static getRandomArbitrary(min: number, max :number): BigInteger {
+  public getRandomArbitrary(min: number, max :number): BigInteger {
     let x = Math.random() * (max - min) + min;
 
     return new BigInteger("" + Math.round(x));
   }
 
-  public static generatePrime(bits: number): BigInteger {
+  public generatePrime(bits: number): BigInteger {
     let min = Math.pow(2, bits - 1);
     let max = Math.pow(2, bits);
 
@@ -24,7 +27,7 @@ export class EncryptionHelper {
     }
   }
 
-  public static findPrimitiveRootOfPrime(prime: BigInteger): BigInteger {
+  public findPrimitiveRootOfPrime(prime: BigInteger): BigInteger {
 
     if (prime.intValue() === 2) {
       return new BigInteger("1");

@@ -23,7 +23,7 @@ describe("StageProvider", () => {
       .toBe(0)
     ;
 
-    stage = stageProvider.create("Test", 1)
+    stage = stageProvider.create("Test", 1);
 
     expect(stage.getName())
       .toEqual("Test")

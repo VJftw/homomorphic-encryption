@@ -9,6 +9,7 @@ import {Injectable} from "angular2/core";
 import {Http} from "angular2/http";
 import {BigInteger} from "jsbn";
 import {Headers} from "angular2/http";
+import {EncryptionHelper} from "../encryption_helper";
 
 /**
  * PaillerScheme
@@ -21,12 +22,14 @@ export class PaillerScheme extends EncryptionScheme {
     stageProvider: StageProvider,
     stepProvider: StepProvider,
     computationResolver: ComputationResolver,
+    encryptionHelper: EncryptionHelper,
     http: Http
   ) {
     super(
       stageProvider,
       stepProvider,
       computationResolver,
+      encryptionHelper,
       http
     );
   }

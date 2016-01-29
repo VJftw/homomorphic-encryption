@@ -9,24 +9,20 @@ describe("PaillerScheme", () => {
 
   let paillerScheme: PaillerScheme;
 
-  let pailler: any;
-  let stageProvider: any;
-  let stepProvider: any;
-  let computationResolver: any;
-  let http: any;
+  let pailler = jasmine.createSpyObj("pailler", [""]);
+  let stageProvider = jasmine.createSpyObj("stageProvider", [""]);
+  let stepProvider = jasmine.createSpyObj("stepProvider", [""]);
+  let computationResolver = jasmine.createSpyObj("computationResolver", [""]);
+  let encryptionHelper = jasmine.createSpyObj("encryptionHelper", [""]);
+  let http = jasmine.createSpyObj("http", [""]);
 
   beforeEach(() => {
-    pailler = jasmine.createSpyObj("pailler", [""]);
-    stageProvider = jasmine.createSpyObj("stageProvider", [""]);
-    stepProvider = jasmine.createSpyObj("stepProvider", [""]);
-    computationResolver = jasmine.createSpyObj("computationResolver", [""]);
-    http = jasmine.createSpyObj("http", [""]);
-
     paillerScheme = new PaillerScheme(
       pailler,
       stageProvider,
       stepProvider,
       computationResolver,
+      encryptionHelper,
       http
     );
   });

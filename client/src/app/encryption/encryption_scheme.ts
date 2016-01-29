@@ -4,6 +4,7 @@ import {ComputationResolver} from "../resolver/computation_resolver";
 import {StepProvider} from "../provider/step_provider";
 import {StageProvider} from "../provider/stage_provider";
 import {Headers} from "angular2/http";
+import {EncryptionHelper} from "./encryption_helper";
 
 /**
  * EncryptionScheme
@@ -17,6 +18,7 @@ export abstract class EncryptionScheme {
     protected stageProvider: StageProvider,
     protected stepProvider: StepProvider,
     protected computationResolver: ComputationResolver,
+    protected encryptionHelper: EncryptionHelper,
     protected http: Http
   ) {
   }
