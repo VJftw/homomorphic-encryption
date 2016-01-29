@@ -6,7 +6,6 @@
 import {Component, View} from "angular2/core";
 import {CORE_DIRECTIVES} from "angular2/common";
 import {ROUTER_DIRECTIVES} from "angular2/router";
-import {BigInteger} from "jsbn";
 
 
 // Simple external file component example

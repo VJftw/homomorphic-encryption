@@ -18,6 +18,7 @@ import {EncryptionSchemeProvider} from "./app/provider/encryption_scheme_provide
 import {PaillerScheme} from "./app/encryption/pailler/pailler_scheme";
 import {ElGamalScheme} from "./app/encryption/elgamal/el_gamal_scheme";
 import {ElGamal} from "./app/encryption/elgamal/el_gamal";
+import {EncryptionHelper} from "./app/encryption/encryption_helper";
 
 /*
  * App Component
@@ -44,6 +45,7 @@ function main() {
     StepProvider,
     StageProvider,
     EncryptionSchemeProvider,
+    EncryptionHelper,
     PaillerScheme,
     Pailler,
     ElGamalScheme,

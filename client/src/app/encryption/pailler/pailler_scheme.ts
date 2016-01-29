@@ -8,7 +8,6 @@ import {StageProvider} from "../../provider/stage_provider";
 import {Injectable} from "angular2/core";
 import {Http} from "angular2/http";
 import {BigInteger} from "jsbn";
-import {Headers} from "angular2/http";
 import {EncryptionHelper} from "../encryption_helper";
 
 /**
@@ -63,21 +62,51 @@ export class PaillerScheme extends EncryptionScheme {
     this.registerComputation();
   }
 
+  protected decrypt(): void {
+    let stageName = "Decryption";
+    this.computation.addStage(
+      this.stageProvider.create(stageName)
+    );
+
+    let lastStage = this.computation.getStages()[
+    this.computation.getStages().length - 2
+      ];
+    let lastStep = lastStage.getSteps()[
+    lastStage.getSteps().length - 1
+      ];
+
+    let e: BigInteger = lastStep.getResult();
+    let privateKey = this.computation.getPrivateKey();
+    let publicKey = this.computation.getPublicKey();
+
+    let x: BigInteger = e.modPow(privateKey.getL(), publicKey.getNSq()).subtract(new BigInteger("1"));
+    let m: BigInteger = x.divide(publicKey.getN());
+
+    let c = m.multiply(privateKey.getM()).mod(publicKey.getN());
+    this.computation.getStageByName(stageName).addStep(this.stepProvider.create(
+      "Calculate \\((\\frac{(cX^l\\bmod n^2) - 1}{n})\\cdot cX \\bmod n \\) to get \\(c\\)",
+      c
+    ));
+
+    this.computation.setC(c);
+    this.computation.setState(Computation.STATE_COMPLETE);
+  }
+
   private workspace(): void {
     let stageName = "Workspace";
     this.computation.addStage(
-        this.stageProvider.create(stageName)
+      this.stageProvider.create(stageName)
     );
     this.computation.getStageByName(stageName).addStep(this.stepProvider.create(
-        "We aim to calculate \\(a + b = c\\)"
+      "We aim to calculate \\(a + b = c\\)"
     ));
     this.computation.getStageByName(stageName).addStep(this.stepProvider.create(
-        "let \\(a\\)",
-        this.computation.getA()
+      "let \\(a\\)",
+      this.computation.getA()
     ));
     this.computation.getStageByName(stageName).addStep(this.stepProvider.create(
-        "let \\(b\\)",
-        this.computation.getB()
+      "let \\(b\\)",
+      this.computation.getB()
     ));
   }
 
@@ -115,7 +144,6 @@ export class PaillerScheme extends EncryptionScheme {
       "Calculate \\(l^{-1} \\bmod n\\) to get \\(m\\)",
       m
     ));
-
 
     let privateKey: PrivateKey = new PrivateKey(p, q, n);
     this.computation.setPrivateKey(privateKey);
@@ -167,33 +195,5 @@ export class PaillerScheme extends EncryptionScheme {
     console.log(this.computation);
   }
 
-  protected decrypt() {
-    let stageName = "Decryption";
-    this.computation.addStage(
-      this.stageProvider.create(stageName)
-    );
 
-    let lastStage = this.computation.getStages()[
-      this.computation.getStages().length - 2
-    ];
-    let lastStep = lastStage.getSteps()[
-      lastStage.getSteps().length - 1
-    ];
-
-    let e: BigInteger = lastStep.getResult();
-    let privateKey = this.computation.getPrivateKey();
-    let publicKey = this.computation.getPublicKey();
-
-    let x: BigInteger = e.modPow(privateKey.getL(), publicKey.getNSq()).subtract(new BigInteger("1"));
-    let m: BigInteger = x.divide(publicKey.getN());
-
-    let c = m.multiply(privateKey.getM()).mod(publicKey.getN());
-    this.computation.getStageByName(stageName).addStep(this.stepProvider.create(
-      "Calculate \\((\\frac{cX^lmod(n^2) - 1}{n})\\cdot cX \\bmod n \\) to get \\(c\\)",
-      c
-    ));
-
-    this.computation.setC(c);
-    this.computation.setState(Computation.STATE_COMPLETE);
-  }
 }

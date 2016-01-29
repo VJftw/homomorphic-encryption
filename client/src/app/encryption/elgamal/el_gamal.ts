@@ -36,9 +36,9 @@ export class PublicKey implements PublicKeyInterface {
 
   public toJson(): {} {
     return {
-      'p': this.getP().toString(),
-      'g': this.getG().toString(),
-      'h': this.getH().toString()
+      "p": this.getP().toString(),
+      "g": this.getG().toString(),
+      "h": this.getH().toString()
     };
   }
 

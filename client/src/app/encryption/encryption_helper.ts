@@ -7,7 +7,7 @@ import {PublicKeyInterface} from "./key";
 @Injectable()
 export class EncryptionHelper {
 
-  public getRandomArbitrary(min: number, max :number): BigInteger {
+  public getRandomArbitrary(min: number, max: number): BigInteger {
     let x = Math.random() * (max - min) + min;
 
     return new BigInteger("" + Math.round(x));
@@ -37,7 +37,7 @@ export class EncryptionHelper {
     let s = prime.subtract(new BigInteger("1"));
     let p2 = s.divide(p1);
 
-    while(true) {
+    while (true) {
       let g = this.getRandomArbitrary(2, s.intValue());
 
       let h = g.modPow(p2, prime);
