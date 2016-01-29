@@ -1,0 +1,35 @@
+#
+# Each Scheme MUST have a Decrypt stage
+# computation variable
+#
+#
+
+unique_name: pailler
+readable_name: Pailler
+description: The Pailler additive somewhat homomorphic scheme
+stages:
+  - stage_name: Workspace
+    steps:
+      - description: We aim to calculate \\(a + b = c\\)
+      - description: let \\(a\\)
+        compute: a = computation.a
+      - description: let \\(b\\)
+        compute: b = computation.b
+  - stage_name: Key Generation
+    steps:
+      - description: Generate random prime \\(p\\)
+        compute: p = generateRandomPrime()
+      - description: Generate random prime \\(q\\)
+        compute: q = generateRandomPrime()
+      - description: Multiply primes \\(p\\) and \\(q\\) to get \\(n\\)
+        compute: n = p x q
+      - description: Calculate \\(\\phi(p\\cdot q)\\) to get \\(l\\)
+        compute: l = (p - 1) * (q - 1)
+      - description: Calculate \\(l^{-1} \\bmod n\\) to get \\(m\\)
+        compute: m = l modInverse n
+  - stage_name: Encryption
+    steps:
+      - description: Generator random prime \\(aR\\)
+        compute: aR = generateRandomPrime()
+      - description: Encrypt A
+        compute: aX = ((g powerMod a,n*n) * (aR powerMod n,n*n)) mod (n * n)
