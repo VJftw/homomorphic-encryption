@@ -120,4 +120,28 @@ describe("Computer", () => {
         ;
     });
 
+    it("should compute 'n = p * q'", () => {
+
+        let steps = [
+            "p = (1 + (5 * 2)) + (3 + 2)",
+            "q = 1 + 2",
+            "n = p * q"
+        ];
+
+        computer.computeSteps(steps);
+
+        let scopeVars = computer.getScopeVars();
+
+        expect(scopeVars['p'].intValue())
+            .toBe(16)
+        ;
+        expect(scopeVars['q'].intValue())
+            .toBe(3)
+        ;
+        expect(scopeVars['n'].intValue())
+            .toBe(48)
+        ;
+    });
+
+
 });

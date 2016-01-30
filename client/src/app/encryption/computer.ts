@@ -2,10 +2,21 @@ import {Injectable} from "angular2/core";
 import {EncryptionHelper} from "./encryption_helper";
 import {BigInteger} from "jsbn";
 import {BaseException} from "angular2/src/facade/exceptions";
+import {ExceptionHandler} from "angular2/core";
 
 
 @Injectable()
 export class Computer {
+
+    private static operations = [
+        "+",
+        "-",
+        "/",
+        "*",
+        "mod",
+        "powerMod",
+        "inverseMod"
+    ];
 
     private scopeVars: {};
 
@@ -49,40 +60,70 @@ export class Computer {
         }
     }
 
-    private calcExpression(expr: string): BigInteger {
-        let parts = expr.split(" ");
-        if (parts.length % 2 === 0) {
-            throw new BaseException("Invalid expression: " + expr);
-        }
-        if (parts.length > 3) {
-            let midOperation = parts[Math.floor(parts.length/2)];
-            console.log("Mid Op: " + midOperation);
+    private findTopOperatorLocation(expr: string): number {
+        let bracketCounter = 0;
+        let topLevelLoc = -1;
 
-            let pattern = /\) . \(/g;
-            parts = expr.split(pattern);
-            let partA = parts[0].trim().substring(1, parts[0].length);
-            let partB = parts[1].trim().substring(0, parts[1].length - 1);
-            console.log("PartA: " + partA);
-            console.log("PartB: " + partB);
-            let a = this.calcExpression(partA);
-            let b = this.calcExpression(partB);
-            console.log("a: " + a);
-            console.log("b: " + b);
-            return this.calc(a, midOperation, b);
+        for (let i = 0; i < expr.length; i++) {
+            let char = expr[i];
+            if (char === "(") {
+                bracketCounter++;
+            } else if (char === ")") {
+                bracketCounter--;
+            } else if (bracketCounter == 0 && Computer.operations.indexOf(char) > -1) {
+                topLevelLoc = i;
+            }
         }
 
-        let aStr = expr.split(" ")[0];
-        let operator = expr.split(" ")[1];
-        let bStr = expr.split(" ")[2];
+        if (bracketCounter !== 0 || topLevelLoc === -1) {
+            throw new BaseException("Broken brackets");
+        }
 
-        // resolve a and b to BigIntegers
-        let a = this.resolveVariable(aStr);
-        let b = this.resolveVariable(bStr);
-
-        return this.calc(a, operator, b);
+        return topLevelLoc;
     }
 
-    private calc(a: BigInteger, operator: string, b: any) {
+    private trimBrackets(expr: string): string {
+        if (expr[0] === "(" && expr[expr.length - 1] === ")") {
+            return this.trimBrackets(expr.substring(1, expr.length - 1));
+        } else {
+            return expr;
+        }
+    }
+
+    private calcExpression(expr: string): BigInteger {
+        // first split in to two, a and b by the top operator
+        let topOpLoc = this.findTopOperatorLocation(expr);
+        let topOp = expr[topOpLoc];
+
+        console.log("Top operator: " + topOp + " at: " + topOpLoc);
+
+        let aStr = this.trimBrackets(expr.substring(0, topOpLoc).trim());
+        let bStr = this.trimBrackets(expr.substring(topOpLoc + 1, expr.length).trim());
+
+        console.log("\taStr: " + aStr);
+        console.log("\tbStr: " + bStr);
+
+        let a;
+        let b;
+        // check if a requires more operations
+        if (Computer.operations.some(function(v) { return aStr.indexOf(v) >= 0; })) {
+            a = this.calcExpression(aStr);
+        } else {
+            a = this.resolveVariable(aStr);
+        }
+        if (Computer.operations.some(function(v) { return bStr.indexOf(v) >= 0; })) {
+            b = this.calcExpression(bStr);
+        } else {
+            b = this.resolveVariable(bStr);
+        }
+
+        console.log("\t\ta: " + a);
+        console.log("\t\tb: " + b);
+
+        return this.calc(a, topOp, b);
+    }
+
+    private calc(a: BigInteger, operator: string, b: BigInteger) {
 
         switch(operator) {
             case "+":
