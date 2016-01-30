@@ -9,13 +9,13 @@ import {ExceptionHandler} from "angular2/core";
 export class Computer {
 
     private static operations = [
-        "+",
-        "-",
-        "/",
-        "*",
-        "mod",
-        "powerMod",
-        "inverseMod"
+        "+", // add
+        "-", // subtract
+        "/", // divide
+        "*", // multiply
+        "%", // modulus
+        "&", // powerMod
+        "$"  // inverseMod
     ];
 
     private scopeVars: {};
@@ -76,7 +76,7 @@ export class Computer {
         }
 
         if (bracketCounter !== 0 || topLevelLoc === -1) {
-            throw new BaseException("Broken brackets");
+            throw new BaseException("Broken expression");
         }
 
         return topLevelLoc;
@@ -84,7 +84,7 @@ export class Computer {
 
     private trimBrackets(expr: string): string {
         if (expr[0] === "(" && expr[expr.length - 1] === ")") {
-            return this.trimBrackets(expr.substring(1, expr.length - 1));
+            return expr.substring(1, expr.length - 1);
         } else {
             return expr;
         }
@@ -99,18 +99,35 @@ export class Computer {
 
         let aStr = this.trimBrackets(expr.substring(0, topOpLoc).trim());
         let bStr = this.trimBrackets(expr.substring(topOpLoc + 1, expr.length).trim());
-
         console.log("\taStr: " + aStr);
         console.log("\tbStr: " + bStr);
 
         let a;
         let b;
+        let c;
+
+        if (topOp == "&") {
+            let parts = bStr.split(",");
+            bStr = parts[0];
+            let cStr = parts[1];
+            console.log("\tbStr: " + cStr);
+            console.log("\tcStr: " + cStr);
+
+            // check if c requires more operations
+            if (Computer.operations.some(function(v) { return cStr.indexOf(v) >= 0; })) {
+                c = this.calcExpression(cStr);
+            } else {
+                c = this.resolveVariable(cStr);
+            }
+        }
+
         // check if a requires more operations
         if (Computer.operations.some(function(v) { return aStr.indexOf(v) >= 0; })) {
             a = this.calcExpression(aStr);
         } else {
             a = this.resolveVariable(aStr);
         }
+        // check if b requires more operations
         if (Computer.operations.some(function(v) { return bStr.indexOf(v) >= 0; })) {
             b = this.calcExpression(bStr);
         } else {
@@ -120,10 +137,14 @@ export class Computer {
         console.log("\t\ta: " + a);
         console.log("\t\tb: " + b);
 
+        if (topOp == "&") {
+            console.log("\t\tc: " + c);
+            return this.calc(a, topOp, b, c);
+        }
         return this.calc(a, topOp, b);
     }
 
-    private calc(a: BigInteger, operator: string, b: BigInteger) {
+    private calc(a: BigInteger, operator: string, b: BigInteger, c?: BigInteger) {
 
         switch(operator) {
             case "+":
@@ -134,6 +155,12 @@ export class Computer {
                 return a.multiply(b);
             case "/":
                 return a.divide(b);
+            case "%":
+                return a.mod(b);
+            case "$":
+                return a.modInverse(b);
+            case "&":
+                return a.modPow(b, c);
             default:
                 throw new BaseException("Cannot resolve operation: " + operator)
         }
