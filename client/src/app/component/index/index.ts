@@ -118,9 +118,6 @@ export class Index {
         return a.multiply(b);
       case "/":
         return a.divide(b);
-      case "powerMod":
-        let exp = b.split(",")[0];
-        return a.modPow()
       default:
         throw new BaseException("Cannot resolve operation: " + operator)
     }
