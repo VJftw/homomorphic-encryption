@@ -23,6 +23,8 @@ stages:
         compute: q = generateRandomPrime()
       - description: Multiply primes \\(p\\) and \\(q\\) to get \\(n\\)
         compute: n = p * q
+      - description: Calculate \\(n^2\\)
+        compute: nSq = n * n
       - description: Add \\(1\\) to \\(n\\) to get \\(g\\)
         compute: g = n + 1
       - description: Calculate \\(\\phi(p\\cdot q)\\) to get \\(l\\)
@@ -31,7 +33,13 @@ stages:
         compute: m = l $ n
   - stage_name: Encryption
     steps:
-      - description: Generator random prime \\(aR\\)
-        compute: aR = generateRandomPrime()
+      - description: Generate \\(aR\\)
+        compute: aR = generateR()
       - description: Encrypt A
         compute: aX = ((g & a,nSq) * (aR & n,nSq)) % nSq
+      - description: Generate \\(bR\\)
+        compute: bX = ((g & b,nSq) * (bR & n,nSq)) % nSq
+  - stage_name: Decryption
+    steps:
+      - description: Calculate
+        compute: c = ((((cX & l,nSq) - 1) / n) * m) % n
