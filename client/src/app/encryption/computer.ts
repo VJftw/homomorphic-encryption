@@ -134,8 +134,8 @@ export class Computer {
             b = this.resolveVariable(bStr);
         }
 
-        console.log("\t\ta: " + a);
-        console.log("\t\tb: " + b);
+        console.log("\t\ta: " + a.toString());
+        console.log("\t\tb: " + b.toString());
 
         if (topOp == "&") {
             console.log("\t\tc: " + c);

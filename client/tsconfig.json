@@ -8,30 +8,38 @@
     "sourceMap": true
   },
   "files": [
-    "src/app/app.ts",
-    "src/app/app.spec.ts",
     "src/bootstrap.ts",
     "src/polyfills.ts",
-    "src/app/directives.ts",
+
+    "src/app/app.ts",
+    "src/app/app.spec.ts",
+
     "src/app/component/index/index.ts",
+    "src/app/component/computation/index.ts",
+    "src/app/component/computation/run.ts",
+    "src/app/component/computation/computation.ts",
+
+    "src/app/directives.ts",
     "src/app/directive/mathjax.ts",
+
     "src/app/encryption/encryption_scheme.ts",
     "src/app/encryption/encryption_helper.ts",
     "src/app/encryption/key.ts",
+    "src/app/encryption/scheme_loader.ts",
+
     "src/app/encryption/pailler/pailler_scheme.ts",
     "src/app/encryption/pailler/pailler.ts",
     "src/app/encryption/elgamal/el_gamal_scheme.ts",
     "src/app/encryption/elgamal/el_gamal.ts",
+
     "src/app/model/computation.ts",
     "src/app/model/step.ts",
     "src/app/model/stage.ts",
+
     "src/app/resolver/computation_resolver.ts",
     "src/app/resolver/step_resolver.ts",
     "src/app/resolver/stage_resolver.ts",
 
-    "src/app/component/computation/index.ts",
-    "src/app/component/computation/run.ts",
-    "src/app/component/computation/computation.ts",
     "src/app/provider/step_provider.ts",
     "src/app/provider/stage_provider.ts",
     "src/app/provider/encryption_scheme_provider.ts",

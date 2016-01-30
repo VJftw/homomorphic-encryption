@@ -19,6 +19,7 @@ import {PaillerScheme} from "./app/encryption/pailler/pailler_scheme";
 import {ElGamalScheme} from "./app/encryption/elgamal/el_gamal_scheme";
 import {ElGamal} from "./app/encryption/elgamal/el_gamal";
 import {EncryptionHelper} from "./app/encryption/encryption_helper";
+import {SchemeLoader} from "./app/encryption/scheme_loader";
 
 /*
  * App Component
@@ -49,7 +50,8 @@ function main() {
     PaillerScheme,
     Pailler,
     ElGamalScheme,
-    ElGamal
+    ElGamal,
+    SchemeLoader
   ];
 
   if (process.env.NODE_ENV !== "development") {

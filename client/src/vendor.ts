@@ -16,6 +16,9 @@ import "rxjs";
 // JS BigNumber
 import "jsbn";
 
+// js-yaml
+import "js-yaml";
+
 // Bootstrap
 require("!!style!css!bootswatch-dist/css/bootstrap.min.css");
 // Animate.css
