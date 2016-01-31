@@ -36,44 +36,9 @@ class Computation
     /**
      * @var string
      *
-     * @ORM\Column(name="scheme", type="string", length=255)
+     * @ORM\Column(name="encryption_scheme", type="string", length=255)
      */
-    private $scheme;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="operation", type="string", length=1)
-     */
-    private $operation;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="a_encrypted", type="text")
-     */
-    private $aEncrypted;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="b_encrypted", type="text")
-     */
-    private $bEncrypted;
-
-    /**
-     * @var array
-     *
-     * @ORM\Column(name="public_key", type="json_array")
-     */
-    private $publicKey;
-
-    /**
-     * @var array
-     *
-     * @ORM\Column(name="stages", type="json_array")
-     */
-    private $stages;
+    private $encryptionScheme;
 
     /**
      * @var \DateTime
@@ -120,13 +85,13 @@ class Computation
     }
 
     /**
-     * @param $scheme
+     * @param $encryptionScheme
      *
      * @return $this
      */
-    public function setScheme($scheme)
+    public function setEncryptionScheme($encryptionScheme)
     {
-        $this->scheme = $scheme;
+        $this->encryptionScheme = $encryptionScheme;
 
         return $this;
     }
@@ -134,109 +99,9 @@ class Computation
     /**
      * @return string
      */
-    public function getScheme()
+    public function getEncryptionScheme()
     {
-        return $this->scheme;
-    }
-
-    /**
-     * @param $operation
-     *
-     * @return $this
-     */
-    public function setOperation($operation)
-    {
-        $this->operation = $operation;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getOperation()
-    {
-        return $this->operation;
-    }
-
-    /**
-     * @param int $aEncrypted
-     *
-     * @return $this
-     */
-    public function setAEncrypted($aEncrypted)
-    {
-        $this->aEncrypted = $aEncrypted;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getAEncrypted()
-    {
-        return $this->aEncrypted;
-    }
-
-    /**
-     * @param int $bEncrypted
-     *
-     * @return $this
-     */
-    public function setBEncrypted($bEncrypted)
-    {
-        $this->bEncrypted = $bEncrypted;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getBEncrypted()
-    {
-        return $this->bEncrypted;
-    }
-
-    /**
-     * @param string $publicKey
-     *
-     * @return $this
-     */
-    public function setPublicKey($publicKey)
-    {
-        $this->publicKey = $publicKey;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPublicKey()
-    {
-        return $this->publicKey;
-    }
-
-    /**
-     * @param $stages
-     *
-     * @return $this
-     */
-    public function setStages($stages)
-    {
-        $this->stages = $stages;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getStages()
-    {
-        return $this->stages;
+        return $this->encryptionScheme;
     }
 
     /**

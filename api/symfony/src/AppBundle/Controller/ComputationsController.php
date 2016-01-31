@@ -69,36 +69,7 @@ class ComputationsController
 
     /**
      * @FOS\RequestParam(
-     *     name="scheme",
-     *     strict=true,
-     *     allowBlank=false
-     * )
-     * @FOS\RequestParam(
-     *     name="operation",
-     *     strict=true,
-     *     allowBlank=false
-     * )
-     * @FOS\RequestParam(
-     *     name="aEncrypted",
-     *     requirements="\d+",
-     *     strict=true,
-     *     allowBlank=false
-     * )
-     * @FOS\RequestParam(
-     *     name="bEncrypted",
-     *     requirements="\d+",
-     *     strict=true,
-     *     allowBlank=false
-     * )
-     * @FOS\RequestParam(
-     *     name="publicKey",
-     *     array=true,
-     *     strict=true,
-     *     allowBlank=false
-     * )
-     * @FOS\RequestParam(
-     *     name="stages",
-     *     array=true,
+     *     name="encryptionScheme",
      *     strict=true,
      *     allowBlank=false
      * )
