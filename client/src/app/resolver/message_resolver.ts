@@ -2,6 +2,7 @@ import {Injectable} from "angular2/core";
 
 import {Computation} from "../model/computation";
 import {StepProvider} from "../provider/step_provider";
+import {BigInteger} from "jsbn";
 
 
 @Injectable()
@@ -24,7 +25,7 @@ export class MessageResolver {
     let publicScope = message["publicScope"];
     for (let varName in publicScope) {
       if (publicScope.hasOwnProperty(varName)) {
-        computation.addToScope(varName, publicScope[varName], true);
+        computation.addToScope(varName, new BigInteger("" + publicScope[varName]), true);
       }
     }
 
@@ -41,7 +42,7 @@ export class MessageResolver {
     }
 
     // resolve State
-    if (message["compute"].length === 0) {
+    if (message["computeSteps"].length === 0) {
       computation.setState(Computation.STATE_COMPLETE);
     }
 

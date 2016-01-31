@@ -18,15 +18,11 @@ class ComputationResolver:
     """
 
     @inject(
-        key_resolver=KeyResolver,
-        stage_resolver=StageResolver,
         log_manager=LogManager)
-    def __init__(self, key_resolver, stage_resolver, log_manager):
+    def __init__(self, log_manager):
         """
         :return:
         """
-        self.__key_resolver = key_resolver
-        self.__stage_resolver = stage_resolver
         self.__logger = log_manager.get_logger('ComputationResolver')
 
     def from_dict(self, computation_dict):
@@ -37,19 +33,7 @@ class ComputationResolver:
         c = Computation()
 
         c.set_hash_id(computation_dict['hashId'])
-        c.set_scheme(computation_dict['scheme'])
-        c.set_operation(computation_dict['operation'])
-        c.set_a_encrypted(int(computation_dict['aEncrypted']))
-        c.set_b_encrypted(int(computation_dict['bEncrypted']))
-
-        self.__key_resolver.from_computation_and_dict(c, computation_dict)
-
-        for stage_dict in computation_dict['stages']:
-            c.add_stage(
-                self.__stage_resolver.from_dict(stage_dict)
-            )
-
-        timestamp = dateutil.parser.parse(computation_dict['timestamp'])
-        c.set_timestamp(timestamp)
+        c.set_compute_steps(computation_dict['computeSteps'])
+        c.set_public_scope(computation_dict['publicScope'])
 
         return c
