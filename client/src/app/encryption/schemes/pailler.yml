@@ -1,12 +1,11 @@
 #
-# Each Scheme MUST have a Decrypt stage
 # computation variable
 #
 #
 
 unique_name: pailler
 readable_name: Pailler
-description: The Pailler additive somewhat homomorphic encryption_scheme
+description: The Pailler additive somewhat homomorphic encryption scheme
 capabilities:
  - +
 stages:
@@ -26,6 +25,7 @@ stages:
       - description: Multiply primes \\(p\\) and \\(q\\) to get \\(n\\)
         compute: n = p * q
       - description: Calculate \\(n^2\\)
+        public: true
         compute: nSq = n * n
       - description: Add \\(1\\) to \\(n\\) to get \\(g\\)
         compute: g = n + 1
@@ -38,9 +38,16 @@ stages:
       - description: Generate \\(aR\\)
         compute: aR = generateR()
       - description: Encrypt A
+        public: true
         compute: aX = ((g & a,nSq) * (aR & n,nSq)) % nSq
       - description: Generate \\(bR\\)
+        public: true
         compute: bX = ((g & b,nSq) * (bR & n,nSq)) % nSq
+  - name: Backend
+    backend: true
+    steps:
+      - description: Calculate \\((aX \cdot bX) \bmod n^2\\) to get \\(cX\\)
+        compute: cX = (aX * bX) % nSq
   - name: Decryption
     steps:
       - description: Calculate

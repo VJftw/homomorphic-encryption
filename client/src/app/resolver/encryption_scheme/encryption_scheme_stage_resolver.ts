@@ -19,7 +19,8 @@ export class EncryptionSchemeStageResolver {
   public fromJson(stageJson): EncryptionSchemeStage {
 
     let stage = new EncryptionSchemeStage(
-      stageJson.name
+      stageJson.name,
+      "backend" in stageJson && stageJson["backend"] ? true : false
     );
 
     stageJson.steps.forEach(stepJson => {

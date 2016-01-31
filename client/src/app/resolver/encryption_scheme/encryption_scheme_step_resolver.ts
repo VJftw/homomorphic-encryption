@@ -13,7 +13,8 @@ export class EncryptionSchemeStepResolver {
   public fromJson(stepJson): EncryptionSchemeStep {
     return new EncryptionSchemeStep(
       stepJson.description,
-      stepJson.compute
+      stepJson.compute,
+      "public" in stepJson && stepJson["public"] ? true : false
     );
   }
 

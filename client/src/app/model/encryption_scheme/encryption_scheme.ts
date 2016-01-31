@@ -13,12 +13,13 @@ export class EncryptionScheme {
   constructor(
     uniqueName: string,
     readableName: string,
-    description: string
+    description: string,
+    capabilities: string[]
   ) {
     this.uniqueName = uniqueName;
     this.readableName = readableName;
     this.description = description;
-    this.capabilities = [];
+    this.capabilities = capabilities;
 
     this.stages = [];
   }

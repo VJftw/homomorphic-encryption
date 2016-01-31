@@ -24,7 +24,8 @@ export class EncryptionSchemeResolver {
     let scheme = new EncryptionScheme(
       schemeJson.uniqueName,
       schemeJson.readableName,
-      schemeJson.description
+      schemeJson.description,
+      schemeJson.capabilities
     );
 
     schemeJson.stages.forEach(stageJson => {
