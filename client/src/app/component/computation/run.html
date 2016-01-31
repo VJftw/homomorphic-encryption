@@ -61,7 +61,7 @@
         </div>
     </div>
 
-    <div *ngIf="encryptionScheme && computationModel" class="col-md-10 col-md-offset-1">
+    <div *ngIf="computationRunner.getComputation() && computationModel" class="col-md-10 col-md-offset-1">
         <div *ngFor="#stage of computationModel.getStages()">
             <div class="panel panel-default animated fadeIn" [ngClass]="{'panel-info': stage.getHost() == 1, 'panel-primary': stage.getHost() == 0}">
                 <div class="panel-heading">{{ stage.getName() }}</div>

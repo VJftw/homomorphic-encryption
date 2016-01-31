@@ -7,7 +7,6 @@ import {FORM_PROVIDERS} from "angular2/common";
 import {ELEMENT_PROBE_PROVIDERS} from "angular2/platform/common_dom";
 import {ROUTER_PROVIDERS} from "angular2/router";
 import {HTTP_PROVIDERS} from "angular2/http";
-import {Pailler} from "./app/encryption/pailler/pailler";
 import {ComputationResolver} from "./app/resolver/computation_resolver";
 import {StepResolver} from "./app/resolver/step_resolver";
 import {StageResolver} from "./app/resolver/stage_resolver";
@@ -15,17 +14,20 @@ import {ComputationProvider} from "./app/provider/computation_provider";
 import {StepProvider} from "./app/provider/step_provider";
 import {StageProvider} from "./app/provider/stage_provider";
 import {EncryptionSchemeProvider} from "./app/provider/encryption_scheme_provider";
-import {PaillerScheme} from "./app/encryption/pailler/pailler_scheme";
-import {ElGamalScheme} from "./app/encryption/elgamal/el_gamal_scheme";
-import {ElGamal} from "./app/encryption/elgamal/el_gamal";
 import {EncryptionHelper} from "./app/encryption/encryption_helper";
-import {SchemeLoader} from "./app/encryption/scheme_loader";
 
 /*
  * App Component
  * our top level component that holds all of our components
  */
 import {App} from "./app/app";
+import {EncryptionSchemeResolver} from "./app/resolver/encryption_scheme/encryption_scheme_resolver";
+import {EncryptionSchemeStageResolver} from "./app/resolver/encryption_scheme/encryption_scheme_stage_resolver";
+import {EncryptionSchemeStepResolver} from "./app/resolver/encryption_scheme/encryption_scheme_step_resolver";
+import {ComputationRunner} from "./app/runner/computation_runner";
+import {Computer} from "./app/encryption/computer";
+import {MessageProvider} from "./app/provider/message_provider";
+import {MessageResolver} from "./app/resolver/message_resolver";
 
 /*
  * Bootstrap our Angular app with a top level component `App` and inject
@@ -47,11 +49,13 @@ function main() {
     StageProvider,
     EncryptionSchemeProvider,
     EncryptionHelper,
-    PaillerScheme,
-    Pailler,
-    ElGamalScheme,
-    ElGamal,
-    SchemeLoader
+    EncryptionSchemeResolver,
+    EncryptionSchemeStageResolver,
+    EncryptionSchemeStepResolver,
+    ComputationRunner,
+    Computer,
+    MessageProvider,
+    MessageResolver
   ];
 
   if (process.env.NODE_ENV !== "development") {

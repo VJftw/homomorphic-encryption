@@ -1,5 +1,5 @@
 #
-# computation variable
+# a and b are reserved variable names. These are set to computation.a and computation.b respectively
 #
 #
 
@@ -9,44 +9,39 @@ description: The Pailler additive somewhat homomorphic encryption scheme
 capabilities:
  - +
 stages:
-  - name: Workspace
-    steps:
-      - description: We aim to calculate \\(a + b = c\\)
-      - description: let \\(a\\)
-        compute: a = computation.a
-      - description: let \\(b\\)
-        compute: b = computation.b
   - name: Key Generation
     steps:
-      - description: Generate random prime \\(p\\)
+      - description: Generate random prime \(p\)
         compute: p = generateRandomPrime()
-      - description: Generate random prime \\(q\\)
+      - description: Generate random prime \(q\)
         compute: q = generateRandomPrime()
-      - description: Multiply primes \\(p\\) and \\(q\\) to get \\(n\\)
+      - description: Multiply primes \(p\) and \(q\) to get \(n\)
         compute: n = p * q
-      - description: Calculate \\(n^2\\)
+      - description: Calculate \(n^2\)
         public: true
         compute: nSq = n * n
-      - description: Add \\(1\\) to \\(n\\) to get \\(g\\)
+      - description: Add \(1\) to \(n\) to get \(g\)
         compute: g = n + 1
-      - description: Calculate \\(\\phi(p\\cdot q)\\) to get \\(l\\)
+      - description: Calculate \(\phi(p\cdot q)\) to get \(l\)
         compute: l = (p - 1) * (q - 1)
-      - description: Calculate \\(l^{-1} \\bmod n\\) to get \\(m\\)
+      - description: Calculate \(l^{-1} \bmod n\) to get \(m\)
         compute: m = l $ n
   - name: Encryption
     steps:
-      - description: Generate \\(aR\\)
+      - description: Generate \(aR\)
         compute: aR = generateR()
       - description: Encrypt A
         public: true
         compute: aX = ((g & a,nSq) * (aR & n,nSq)) % nSq
-      - description: Generate \\(bR\\)
+      - description: Generate \(bR\)
+        compute: bR = generateR()
+      - description: Encrypt B
         public: true
         compute: bX = ((g & b,nSq) * (bR & n,nSq)) % nSq
   - name: Backend
     operation: +
     steps:
-      - description: Calculate \\((aX \cdot bX) \bmod n^2\\) to get \\(cX\\)
+      - description: Calculate \((aX \cdot bX) \bmod n^2\\) to get \(cX\)
         compute: cX = (aX * bX) % nSq
   - name: Decryption
     steps:

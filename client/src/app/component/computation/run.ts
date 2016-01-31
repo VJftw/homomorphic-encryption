@@ -9,6 +9,7 @@ import {RouteParams} from "angular2/router";
 import {EncryptionSchemeProvider} from "../../provider/encryption_scheme_provider";
 import {EncryptionScheme} from "../../model/encryption_scheme/encryption_scheme";
 import {ComputationProvider} from "../../provider/computation_provider";
+import {ComputationRunner} from "../../runner/computation_runner";
 
 
 @Component({
@@ -51,8 +52,8 @@ export class ComputationRun {
   public submit(event: Event): void {
     event.preventDefault();
     this.formSubmitted = true;
-    this.encryptionScheme.setComputation(this.computationModel);
-    this.encryptionScheme.doScheme();
+    this.computationRunner.setComputation(this.computationModel);
+    this.computationRunner.runComputation();
   }
 
 }

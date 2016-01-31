@@ -22,15 +22,7 @@
     "src/app/directives.ts",
     "src/app/directive/mathjax.ts",
 
-    "src/app/encryption/encryption_scheme.ts",
     "src/app/encryption/encryption_helper.ts",
-    "src/app/encryption/key.ts",
-    "src/app/encryption/scheme_loader.ts",
-
-    "src/app/encryption/pailler/pailler_scheme.ts",
-    "src/app/encryption/pailler/pailler.ts",
-    "src/app/encryption/elgamal/el_gamal_scheme.ts",
-    "src/app/encryption/elgamal/el_gamal.ts",
 
     "src/app/model/computation.ts",
     "src/app/model/step.ts",
@@ -43,6 +35,21 @@
     "src/app/provider/step_provider.ts",
     "src/app/provider/stage_provider.ts",
     "src/app/provider/encryption_scheme_provider.ts",
-    "src/app/provider/computation_provider.ts"
+    "src/app/provider/computation_provider.ts",
+
+
+    "src/app/encryption/computer.ts",
+    "src/app/message/message_interface.ts",
+    "src/app/message/register_message.ts",
+    "src/app/message/compute_message.ts",
+    "src/app/model/encryption_scheme/encryption_scheme.ts",
+    "src/app/model/encryption_scheme/encryption_scheme_stage.ts",
+    "src/app/model/encryption_scheme/encryption_scheme_step.ts",
+    "src/app/provider/message_provider.ts",
+    "src/app/resolver/message_resolver.ts",
+    "src/app/resolver/encryption_scheme/encryption_scheme_resolver.ts",
+    "src/app/resolver/encryption_scheme/encryption_scheme_stage_resolver.ts",
+    "src/app/resolver/encryption_scheme/encryption_scheme_step_resolver.ts",
+    "src/app/runner/computation_runner.ts"
   ]
 }

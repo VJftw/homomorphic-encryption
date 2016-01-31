@@ -50,30 +50,38 @@ export class EncryptionScheme {
     return this.stages;
   }
 
-  public getBackendStages(): EncryptionSchemeStage[] {
+  public getSetupStages(): EncryptionSchemeStage[] {
     let stages = [];
 
-    this.stages.forEach(stage => {
+    for (let stage of this.stages) {
       if (stage.isBackend()) {
+        return stages;
+      } else {
         stages.push(stage);
       }
-    });
-
-    return stages;
+    }
   }
 
-  public toJson(): {} {
+  public getBackendStage(): EncryptionSchemeStage {
 
-    let stages = [];
-    this.getBackendStages().forEach(stage => {
-      stages.push(stage.toJson());
-    });
+    for (let stage of this.stages) {
+      if (stage.isBackend()) {
+        return stage;
+      }
+    }
 
-    return {
-      "uniqueName": this.getUniqueName(),
-      "readableName": this.getReadableName(),
-      "stages": stages
-    };
+    throw new RangeError("No Backend Stage found.");
+  }
+
+  public getDecryptStage(): EncryptionSchemeStage {
+
+    for (let stage of this.stages) {
+      if (stage.getName() === "Decryption") {
+        return stage;
+      }
+    }
+
+    throw new RangeError("No Decryption Stage found.");
   }
 
 }

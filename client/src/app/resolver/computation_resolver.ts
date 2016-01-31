@@ -11,17 +11,13 @@ export class ComputationResolver {
   ) {
   }
 
-  public fromJson(jsonArr, computation?: Computation): Computation {
-    if (!computation) {
-      computation = new Computation();
-    }
+  public fromJson(jsonArr, computation: Computation): Computation {
+
     computation
-      .setScheme(jsonArr.scheme)
-      .setOperation(jsonArr.operation)
-      .setAEncrypted(new BigInteger(jsonArr.aEncrypted))
-      .setBEncrypted(new BigInteger(jsonArr.bEncrypted))
       .setState(jsonArr.state)
     ;
+
+
 
     jsonArr.stages.slice(computation.getStages().length).forEach(stageJson => {
       let stage = this.stageResolver.fromJson(stageJson);
@@ -30,4 +26,5 @@ export class ComputationResolver {
 
     return computation;
   }
+
 }

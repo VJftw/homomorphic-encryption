@@ -8,6 +8,11 @@ import {ComputationResolver} from "../resolver/computation_resolver";
 import {Http} from "angular2/http";
 import {Headers} from "angular2/http";
 import {Computer} from "../encryption/computer";
+import {EncryptionSchemeStep} from "../model/encryption_scheme/encryption_scheme_step";
+import {MessageProvider} from "../provider/message_provider";
+import {MessageResolver} from "../resolver/message_resolver";
+import {EncryptionSchemeStage} from "../model/encryption_scheme/encryption_scheme_stage";
+import {BigInteger} from "jsbn";
 
 @Injectable()
 export class ComputationRunner {
@@ -18,28 +23,80 @@ export class ComputationRunner {
   constructor(
     private stageProvider: StageProvider,
     private stepProvider: StepProvider,
-    private computationResolver: ComputationResolver,
     private computer: Computer,
+    private messageProvider: MessageProvider,
+    private messageResolver: MessageResolver,
     private http: Http
   ) {
   }
 
+  private addWorkspace(): void {
+    let stage = this.stageProvider.create("Workspace");
+    stage.addStep(this.stepProvider.create(
+      "We aim to calculate \\(a " + this.computation.getOperation() + " b = c\\)"
+    ));
+
+    stage.addStep(this.stepProvider.create(
+      "let \\(a\\)",
+      this.computation.getA()
+    ));
+
+    stage.addStep(this.stepProvider.create(
+      "let \\(b\\)",
+      this.computation.getB()
+    ));
+
+    this.computation.addStage(stage);
+
+  }
+
   public runComputation(): void {
+    // set up a and b
+    this.computation.addToScope("a", new BigInteger("" + this.computation.getA()), false);
+    this.computation.addToScope("b", new BigInteger("" + this.computation.getB()), false);
+
+    this.addWorkspace();
+
+
     let encryptionScheme = this.computation.getEncryptionScheme();
 
-    let stages = encryptionScheme.getStages();
-
-    stages.forEach(stage => {
-      if (stage.isBackend()) {
-        this.registerComputation();
-        return;
-      } else {
-        stage.getSteps().forEach(step => {
-          this.computation = this.computer.computeStep(step, this.computation);
-        });
-      }
+    let schemeStages = encryptionScheme.getSetupStages();
+    schemeStages.forEach(schemeStage => {
+      this.doStage(schemeStage);
     });
 
+    this.registerComputation();
+  }
+
+  private doStage(schemeStage: EncryptionSchemeStage) {
+    let stage = this.stageProvider.create(schemeStage.getName());
+    this.computation.addStage(stage);
+
+    schemeStage.getSteps().forEach(schemeStep => {
+      let r = this.computeStep(schemeStep);
+
+      let step = this.stepProvider.create(
+        schemeStep.getDescription(),
+        r
+      );
+
+      this.computation.getStageByName(schemeStage.getName()).addStep(step);
+    });
+  }
+
+  private computeStep(step: EncryptionSchemeStep) {
+    // 1) get variable name from compute step
+    let varName = step.getCompute().split(" = ")[0];
+    console.log("\tvarName: " + varName);
+    // 2) compute based on the command
+    let command = step.getCompute().split(" = ")[1];
+    console.log("\tcommand: " + command);
+
+    let r = this.computer.calculateStepCompute(command, this.computation.getFullScope());
+
+    this.computation.addToScope(varName, r, step.isPublicScope());
+
+    return r;
   }
 
   public setComputation(computation: Computation) {
@@ -53,10 +110,10 @@ export class ComputationRunner {
   }
 
   private decrypt() {
-    // scope should have been resolved
-
     // run Decryption stage
+    let stage = this.computation.getEncryptionScheme().getDecryptStage();
 
+    this.doStage(stage);
   }
 
   private registerComputation(): void {
@@ -66,31 +123,40 @@ export class ComputationRunner {
 
     JSON_HEADERS.append("Accept", "application/json");
     JSON_HEADERS.append("Content-Type", "application/json");
-    this.http.post("http://" + __API_URL__ + "/api/computations", JSON.stringify(this.computation.toJson()), { headers: JSON_HEADERS})
+    let message = this.messageProvider.createRegisterMessage(this.computation);
+    this.http.post("http://" + __API_URL__ + "/api/computations", JSON.stringify(message.toJson()), { headers: JSON_HEADERS})
       .subscribe(
-        data => this.connectToWebSocket(data),
+        data => this.registerSuccess(data),
         err => console.log(err)
       )
     ;
   }
 
-  protected connectToWebSocket(data): void {
+  private registerSuccess(data) {
     console.log(data);
-    this.computation.setHashId(data.json().hashId);
+
+    this.computation = this.messageResolver.resolveRegisterMessage(data.json(), this.computation);
+
+    this.connectToWebSocket();
+  }
+
+  protected connectToWebSocket(): void {
     this.socket = new WebSocket("ws://" + __BACKEND_URL__);
 
     this.socket.addEventListener("open", (ev: Event) => {
-      this.socket.send(JSON.stringify({
-        "action": "computation/compute",
-        "data": {
-          "hashId": this.computation.getHashId()
-        }
-      }));
+      let message = this.messageProvider.createComputeMessage(this.computation);
+      this.socket.send(JSON.stringify(message.toJson()));
+
+      this.computation.setState(Computation.STATE_STARTED);
     });
 
     this.socket.addEventListener("message", (ev: MessageEvent) => {
       console.log(ev);
-      this.computation = this.computationResolver.fromJson(
+
+      let stage = this.stageProvider.create(this.computation.getEncryptionScheme().getBackendStage().getName());
+      this.computation.addStage(stage);
+
+      this.computation = this.messageResolver.resolveComputeMessage(
         JSON.parse(ev.data),
         this.computation
       );

@@ -1,4 +1,4 @@
-import {PrivateKeyInterface, PublicKeyInterface} from "../encryption/key";
+// import {PrivateKeyInterface, PublicKeyInterface} from "../encryption/key";
 import {BigInteger} from "jsbn";
 import {Stage} from "./stage";
 import {EncryptionScheme} from "./encryption_scheme/encryption_scheme";
@@ -31,7 +31,23 @@ export class Computation {
   }
 
   public getFullScope() {
-    return this.privateScope + this.publicScope;
+    let r = {};
+    for (let varName in this.privateScope) {
+      if (this.privateScope.hasOwnProperty(varName)) {
+        r[varName] = this.privateScope[varName];
+      }
+    }
+
+    for (let varName in this.publicScope) {
+      if (this.publicScope.hasOwnProperty(varName)) {
+        r[varName] = this.publicScope[varName];
+      }
+    }
+    return r;
+  }
+
+  public getPublicScope() {
+    return this.publicScope;
   }
 
   public addToScope(varName: string, value: BigInteger, toPublic = false) {
@@ -154,19 +170,5 @@ export class Computation {
     }, this.stages);
 
     return r;
-  }
-
-  public toJson() {
-
-    let publicScope = {};
-    this.publicScope.forEach(varName => {
-      publicScope[varName] = this.publicScope[varName].toString();
-    });
-
-    return {
-      "operation": this.getOperation(),
-      "publicScope": publicScope,
-      "encryptionScheme": this.getEncryptionScheme().toJson()
-    };
   }
 }

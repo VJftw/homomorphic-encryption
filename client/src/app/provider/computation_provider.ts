@@ -10,7 +10,7 @@ export class ComputationProvider {
     let c = new Computation();
 
     c
-      .setScheme(scheme.getUniqueName())
+      .setEncryptionScheme(scheme)
       .setOperation(scheme.getCapabilities()[0])
     ;
 

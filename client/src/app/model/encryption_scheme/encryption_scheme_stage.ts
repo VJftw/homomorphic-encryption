@@ -11,6 +11,7 @@ export class EncryptionSchemeStage {
     name: string
   ) {
     this.name = name;
+    this.steps = [];
   }
 
   public getName(): string {
@@ -39,6 +40,18 @@ export class EncryptionSchemeStage {
 
   public getSteps(): EncryptionSchemeStep[] {
     return this.steps;
+  }
+
+  public toJson() {
+    let steps = [];
+
+    this.steps.forEach(step => {
+      steps.push(step.toJson());
+    });
+    return {
+      "name": this.getName(),
+      "steps": steps
+    }
   }
 
 }

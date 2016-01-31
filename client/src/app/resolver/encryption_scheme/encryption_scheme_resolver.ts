@@ -22,13 +22,13 @@ export class EncryptionSchemeResolver {
   public fromJson(schemeJson): EncryptionScheme {
 
     let scheme = new EncryptionScheme(
-      schemeJson.uniqueName,
-      schemeJson.readableName,
-      schemeJson.description,
-      schemeJson.capabilities
+      schemeJson["unique_name"],
+      schemeJson["readable_name"],
+      schemeJson["description"],
+      schemeJson["capabilities"]
     );
 
-    schemeJson.stages.forEach(stageJson => {
+    schemeJson["stages"].forEach(stageJson => {
       let stage = this.encryptionSchemeStageResolver.fromJson(stageJson);
       scheme.addStage(stage);
     });

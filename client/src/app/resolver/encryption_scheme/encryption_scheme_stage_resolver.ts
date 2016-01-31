@@ -1,7 +1,8 @@
 import {EncryptionSchemeStage} from "../../model/encryption_scheme/encryption_scheme_stage";
 import {EncryptionSchemeStepResolver} from "./encryption_scheme_step_resolver";
+import {Injectable} from "angular2/core";
 
-
+@Injectable()
 export class EncryptionSchemeStageResolver {
 
   /**

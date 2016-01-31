@@ -22,8 +22,15 @@ export class EncryptionSchemeStep {
     return this.compute;
   }
 
-  public inPublicScope(): boolean {
+  public isPublicScope(): boolean {
     return this.inPublicScope;
+  }
+
+  public toJson() {
+    return {
+      "description": this.getDescription(),
+      "compute": this.getCompute()
+    }
   }
 
 }

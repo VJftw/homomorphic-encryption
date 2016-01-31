@@ -29,22 +29,8 @@ export class Computer {
   ) {
   }
 
-  public computeStep(step: EncryptionSchemeStep, computation: Computation): Computation {
-
-    let stepCompute = step.getCompute();
-    // 1) get variable name from compute step
-    let varName = stepCompute.split(" = ")[0];
-    console.log("\tvarName: " + varName);
-    // 2) compute based on the command
-    let command = stepCompute.split(" = ")[1];
-    console.log("\tcommand: " + command);
-
-    let scope = computation.getFullScope();
-
-    // 3) add variable to scope
-    computation.addToScope(varName, this.doCommand(command, scope), step.inPublicScope());
-
-    return computation;
+  public calculateStepCompute(compute: string, scope: {}): BigInteger {
+    return this.doCommand(compute, scope);
   }
 
   public computeSteps(steps: string[]) {
@@ -69,12 +55,16 @@ export class Computer {
   }
 
   private doCommand(command: string, scope: {}): BigInteger {
-    if (command === "generateRandomPrime()") {
-      return this.encryptionHelper.generatePrime(16);
-    } else {
-      // p + 1
-      return this.calcExpression(command, scope);
+
+    switch(command) {
+      case "generateRandomPrime()":
+        return this.encryptionHelper.generatePrime(16);
+      case "generateR()":
+        return this.encryptionHelper.generateR(scope["n"]);
+      default:
+        return this.calcExpression(command, scope);
     }
+
   }
 
   private findTopOperatorLocation(expr: string): number {
@@ -162,6 +152,7 @@ export class Computer {
 
     if (topOp == "&") {
       console.log("\t\tc: " + c);
+      console.log(scope);
       return this.calc(a, topOp, b, c);
     }
     return this.calc(a, topOp, b);
