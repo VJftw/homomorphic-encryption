@@ -4,23 +4,31 @@ import {EncryptionSchemeStep} from "./encryption_scheme_step";
 export class EncryptionSchemeStage {
 
   private name: string;
-  private backend: boolean;
+  private operation: string;
   private steps: EncryptionSchemeStep[];
 
   constructor(
-    name: string,
-    backend = false
+    name: string
   ) {
     this.name = name;
-    this.backend = false;
   }
 
   public getName(): string {
     return this.name;
   }
 
+  public setOperation(operation: string): EncryptionSchemeStage {
+    this.operation = operation;
+
+    return this;
+  }
+
+  public getOperation(): string {
+    return this.operation;
+  }
+
   public isBackend(): boolean {
-    return this.backend;
+    return this.operation !== undefined;
   }
 
   public addStep(step: EncryptionSchemeStep) {

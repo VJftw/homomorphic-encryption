@@ -1,33 +1,57 @@
 import {PrivateKeyInterface, PublicKeyInterface} from "../encryption/key";
 import {BigInteger} from "jsbn";
 import {Stage} from "./stage";
+import {EncryptionScheme} from "./encryption_scheme/encryption_scheme";
 
 export class Computation {
-
-  public static SCHEME_PAILLER = 1;
 
   public static STATE_NEW = 0;
   public static STATE_STARTED = 1;
   public static STATE_COMPLETE = 2;
 
   protected _hashId: string;
-  protected aEncrypted: BigInteger;
-  protected bEncrypted: BigInteger;
-  protected publicKey: PublicKeyInterface;
   protected timestamp: Date;
-  protected scheme: string;
+  protected encryptionScheme: EncryptionScheme;
   protected operation: string;
   protected state: number;
   protected stages: Stage[];
 
+  private privateScope = {};
+  private publicScope = {};
+
   private a: BigInteger;
   private b: BigInteger;
   private c: BigInteger;
-  private privateKey: PrivateKeyInterface;
 
   constructor() {
     this.state = Computation.STATE_NEW;
     this.stages = [];
+    this.privateScope = {};
+    this.publicScope = {};
+  }
+
+  public getFullScope() {
+    return this.privateScope + this.publicScope;
+  }
+
+  public addToScope(varName: string, value: BigInteger, toPublic = false) {
+    if (toPublic) {
+      this.publicScope[varName] = value;
+    } else {
+      this.privateScope[varName] = value;
+    }
+
+    return this;
+  }
+
+  public getFromScope(varName: string) {
+    if (varName in this.publicScope) {
+      return this.publicScope[varName];
+    } else if (varName in this.privateScope) {
+      return this.privateScope[varName];
+    }
+
+    throw new RangeError("Variable not found in scope");
   }
 
   public setHashId(hashId: string): Computation {
@@ -58,46 +82,6 @@ export class Computation {
     return this;
   }
 
-  public setPrivateKey(privateKey: PrivateKeyInterface) {
-    this.privateKey = privateKey;
-
-    return this;
-  }
-
-  public getPrivateKey(): any {
-    return this.privateKey;
-  }
-
-  public setPublicKey(publicKey: PublicKeyInterface) {
-    this.publicKey = publicKey;
-
-    return this;
-  }
-
-  public getPublicKey(): any {
-    return this.publicKey;
-  }
-
-  public setAEncrypted(aEncrypted: BigInteger) {
-    this.aEncrypted = aEncrypted;
-
-    return this;
-  }
-
-  public getAEncrypted(): BigInteger {
-    return this.aEncrypted;
-  }
-
-  public setBEncrypted(bEncrypted: BigInteger) {
-    this.bEncrypted = bEncrypted;
-
-    return this;
-  }
-
-  public getBEncrypted(): BigInteger {
-    return this.bEncrypted;
-  }
-
   public setTimestamp(timestamp: Date) {
     this.timestamp = timestamp;
 
@@ -118,12 +102,12 @@ export class Computation {
     return this;
   }
 
-  public getScheme(): string {
-    return this.scheme;
+  public getEncryptionScheme(): EncryptionScheme {
+    return this.encryptionScheme;
   }
 
-  public setScheme(scheme: string): Computation {
-    this.scheme = scheme;
+  public setEncryptionScheme(scheme: EncryptionScheme): Computation {
+    this.encryptionScheme = scheme;
 
     return this;
   }
@@ -173,17 +157,16 @@ export class Computation {
   }
 
   public toJson() {
-    let stages = [];
-    this.stages.forEach(function(stage) {
-      stages.push(stage.toJson());
+
+    let publicScope = {};
+    this.publicScope.forEach(varName => {
+      publicScope[varName] = this.publicScope[varName].toString();
     });
+
     return {
-      "scheme": this.getScheme(),
       "operation": this.getOperation(),
-      "aEncrypted": this.getAEncrypted().toString(),
-      "bEncrypted": this.getBEncrypted().toString(),
-      "publicKey": this.getPublicKey().toJson(),
-      "stages": stages
+      "publicScope": publicScope,
+      "encryptionScheme": this.getEncryptionScheme().toJson()
     };
   }
 }

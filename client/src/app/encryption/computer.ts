@@ -4,6 +4,12 @@ import {BaseException} from "angular2/src/facade/exceptions";
 
 import {EncryptionHelper} from "./encryption_helper";
 import {EncryptionSchemeStep} from "../model/encryption_scheme/encryption_scheme_step";
+import {Computation} from "../model/computation";
+import {Http} from "angular2/http";
+import {ComputationResolver} from "../resolver/computation_resolver";
+import {StepProvider} from "../provider/step_provider";
+import {StageProvider} from "../provider/stage_provider";
+import {Headers} from "angular2/http";
 
 @Injectable()
 export class Computer {
@@ -18,28 +24,27 @@ export class Computer {
     "$"  // inverseMod
   ];
 
-  private scopeVars: {};
-
-  constructor(private encryptionHelper: EncryptionHelper) {
-    this.scopeVars = {};
+  constructor(
+    private encryptionHelper: EncryptionHelper
+  ) {
   }
 
-  public reset() {
-    this.scopeVars = {};
-  }
+  public computeStep(step: EncryptionSchemeStep, computation: Computation): Computation {
 
-  public addToScope(variable: string, value: BigInteger) {
-    this.scopeVars[variable] = value;
+    let stepCompute = step.getCompute();
+    // 1) get variable name from compute step
+    let varName = stepCompute.split(" = ")[0];
+    console.log("\tvarName: " + varName);
+    // 2) compute based on the command
+    let command = stepCompute.split(" = ")[1];
+    console.log("\tcommand: " + command);
 
-    return this;
-  }
+    let scope = computation.getFullScope();
 
-  public getScopeVars(): {} {
-    return this.scopeVars;
-  }
+    // 3) add variable to scope
+    computation.addToScope(varName, this.doCommand(command, scope), step.inPublicScope());
 
-  public computeStep(step: EncryptionSchemeStep) {
-    
+    return computation;
   }
 
   public computeSteps(steps: string[]) {
@@ -47,11 +52,11 @@ export class Computer {
       console.log("Step " + i + ").");
       let step = steps[i];
       console.log("\t" + step);
-      this.doStepCompute(step);
+      this.doStepCompute(step, {});
     }
   }
 
-  private doStepCompute(stepCompute: string) {
+  private doStepCompute(stepCompute: string, scope: {}) {
     // 1) get variable name from compute step
     let varName = stepCompute.split(" = ")[0];
     console.log("\tvarName: " + varName);
@@ -60,15 +65,15 @@ export class Computer {
     console.log("\tcommand: " + command);
 
     // 3) add variable to scope
-    this.scopeVars[varName] = this.doCommand(command);
+    scope[varName] = this.doCommand(command, scope);
   }
 
-  private doCommand(command: string): BigInteger {
+  private doCommand(command: string, scope: {}): BigInteger {
     if (command === "generateRandomPrime()") {
       return this.encryptionHelper.generatePrime(16);
     } else {
       // p + 1
-      return this.calcExpression(command);
+      return this.calcExpression(command, scope);
     }
   }
 
@@ -102,7 +107,7 @@ export class Computer {
     }
   }
 
-  private calcExpression(expr: string): BigInteger {
+  private calcExpression(expr: string, scope: {}): BigInteger {
     // first split in to two, a and b by the top operator
     let topOpLoc = this.findTopOperatorLocation(expr);
     let topOp = expr[topOpLoc];
@@ -129,9 +134,9 @@ export class Computer {
       if (Computer.operations.some(function (v) {
           return cStr.indexOf(v) >= 0;
         })) {
-        c = this.calcExpression(cStr);
+        c = this.calcExpression(cStr, scope);
       } else {
-        c = this.resolveVariable(cStr);
+        c = this.resolveVariable(cStr, scope);
       }
     }
 
@@ -139,17 +144,17 @@ export class Computer {
     if (Computer.operations.some(function (v) {
         return aStr.indexOf(v) >= 0;
       })) {
-      a = this.calcExpression(aStr);
+      a = this.calcExpression(aStr, scope);
     } else {
-      a = this.resolveVariable(aStr);
+      a = this.resolveVariable(aStr, scope);
     }
     // check if b requires more operations
     if (Computer.operations.some(function (v) {
         return bStr.indexOf(v) >= 0;
       })) {
-      b = this.calcExpression(bStr);
+      b = this.calcExpression(bStr, scope);
     } else {
-      b = this.resolveVariable(bStr);
+      b = this.resolveVariable(bStr, scope);
     }
 
     console.log("\t\ta: " + a.toString());
@@ -184,9 +189,9 @@ export class Computer {
     }
   }
 
-  private resolveVariable(v: string): BigInteger {
-    if (v in this.scopeVars) {
-      return this.scopeVars[v];
+  private resolveVariable(v: string, scope: {}): BigInteger {
+    if (v in scope) {
+      return scope[v];
     } else if (+v) {
       return new BigInteger("" + v);
     } else {

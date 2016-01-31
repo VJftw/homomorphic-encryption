@@ -44,7 +44,7 @@ stages:
         public: true
         compute: bX = ((g & b,nSq) * (bR & n,nSq)) % nSq
   - name: Backend
-    backend: true
+    operation: +
     steps:
       - description: Calculate \\((aX \cdot bX) \bmod n^2\\) to get \\(cX\\)
         compute: cX = (aX * bX) % nSq

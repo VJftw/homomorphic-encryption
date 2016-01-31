@@ -50,4 +50,30 @@ export class EncryptionScheme {
     return this.stages;
   }
 
+  public getBackendStages(): EncryptionSchemeStage[] {
+    let stages = [];
+
+    this.stages.forEach(stage => {
+      if (stage.isBackend()) {
+        stages.push(stage);
+      }
+    });
+
+    return stages;
+  }
+
+  public toJson(): {} {
+
+    let stages = [];
+    this.getBackendStages().forEach(stage => {
+      stages.push(stage.toJson());
+    });
+
+    return {
+      "uniqueName": this.getUniqueName(),
+      "readableName": this.getReadableName(),
+      "stages": stages
+    };
+  }
+
 }

@@ -13,8 +13,7 @@ import {Computer} from "../encryption/computer";
 export class ComputationRunner {
 
   private computation: Computation;
-
-  private encryptionScheme: EncryptionScheme;
+  private socket: WebSocket;
 
   constructor(
     private stageProvider: StageProvider,
@@ -25,14 +24,26 @@ export class ComputationRunner {
   ) {
   }
 
-  public setComputation(computation: Computation) {
-    this.computation = computation;
+  public runComputation(): void {
+    let encryptionScheme = this.computation.getEncryptionScheme();
 
-    return this;
+    let stages = encryptionScheme.getStages();
+
+    stages.forEach(stage => {
+      if (stage.isBackend()) {
+        this.registerComputation();
+        return;
+      } else {
+        stage.getSteps().forEach(step => {
+          this.computation = this.computer.computeStep(step, this.computation);
+        });
+      }
+    });
+
   }
 
-  public setEncryptionScheme(scheme: EncryptionScheme) {
-    this.encryptionScheme = scheme;
+  public setComputation(computation: Computation) {
+    this.computation = computation;
 
     return this;
   }
@@ -41,26 +52,11 @@ export class ComputationRunner {
     return this.computation;
   }
 
-  public doScheme(): void {
-    this.computer.reset();
-
-    stages = this.encryptionScheme.getStages();
-
-    stages.forEach(stage => {
-      if (stage.getName() === "Decryption") {
-        this.registerComputation();
-      } else {
-        stage.getSteps().forEach(step => {
-          this.computer.computeStep(step);
-        });
-      }
-    });
-  }
-
   private decrypt() {
-    // add cX to computerScope
+    // scope should have been resolved
 
     // run Decryption stage
+
   }
 
   private registerComputation(): void {
