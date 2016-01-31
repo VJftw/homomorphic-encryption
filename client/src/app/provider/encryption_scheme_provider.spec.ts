@@ -21,7 +21,7 @@ describe("EncryptionSchemeProvider", () => {
     );
   });
 
-  it("should return an encryption scheme given by its name", () => {
+  it("should return an encryption encryption_scheme given by its name", () => {
 
     expect(encryptionSchemeProvider.getEncryptionSchemeByName("Pailler"))
       .toBe(paillerScheme)
@@ -29,7 +29,7 @@ describe("EncryptionSchemeProvider", () => {
 
   });
 
-  it("should throw an error for an unknown encryption scheme", () => {
+  it("should throw an error for an unknown encryption encryption_scheme", () => {
 
     expect(() => {
       encryptionSchemeProvider.getEncryptionSchemeByName("abcd")

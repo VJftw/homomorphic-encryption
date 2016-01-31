@@ -6,12 +6,9 @@ import {StageResolver} from "./stage_resolver";
 @Injectable()
 export class ComputationResolver {
 
-  private stageResolver: StageResolver;
-
   constructor(
-    stageResolver: StageResolver
+    private stageResolver: StageResolver
   ) {
-    this.stageResolver = stageResolver;
   }
 
   public fromJson(jsonArr, computation?: Computation): Computation {

@@ -1,30 +1,38 @@
+import {Injectable} from "angular2/core";
+
 import {Computation} from "../model/computation";
-import {Http} from "angular2/http";
-import {ComputationResolver} from "../resolver/computation_resolver";
-import {StepProvider} from "../provider/step_provider";
+import {EncryptionScheme} from "../model/encryption_scheme/encryption_scheme";
 import {StageProvider} from "../provider/stage_provider";
+import {StepProvider} from "../provider/step_provider";
+import {ComputationResolver} from "../resolver/computation_resolver";
+import {Http} from "angular2/http";
 import {Headers} from "angular2/http";
-import {EncryptionHelper} from "./encryption_helper";
+import {Computer} from "../encryption/computer";
 
-/**
- * EncryptionScheme
- */
-export abstract class EncryptionScheme {
+@Injectable()
+export class ComputationRunner {
 
-  protected computation: Computation;
-  protected socket: WebSocket;
+  private computation: Computation;
+
+  private encryptionScheme: EncryptionScheme;
 
   constructor(
-    protected stageProvider: StageProvider,
-    protected stepProvider: StepProvider,
-    protected computationResolver: ComputationResolver,
-    protected encryptionHelper: EncryptionHelper,
-    protected http: Http
+    private stageProvider: StageProvider,
+    private stepProvider: StepProvider,
+    private computationResolver: ComputationResolver,
+    private computer: Computer,
+    private http: Http
   ) {
   }
 
-  public setComputation(computation: Computation): EncryptionScheme {
+  public setComputation(computation: Computation) {
     this.computation = computation;
+
+    return this;
+  }
+
+  public setEncryptionScheme(scheme: EncryptionScheme) {
+    this.encryptionScheme = scheme;
 
     return this;
   }
@@ -33,7 +41,29 @@ export abstract class EncryptionScheme {
     return this.computation;
   }
 
-  protected registerComputation(): void {
+  public doScheme(): void {
+    this.computer.reset();
+
+    stages = this.encryptionScheme.getStages();
+
+    stages.forEach(stage => {
+      if (stage.getName() === "Decryption") {
+        this.registerComputation();
+      } else {
+        stage.getSteps().forEach(step => {
+          this.computer.computeStep(step);
+        });
+      }
+    });
+  }
+
+  private decrypt() {
+    // add cX to computerScope
+
+    // run Decryption stage
+  }
+
+  private registerComputation(): void {
     console.log(__API_URL__);
 
     const JSON_HEADERS = new Headers();
@@ -59,7 +89,7 @@ export abstract class EncryptionScheme {
         "data": {
           "hashId": this.computation.getHashId()
         }
-     }));
+      }));
     });
 
     this.socket.addEventListener("message", (ev: MessageEvent) => {
@@ -76,36 +106,5 @@ export abstract class EncryptionScheme {
       }
     });
   }
-
-  protected abstract decrypt(): void;
-
-  /**
-   * Return the name of the Encryption Scheme
-   */
-  public abstract getName(): string;
-
-  /**
-   * Return a description of the Encryption Scheme
-   */
-  public abstract getDescription(): string;
-
-  /**
-   * Return what calculations the encryption_scheme can perform
-   */
-  public abstract getCapabilities(): Array<string>;
-
-  /**
-   * execute the encryption encryption_scheme with the given numbers and operator
-   */
-  public abstract doScheme(): void;
-
-}
-
-export class Operation {
-
-  public static ADD = "+";
-  public static SUBTRACT = "-";
-  public static MULTIPLY = "*";
-  public static DIVIDE = "/";
 
 }

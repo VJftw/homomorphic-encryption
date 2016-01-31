@@ -1,6 +1,6 @@
 import {Injectable} from "angular2/core";
 import {Computation} from "../model/computation";
-import {EncryptionScheme} from "../encryption/encryption_scheme";
+import {EncryptionScheme} from "../model/encryption_scheme/encryption_scheme";
 
 
 @Injectable()
@@ -10,7 +10,7 @@ export class ComputationProvider {
     let c = new Computation();
 
     c
-      .setScheme(scheme.getName())
+      .setScheme(scheme.getUniqueName())
       .setOperation(scheme.getCapabilities()[0])
     ;
 

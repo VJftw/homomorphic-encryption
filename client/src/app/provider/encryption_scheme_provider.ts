@@ -1,20 +1,27 @@
 import {Injectable} from "angular2/core";
-import {PaillerScheme} from "../encryption/pailler/pailler_scheme";
-import {ElGamalScheme} from "../encryption/elgamal/el_gamal_scheme";
-import {EncryptionScheme} from "../encryption/encryption_scheme";
+
+import {EncryptionScheme} from "../model/encryption_scheme/encryption_scheme";
+import {EncryptionSchemeResolver} from "../resolver/encryption_scheme/encryption_scheme_resolver";
 
 @Injectable()
 export class EncryptionSchemeProvider {
 
   private schemes: Map<string, EncryptionScheme>;
 
+  private schemeJsons = [
+    require("json!yaml!../encryption/schemes/pailler.yml")
+  ];
+
   constructor(
-    private paillerScheme: PaillerScheme,
-    private elGamalEccScheme: ElGamalScheme
+    encryptionSchemeResolver: EncryptionSchemeResolver
   ) {
     this.schemes = new Map<string, EncryptionScheme>();
-    this.schemes.set(paillerScheme.getName(), paillerScheme);
-    this.schemes.set(elGamalEccScheme.getName(), elGamalEccScheme);
+
+    this.schemeJsons.forEach(schemeJson => {
+      console.log(schemeJson);
+      let scheme = encryptionSchemeResolver.fromJson(schemeJson);
+      this.schemes.set(scheme.getUniqueName(), scheme);
+    });
   }
 
   public getEncryptionSchemeByName(name: string): EncryptionScheme {

@@ -147,13 +147,13 @@ describe("Computation", () => {
     ;
   });
 
-  it("should return the scheme", () => {
+  it("should return the encryption_scheme", () => {
     expect(computation.getScheme())
       .toBeUndefined()
     ;
   });
 
-  it("should set the scheme", () => {
+  it("should set the encryption_scheme", () => {
     expect(computation.setScheme("Pailler"))
       .toBe(computation)
     ;
