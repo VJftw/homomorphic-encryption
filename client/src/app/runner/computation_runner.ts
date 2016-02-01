@@ -96,10 +96,8 @@ export class ComputationRunner {
   private computeStep(step: EncryptionSchemeStep) {
     // 1) get variable name from compute step
     let varName = step.getCompute().split(" = ")[0];
-    console.log("\tvarName: " + varName);
     // 2) compute based on the command
     let command = step.getCompute().split(" = ")[1];
-    console.log("\tcommand: " + command);
 
     let r = this.computer.calculateStepCompute(command, this.computation.getFullScope());
 
@@ -123,7 +121,7 @@ export class ComputationRunner {
   }
 
   private registerComputation(): void {
-    console.log(__API_URL__);
+    console.log("API Address: " +  __API_URL__);
 
     const JSON_HEADERS = new Headers();
 
@@ -139,14 +137,14 @@ export class ComputationRunner {
   }
 
   private registerSuccess(data) {
-    console.log(data);
-
     this.computation = this.messageResolver.resolveRegisterMessage(data.json(), this.computation);
 
     this.connectToWebSocket();
   }
 
   private connectToWebSocket(): void {
+    console.log("Backend Address: " +  __BACKEND_URL__);
+
     this.socket = new WebSocket("ws://" + __BACKEND_URL__);
 
     this.socket.addEventListener("open", (ev: Event) => {
@@ -157,8 +155,6 @@ export class ComputationRunner {
     });
 
     this.socket.addEventListener("message", (ev: MessageEvent) => {
-      console.log(ev);
-
       let stage = this.stageProvider.create(
         this.computation.getEncryptionScheme().getBackendStage().getName(),
         Stage.HOST_SERVER

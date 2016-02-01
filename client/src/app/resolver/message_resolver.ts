@@ -41,10 +41,6 @@ export class MessageResolver {
       let r = new BigInteger(results[i]);
       let step = this.stepProvider.create(schemeStep.getDescription(), new BigInteger(results[i]));
 
-      console.log("Step Result: " + r.toString());
-      console.log(results);
-      console.log(message);
-
       computation.getStageByName(backendStage.getName()).addStep(step);
     }
 

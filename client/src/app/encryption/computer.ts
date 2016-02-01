@@ -32,8 +32,6 @@ export class Computer {
     let primitiveRootRegex = /primitiveRoot\((.+)\)/;
     let randomArbitraryRegex = /randomArbitrary\((.+),(.+)\)/;
 
-    console.log(scope);
-
     let matches;
     switch (true) {
       case generateRandomPrimeRegex.test(command):
@@ -43,11 +41,9 @@ export class Computer {
         return this.encryptionHelper.generateR(scope[matches[1]]);
       case primitiveRootRegex.test(command):
         matches = primitiveRootRegex.exec(command);
-        console.log(matches);
         return this.encryptionHelper.findPrimitiveRootOfPrime(scope[matches[1]]);
       case randomArbitraryRegex.test(command):
         matches = randomArbitraryRegex.exec(command);
-        console.log(matches);
         return this.encryptionHelper.getRandomArbitrary(
           this.resolveVariable(matches[1].trim(), scope).intValue(),
           this.resolveVariable(matches[2].trim(), scope).intValue()
@@ -94,12 +90,8 @@ export class Computer {
     let topOpLoc = this.findTopOperatorLocation(expr);
     let topOp = expr[topOpLoc];
 
-    console.log("Top operator: " + topOp + " at: " + topOpLoc);
-
     let aStr = this.trimBrackets(expr.substring(0, topOpLoc).trim());
     let bStr = this.trimBrackets(expr.substring(topOpLoc + 1, expr.length).trim());
-    console.log("\taStr: " + aStr);
-    console.log("\tbStr: " + bStr);
 
     let a;
     let b;
@@ -109,8 +101,6 @@ export class Computer {
       let parts = bStr.split(",");
       bStr = parts[0];
       let cStr = parts[1];
-      console.log("\tbStr: " + cStr);
-      console.log("\tcStr: " + cStr);
 
       // check if c requires more operations
       if (Computer.operations.some(function (v) {
@@ -139,12 +129,7 @@ export class Computer {
       b = this.resolveVariable(bStr, scope);
     }
 
-    console.log("\t\ta: " + a.toString());
-    console.log("\t\tb: " + b.toString());
-
     if (topOp === "&") {
-      console.log("\t\tc: " + c);
-      console.log(scope);
       return this.calc(a, topOp, b, c);
     }
     return this.calc(a, topOp, b);

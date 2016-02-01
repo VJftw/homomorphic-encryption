@@ -29,7 +29,6 @@ export class EncryptionHelper {
   public generateR(n: BigInteger): BigInteger {
     let r: BigInteger;
     let k = n.bitLength() - 1;
-    console.log(k);
     while (true) {
       r = this.generatePrime(k);
       if (r.intValue() > 0 && r < n) {
