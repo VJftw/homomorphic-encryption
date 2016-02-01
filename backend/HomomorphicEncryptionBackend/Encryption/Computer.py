@@ -42,6 +42,81 @@ class Computer:
         top_op_loc = self.__find_top_operator_location(expr)
         top_op = expr[top_op_loc]
 
+        self.__logger.debug("Top operator: {0} at: {1}".format(top_op, top_op_loc))
+
+        aStr = self.__trim_brackets(expr[0:top_op_loc].strip())
+        bStr = self.__trim_brackets(expr[top_op_loc + 1:].strip())
+
+        self.__logger.debug("\taStr: {0}".format(aStr))
+        self.__logger.debug("\tbStr: {0}".format(bStr))
+
+        if top_op == "&":
+            parts = bStr.split(",")
+            bStr = parts[0]
+            cStr = parts[1]
+            self.__logger("\tbStr: {0}".format(bStr))
+            self.__logger("\tcStr: {0}".format(cStr))
+
+            # check if c requires more operations
+            if any(operator in cStr for operator in Computer.OPERATIONS):
+                c = this.calcExpression(cStr, scope)
+            else:
+                c = this.resolveVariable(cStr, scope)
+
+        # check if a requires more operations
+        if any(operator in aStr for operator in Computer.OPERATIONS):
+            a = this.calcExpression(aStr, scope)
+        else:
+            a = this.resolveVariable(aStr, scope)
+
+        # check if c requires more operations
+        if any(operator in bStr for operator in Computer.OPERATIONS):
+            b = this.calcExpression(bStr, scope)
+        else:
+            b = this.resolveVariable(bStr, scope)
+
+        self.__logger.debug("\t\ta: {0}".format(a))
+        self.__logger.debug("\t\tb: {0}".format(b))
+
+        if topOp == "&":
+            self.__logger.debug("\t\tc: {0}".format(c))
+            self.__logger.debug(scope)
+
+            return this.calc(a, topOp, c)
+
+        return this.calc(a, topOp, b)
+
+    def __calc(self, a, b, c):
+        if operator == "+":
+            return a + b
+        if operator == "-":
+            return a - b
+        if operator == "*":
+            return a * b
+        if operator == "/":
+            return a // b
+        if operator == "%":
+            return a % b
+        if operator == "$":
+            return modInv(a, b)
+        if operator == "&":
+            return pow(a, b, c)
+
+    def egcd(a, b):
+    if a == 0:
+        return (b, 0, 1)
+    else:
+        g, y, x = egcd(b % a, a)
+        return (g, x - (b // a) * y, y)
+
+    def modinv(a, m):
+        g, x, y = egcd(a, m)
+        if g != 1:
+            raise Exception('modular inverse does not exist')
+        else:
+            return x % m
+
+
     def __find_top_operator_location(self, expr):
         bracket_counter = 0
         top_level_loc = -1
@@ -60,3 +135,19 @@ class Computer:
             raise Exception("Broken expression")
 
         return top_level_loc
+
+    def __resolve_variable(self, v, scope):
+        if v in scope:
+            return scope[v]
+        elif self.__is_int(v)
+            return int(v)
+        else:
+            raise Error("Cannot resolve variable: {0}".format(v))
+
+
+    def __is_int(self, string):
+        try:
+            int(string)
+            return True
+        except ValueError:
+            return False
