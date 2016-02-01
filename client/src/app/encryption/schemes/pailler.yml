@@ -41,7 +41,7 @@ stages:
   - name: Backend
     operation: +
     steps:
-      - description: Calculate \((aX \cdot bX) \bmod n^2\\) to get \(cX\)
+      - description: Calculate \((aX \cdot bX) \bmod n^2\) to get \(cX\)
         compute: cX = (aX * bX) % nSq
   - name: Decryption
     steps:

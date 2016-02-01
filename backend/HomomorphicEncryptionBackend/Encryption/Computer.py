@@ -106,7 +106,7 @@ class Computer:
         if operator == "$":
             return modInv(a, b)
         if operator == "&":
-            return pow(a, b, c)
+            return a ^ b % c
 
     def egcd(a, b):
         if a == 0:
