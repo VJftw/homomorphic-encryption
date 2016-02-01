@@ -2,7 +2,7 @@ import {
   it
 } from "angular2/testing";
 
-import {EncryptionHelper, KeyPair} from "./encryption_helper";
+import {EncryptionHelper} from "./encryption_helper";
 import {BigInteger} from "jsbn";
 
 
@@ -60,31 +60,6 @@ describe("EncryptionHelper", () => {
     let roots = [3, 5, 12, 18, 19, 20, 26, 28, 29, 30, 33, 34];
     expect(roots.indexOf(root.intValue())).toBeTruthy();
 
-  });
-
-});
-
-describe("KeyPair", () => {
-
-  let privateKey = jasmine.createSpyObj("privateKey", [""]);
-  let publicKey = jasmine.createSpyObj("publicKey", [""]);
-
-  let keyPair: KeyPair;
-
-  beforeEach(() => {
-    keyPair = new KeyPair(privateKey, publicKey);
-  });
-
-  it("should return the private key", () => {
-    expect(keyPair.getPrivateKey())
-      .toBe(privateKey)
-    ;
-  });
-
-  it("should return the public key", () => {
-    expect(keyPair.getPublicKey())
-      .toBe(publicKey)
-    ;
   });
 
 });

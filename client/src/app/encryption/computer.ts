@@ -25,27 +25,6 @@ export class Computer {
     return this.doCommand(compute, scope);
   }
 
-  public computeSteps(steps: string[]) {
-    for (let i = 0; i < steps.length; i++) {
-      console.log("Step " + i + ").");
-      let step = steps[i];
-      console.log("\t" + step);
-      this.doStepCompute(step, {});
-    }
-  }
-
-  private doStepCompute(stepCompute: string, scope: {}) {
-    // 1) get variable name from compute step
-    let varName = stepCompute.split(" = ")[0];
-    console.log("\tvarName: " + varName);
-    // 2) compute based on the command
-    let command = stepCompute.split(" = ")[1];
-    console.log("\tcommand: " + command);
-
-    // 3) add variable to scope
-    scope[varName] = this.doCommand(command, scope);
-  }
-
   private doCommand(command: string, scope: {}): BigInteger {
 
     let generateRandomPrimeRegex = /generateRandomPrime\(\)/;

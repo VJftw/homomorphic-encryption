@@ -15,6 +15,7 @@ describe("ComputationRun", () => {
   let routeParams = jasmine.createSpyObj("routeParams", ["get"]);
   let encryptionSchemeProvider = jasmine.createSpyObj("encryptionSchemeProvider", ["getEncryptionSchemeByName"]);
   let computationProvider = jasmine.createSpyObj("computationProvider", ["create"]);
+  let computationRunner = jasmine.createSpyObj("computationRunner", ["setComputation", "runComputation"]);
 
   let computationRun: ComputationRun;
 
@@ -22,10 +23,9 @@ describe("ComputationRun", () => {
   let computation = jasmine.createSpyObj("computation", [""]);
 
   beforeEach(() => {
-    routeParams.get.and.returnValue("Pailler");
+    routeParams.get.and.returnValue("pailler");
 
     encryptionScheme.getCapabilities.and.returnValue(["+"]);
-    encryptionScheme.getName.and.returnValue("Pailler");
 
     encryptionSchemeProvider.getEncryptionSchemeByName.and.returnValue(encryptionScheme);
 
@@ -35,7 +35,8 @@ describe("ComputationRun", () => {
       routeParams,
       formBuilder,
       encryptionSchemeProvider,
-      computationProvider
+      computationProvider,
+      computationRunner
     );
   });
 
@@ -49,7 +50,7 @@ describe("ComputationRun", () => {
     ;
 
     expect(encryptionSchemeProvider.getEncryptionSchemeByName.calls.mostRecent().args)
-      .toEqual(["Pailler"])
+      .toEqual(["pailler"])
     ;
 
     expect(computationProvider.create.calls.mostRecent().args)
@@ -71,11 +72,11 @@ describe("ComputationRun", () => {
       .toHaveBeenCalled()
     ;
 
-    expect(encryptionScheme.setComputation.calls.mostRecent().args)
+    expect(computationRunner.setComputation.calls.mostRecent().args)
       .toEqual([computation])
     ;
 
-    expect(encryptionScheme.doScheme)
+    expect(computationRunner.runComputation)
       .toHaveBeenCalled()
     ;
 
