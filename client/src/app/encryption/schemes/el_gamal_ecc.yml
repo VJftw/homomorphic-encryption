@@ -1,5 +1,5 @@
-unique_name: el_gamal_ecc
-readable_name: ElGamal ECC
+uniqueName: el_gamal_ecc
+readableName: ElGamal ECC
 description: The ElGamal ECC additive somewhat homomorphic encryption scheme
 capabilities:
  - +
@@ -20,10 +20,10 @@ stages:
         compute: y = randomArbitrary(0, p)
       - description: Encrypt \(a\) by calculating \((a \cdot (h^y \bmod p)) \bmod p\) to get \(aX\)
         compute: aX = (a * (h & y,p)) % p
-        public: true
+        isPublic: true
       - description: Encrypt \(b\) by calculating \((b \cdot (h^y \bmod p)) \bmod p\) to get \(bX\)
         compute: bX = (b * (h & y,p)) % p
-        public: true
+        isPublic: true
   - name: Backend
     operation: +
     steps:

@@ -30,7 +30,7 @@ export class Computation {
     this.publicScope = {};
   }
 
-  public getFullScope() {
+  public getFullScope(): IScopeObject {
     let r = {};
     for (let varName in this.privateScope) {
       if (this.privateScope.hasOwnProperty(varName)) {
@@ -171,4 +171,10 @@ export class Computation {
 
     return r;
   }
+}
+
+export interface IScopeObject {
+  a?: BigInteger;
+  b?: BigInteger;
+  c?: BigInteger;
 }

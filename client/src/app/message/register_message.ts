@@ -13,7 +13,11 @@ export class RegisterMessage implements MessageInterface {
     return {
       "encryptionScheme": this.encryptionScheme.getUniqueName(),
       // "keyBitSize": this.keyBitSize
-    }
+    };
   }
 
+}
+
+export interface IRegisterMessageResponseJson {
+  hashId: string;
 }

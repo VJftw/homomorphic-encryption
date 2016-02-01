@@ -1,10 +1,8 @@
 import {Injectable} from "angular2/core";
 
 import {Computation} from "../model/computation";
-import {EncryptionScheme} from "../model/encryption_scheme/encryption_scheme";
 import {StageProvider} from "../provider/stage_provider";
 import {StepProvider} from "../provider/step_provider";
-import {ComputationResolver} from "../resolver/computation_resolver";
 import {Http} from "angular2/http";
 import {Headers} from "angular2/http";
 import {Computer} from "../encryption/computer";
@@ -31,24 +29,14 @@ export class ComputationRunner {
   ) {
   }
 
-  private addWorkspace(): void {
-    let stage = this.stageProvider.create("Workspace");
-    stage.addStep(this.stepProvider.create(
-      "We aim to calculate \\(a " + this.computation.getOperation() + " b = c\\)"
-    ));
+  public setComputation(computation: Computation) {
+    this.computation = computation;
 
-    stage.addStep(this.stepProvider.create(
-      "let \\(a\\)",
-      this.computation.getA()
-    ));
+    return this;
+  }
 
-    stage.addStep(this.stepProvider.create(
-      "let \\(b\\)",
-      this.computation.getB()
-    ));
-
-    this.computation.addStage(stage);
-
+  public getComputation(): Computation {
+    return this.computation;
   }
 
   public runComputation(): void {
@@ -67,6 +55,26 @@ export class ComputationRunner {
     });
 
     this.registerComputation();
+  }
+
+  private addWorkspace(): void {
+    let stage = this.stageProvider.create("Workspace");
+    stage.addStep(this.stepProvider.create(
+      "We aim to calculate \\(a " + this.computation.getOperation() + " b = c\\)"
+    ));
+
+    stage.addStep(this.stepProvider.create(
+      "let \\(a\\)",
+      this.computation.getA()
+    ));
+
+    stage.addStep(this.stepProvider.create(
+      "let \\(b\\)",
+      this.computation.getB()
+    ));
+
+    this.computation.addStage(stage);
+
   }
 
   private doStage(schemeStage: EncryptionSchemeStage) {
@@ -102,15 +110,7 @@ export class ComputationRunner {
     return r;
   }
 
-  public setComputation(computation: Computation) {
-    this.computation = computation;
 
-    return this;
-  }
-
-  public getComputation(): Computation {
-    return this.computation;
-  }
 
   private decrypt() {
     // run Decryption stage
@@ -118,7 +118,7 @@ export class ComputationRunner {
 
     this.doStage(stage);
 
-    this.computation.setC(this.computation.getFullScope()["c"]);
+    this.computation.setC(this.computation.getFullScope().c);
 
   }
 
@@ -146,7 +146,7 @@ export class ComputationRunner {
     this.connectToWebSocket();
   }
 
-  protected connectToWebSocket(): void {
+  private connectToWebSocket(): void {
     this.socket = new WebSocket("ws://" + __BACKEND_URL__);
 
     this.socket.addEventListener("open", (ev: Event) => {

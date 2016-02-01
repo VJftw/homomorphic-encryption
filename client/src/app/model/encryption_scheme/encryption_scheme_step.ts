@@ -30,7 +30,13 @@ export class EncryptionSchemeStep {
     return {
       "description": this.getDescription(),
       "compute": this.getCompute()
-    }
+    };
   }
 
+}
+
+export interface IEncryptionSchemeStepJson {
+  description: string;
+  compute: string;
+  isPublic?: boolean;
 }

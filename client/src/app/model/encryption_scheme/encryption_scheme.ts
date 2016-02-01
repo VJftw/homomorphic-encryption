@@ -1,4 +1,5 @@
 import {EncryptionSchemeStage} from "./encryption_scheme_stage";
+import {IEncryptionSchemeStageJson} from "./encryption_scheme_stage";
 
 
 export class EncryptionScheme {
@@ -84,4 +85,12 @@ export class EncryptionScheme {
     throw new RangeError("No Decryption Stage found.");
   }
 
+}
+
+export interface IEncryptionSchemeJson {
+  uniqueName: string;
+  readableName: string;
+  description: string;
+  capabilities: string[];
+  stages: IEncryptionSchemeStageJson[];
 }

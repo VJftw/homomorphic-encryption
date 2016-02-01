@@ -24,9 +24,4 @@ import {ROUTER_DIRECTIVES} from "angular2/router";
   template: require("./index.html")
 })
 export class Index {
-
-  public test() {
-  }
-
-
 }

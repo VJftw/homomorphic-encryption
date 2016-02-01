@@ -3,8 +3,8 @@
 #
 #
 
-unique_name: pailler
-readable_name: Pailler
+uniqueName: pailler
+readableName: Pailler
 description: The Pailler additive somewhat homomorphic encryption scheme
 capabilities:
  - +
@@ -18,7 +18,7 @@ stages:
       - description: Multiply primes \(p\) and \(q\) to get \(n\)
         compute: n = p * q
       - description: Calculate \(n^2\)
-        public: true
+        isPublic: true
         compute: nSq = n * n
       - description: Add \(1\) to \(n\) to get \(g\)
         compute: g = n + 1
@@ -31,12 +31,12 @@ stages:
       - description: Generate \(aR\)
         compute: aR = generateR(n)
       - description: Encrypt B by calculating \((g^a \bmod n^2 \cdot aR^n \bmod n^2) \bmod n^2\) to get \(aX\)
-        public: true
+        isPublic: true
         compute: aX = ((g & a,nSq) * (aR & n,nSq)) % nSq
       - description: Generate \(bR\)
         compute: bR = generateR(n)
       - description: Encrypt B by calculating \((g^b \bmod n^2 \cdot bR^n \bmod n^2) \bmod n^2\) to get \(bX\)
-        public: true
+        isPublic: true
         compute: bX = ((g & b,nSq) * (bR & n,nSq)) % nSq
   - name: Backend
     operation: +

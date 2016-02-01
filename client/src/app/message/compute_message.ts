@@ -26,6 +26,12 @@ export class ComputeMessage implements MessageInterface {
         "computeSteps": this.steps,
         "publicScope": this.publicScope
       }
-    }
+    };
   }
+}
+
+export interface IComputeMessageResponseJson {
+  publicScope: {};
+  results: string[];
+  computeSteps: string[];
 }

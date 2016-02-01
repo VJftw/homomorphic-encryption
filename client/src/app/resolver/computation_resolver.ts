@@ -1,6 +1,5 @@
 import {Injectable} from "angular2/core";
 import {Computation} from "../model/computation";
-import {BigInteger} from "jsbn";
 import {StageResolver} from "./stage_resolver";
 
 @Injectable()
@@ -16,7 +15,6 @@ export class ComputationResolver {
     computation
       .setState(jsonArr.state)
     ;
-
 
 
     jsonArr.stages.slice(computation.getStages().length).forEach(stageJson => {

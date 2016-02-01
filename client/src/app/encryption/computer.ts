@@ -1,15 +1,7 @@
 import {Injectable} from "angular2/core";
 import {BigInteger} from "jsbn";
-import {BaseException} from "angular2/src/facade/exceptions";
 
 import {EncryptionHelper} from "./encryption_helper";
-import {EncryptionSchemeStep} from "../model/encryption_scheme/encryption_scheme_step";
-import {Computation} from "../model/computation";
-import {Http} from "angular2/http";
-import {ComputationResolver} from "../resolver/computation_resolver";
-import {StepProvider} from "../provider/step_provider";
-import {StageProvider} from "../provider/stage_provider";
-import {Headers} from "angular2/http";
 
 @Injectable()
 export class Computer {
@@ -60,20 +52,22 @@ export class Computer {
     let generateRRegex = /generateR\((.+)\)/;
     let primitiveRootRegex = /primitiveRoot\((.+)\)/;
     let randomArbitraryRegex = /randomArbitrary\((.+),(.+)\)/;
+
     console.log(scope);
 
-    switch(true) {
+    let matches;
+    switch (true) {
       case generateRandomPrimeRegex.test(command):
         return this.encryptionHelper.generatePrime(16);
       case generateRRegex.test(command):
-        let matches = generateRRegex.exec(command);
+        matches = generateRRegex.exec(command);
         return this.encryptionHelper.generateR(scope[matches[1]]);
       case primitiveRootRegex.test(command):
-        let matches = primitiveRootRegex.exec(command);
+        matches = primitiveRootRegex.exec(command);
         console.log(matches);
         return this.encryptionHelper.findPrimitiveRootOfPrime(scope[matches[1]]);
       case randomArbitraryRegex.test(command):
-        let matches = randomArbitraryRegex.exec(command);
+        matches = randomArbitraryRegex.exec(command);
         console.log(matches);
         return this.encryptionHelper.getRandomArbitrary(
           this.resolveVariable(matches[1].trim(), scope).intValue(),
@@ -96,13 +90,13 @@ export class Computer {
         bracketCounter++;
       } else if (char === ")") {
         bracketCounter--;
-      } else if (bracketCounter == 0 && Computer.operations.indexOf(char) > -1) {
+      } else if (bracketCounter === 0 && Computer.operations.indexOf(char) > -1) {
         topLevelLoc = i;
       }
     }
 
     if (bracketCounter !== 0 || topLevelLoc === -1) {
-      throw new BaseException("Broken expression");
+      throw new Error("Broken expression");
     }
 
     return topLevelLoc;
@@ -132,7 +126,7 @@ export class Computer {
     let b;
     let c;
 
-    if (topOp == "&") {
+    if (topOp === "&") {
       let parts = bStr.split(",");
       bStr = parts[0];
       let cStr = parts[1];
@@ -169,7 +163,7 @@ export class Computer {
     console.log("\t\ta: " + a.toString());
     console.log("\t\tb: " + b.toString());
 
-    if (topOp == "&") {
+    if (topOp === "&") {
       console.log("\t\tc: " + c);
       console.log(scope);
       return this.calc(a, topOp, b, c);
@@ -195,17 +189,17 @@ export class Computer {
       case "&":
         return a.modPow(b, c);
       default:
-        throw new BaseException("Cannot resolve operation: " + operator)
+        throw new RangeError("Cannot resolve operation: " + operator);
     }
   }
 
   private resolveVariable(v: string, scope: {}): BigInteger {
     if (v in scope) {
       return scope[v];
-    } else if (parseInt(v) !== NaN) {
+    } else if (parseInt(v, 10) !== NaN) {
       return new BigInteger("" + v);
     } else {
-      throw new BaseException("Cannot resolve variable: " + v);
+      throw new RangeError("Cannot resolve variable: " + v);
     }
   }
 

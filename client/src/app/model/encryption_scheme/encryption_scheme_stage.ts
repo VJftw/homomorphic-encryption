@@ -1,4 +1,5 @@
 import {EncryptionSchemeStep} from "./encryption_scheme_step";
+import {IEncryptionSchemeStepJson} from "./encryption_scheme_step";
 
 
 export class EncryptionSchemeStage {
@@ -48,10 +49,17 @@ export class EncryptionSchemeStage {
     this.steps.forEach(step => {
       steps.push(step.toJson());
     });
+
     return {
       "name": this.getName(),
       "steps": steps
-    }
+    };
   }
 
+}
+
+export interface IEncryptionSchemeStageJson {
+  name: string;
+  operation?: string;
+  steps: IEncryptionSchemeStepJson[];
 }
