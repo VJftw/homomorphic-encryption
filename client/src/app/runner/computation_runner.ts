@@ -13,6 +13,7 @@ import {MessageProvider} from "../provider/message_provider";
 import {MessageResolver} from "../resolver/message_resolver";
 import {EncryptionSchemeStage} from "../model/encryption_scheme/encryption_scheme_stage";
 import {BigInteger} from "jsbn";
+import {Stage} from "../model/stage";
 
 @Injectable()
 export class ComputationRunner {
@@ -158,7 +159,10 @@ export class ComputationRunner {
     this.socket.addEventListener("message", (ev: MessageEvent) => {
       console.log(ev);
 
-      let stage = this.stageProvider.create(this.computation.getEncryptionScheme().getBackendStage().getName());
+      let stage = this.stageProvider.create(
+        this.computation.getEncryptionScheme().getBackendStage().getName(),
+        Stage.HOST_SERVER
+      );
       this.computation.addStage(stage);
 
       this.computation = this.messageResolver.resolveComputeMessage(
