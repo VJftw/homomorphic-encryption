@@ -114,6 +114,9 @@ export class ComputationRunner {
     let stage = this.computation.getEncryptionScheme().getDecryptStage();
 
     this.doStage(stage);
+
+    this.computation.setC(this.computation.getFullScope()["c"]);
+
   }
 
   private registerComputation(): void {

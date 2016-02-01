@@ -39,8 +39,8 @@ class ComputationThread(Thread):
             compute = step.split(" = ")[1]
             result = self.__computer.compute(compute, self.__computation.get_public_scope())
 
-            self.__computation.add_public_scope(var_name, result)
-            self.__computation.add_result(result)
+            self.__computation.add_public_scope(var_name, "{0}".format(result))
+            self.__computation.add_result("{0}".format(result))
             self.__computation.remove_compute_step(step)
             self.__socket_manager.send_message(self.__computation)
 

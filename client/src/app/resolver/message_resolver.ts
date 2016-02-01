@@ -25,7 +25,7 @@ export class MessageResolver {
     let publicScope = message["publicScope"];
     for (let varName in publicScope) {
       if (publicScope.hasOwnProperty(varName)) {
-        computation.addToScope(varName, new BigInteger("" + publicScope[varName]), true);
+        computation.addToScope(varName, new BigInteger(publicScope[varName]), true);
       }
     }
 
@@ -33,10 +33,15 @@ export class MessageResolver {
     let backendStage = computation.getEncryptionScheme().getBackendStage();
     let backendSteps = backendStage.getSteps();
 
-    let results = message["results"].slice(backendStage.getSteps().length);
+    let results = message["results"].slice(backendStage.getSteps().length - message["results"].length);
     for (let i = 0; i < backendSteps.length; i++) {
       let schemeStep = backendSteps[i];
-      let step = this.stepProvider.create(schemeStep.getDescription(), results[i]);
+      let r = new BigInteger(results[i]);
+      let step = this.stepProvider.create(schemeStep.getDescription(), new BigInteger(results[i]));
+
+      console.log("Step Result: " + r.toString());
+      console.log(results);
+      console.log(message);
 
       computation.getStageByName(backendStage.getName()).addStep(step);
     }
