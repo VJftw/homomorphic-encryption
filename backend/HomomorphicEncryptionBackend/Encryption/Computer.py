@@ -30,13 +30,19 @@ class Computer:
                 scope):
         self.__logger.debug(compute)
         self.__logger.debug(scope)
-        return 12321
+        return self.__do_command(compute, scope)
 
     def __do_command(self, command, scope):
         if command == "generateRandomPrime()":
             return self.__encryption_helper.generatePrime(16)
         else:
             return self.__calc_expression(command, scope)
+
+    def __trim_brackets(self, expr):
+        if(expr[0] == "(" and expr[-1] == ")"):
+            return expr[1:-1]
+        else:
+            return expr
 
     def __calc_expression(self, expr, scope):
         top_op_loc = self.__find_top_operator_location(expr)
@@ -59,34 +65,34 @@ class Computer:
 
             # check if c requires more operations
             if any(operator in cStr for operator in Computer.OPERATIONS):
-                c = this.calcExpression(cStr, scope)
+                c = self.__calc_expression(cStr, scope)
             else:
-                c = this.resolveVariable(cStr, scope)
+                c = self.__resolve_variable(cStr, scope)
 
         # check if a requires more operations
         if any(operator in aStr for operator in Computer.OPERATIONS):
-            a = this.calcExpression(aStr, scope)
+            a = self.__calc_expression(aStr, scope)
         else:
-            a = this.resolveVariable(aStr, scope)
+            a = self.__resolve_variable(aStr, scope)
 
         # check if c requires more operations
         if any(operator in bStr for operator in Computer.OPERATIONS):
-            b = this.calcExpression(bStr, scope)
+            b = self.__calc_expression(bStr, scope)
         else:
-            b = this.resolveVariable(bStr, scope)
+            b = self.__resolve_variable(bStr, scope)
 
         self.__logger.debug("\t\ta: {0}".format(a))
         self.__logger.debug("\t\tb: {0}".format(b))
 
-        if topOp == "&":
+        if top_op == "&":
             self.__logger.debug("\t\tc: {0}".format(c))
             self.__logger.debug(scope)
 
-            return this.calc(a, topOp, c)
+            return self.__calc(a, top_op, b, c)
 
-        return this.calc(a, topOp, b)
+        return self.__calc(a, top_op, b)
 
-    def __calc(self, a, b, c):
+    def __calc(self, a, operator, b, c=None):
         if operator == "+":
             return a + b
         if operator == "-":
@@ -103,11 +109,11 @@ class Computer:
             return pow(a, b, c)
 
     def egcd(a, b):
-    if a == 0:
-        return (b, 0, 1)
-    else:
-        g, y, x = egcd(b % a, a)
-        return (g, x - (b // a) * y, y)
+        if a == 0:
+            return (b, 0, 1)
+        else:
+            g, y, x = egcd(b % a, a)
+            return (g, x - (b // a) * y, y)
 
     def modinv(a, m):
         g, x, y = egcd(a, m)
@@ -138,8 +144,8 @@ class Computer:
 
     def __resolve_variable(self, v, scope):
         if v in scope:
-            return scope[v]
-        elif self.__is_int(v)
+            return int(scope[v])
+        elif self.__is_int(v):
             return int(v)
         else:
             raise Error("Cannot resolve variable: {0}".format(v))
