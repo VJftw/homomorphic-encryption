@@ -96,6 +96,8 @@ export class ComputationRunner {
 
     this.computation.addToScope(varName, r, step.isPublicScope());
 
+    console.log("Completed: " + step.getCompute());
+
     return r;
   }
 

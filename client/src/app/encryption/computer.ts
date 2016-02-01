@@ -56,11 +56,30 @@ export class Computer {
 
   private doCommand(command: string, scope: {}): BigInteger {
 
-    switch(command) {
-      case "generateRandomPrime()":
+    let generateRandomPrimeRegex = /generateRandomPrime\(\)/;
+    let generateRRegex = /generateR\((.+)\)/;
+    let primitiveRootRegex = /primitiveRoot\((.+)\)/;
+    let randomArbitraryRegex = /randomArbitrary\((.+),(.+)\)/;
+    console.log(scope);
+
+    switch(true) {
+      case generateRandomPrimeRegex.test(command):
         return this.encryptionHelper.generatePrime(16);
-      case "generateR()":
-        return this.encryptionHelper.generateR(scope["n"]);
+      case generateRRegex.test(command):
+        let matches = generateRRegex.exec(command);
+        return this.encryptionHelper.generateR(scope[matches[1]]);
+      case primitiveRootRegex.test(command):
+        let matches = primitiveRootRegex.exec(command);
+        console.log(matches);
+        return this.encryptionHelper.findPrimitiveRootOfPrime(scope[matches[1]]);
+      case randomArbitraryRegex.test(command):
+        let matches = randomArbitraryRegex.exec(command);
+        console.log(matches);
+        return this.encryptionHelper.getRandomArbitrary(
+          this.resolveVariable(matches[1].trim(), scope).intValue(),
+          this.resolveVariable(matches[2].trim(), scope).intValue()
+        );
+
       default:
         return this.calcExpression(command, scope);
     }
@@ -183,7 +202,7 @@ export class Computer {
   private resolveVariable(v: string, scope: {}): BigInteger {
     if (v in scope) {
       return scope[v];
-    } else if (+v) {
+    } else if (parseInt(v) !== NaN) {
       return new BigInteger("" + v);
     } else {
       throw new BaseException("Cannot resolve variable: " + v);

@@ -29,13 +29,13 @@ stages:
   - name: Encryption
     steps:
       - description: Generate \(aR\)
-        compute: aR = generateR()
-      - description: Encrypt A
+        compute: aR = generateR(n)
+      - description: Encrypt B by calculating \((g^a \bmod n^2 \cdot aR^n \bmod n^2) \bmod n^2\) to get \(aX\)
         public: true
         compute: aX = ((g & a,nSq) * (aR & n,nSq)) % nSq
       - description: Generate \(bR\)
-        compute: bR = generateR()
-      - description: Encrypt B
+        compute: bR = generateR(n)
+      - description: Encrypt B by calculating \((g^b \bmod n^2 \cdot bR^n \bmod n^2) \bmod n^2\) to get \(bX\)
         public: true
         compute: bX = ((g & b,nSq) * (bR & n,nSq)) % nSq
   - name: Backend
@@ -45,5 +45,5 @@ stages:
         compute: cX = (aX * bX) % nSq
   - name: Decryption
     steps:
-      - description: Calculate
+      - description: Calculate \((\frac{(cX^l\bmod n^2) - 1}{n})\cdot cX \bmod n \) to get \(c\)
         compute: c = ((((cX & l,nSq) - 1) / n) * m) % n
