@@ -38,7 +38,6 @@ export class MessageResolver {
     let results = message.results.slice(backendStage.getSteps().length - message.results.length);
     for (let i = 0; i < backendSteps.length; i++) {
       let schemeStep = backendSteps[i];
-      let r = new BigInteger(results[i]);
       let step = this.stepProvider.create(schemeStep.getDescription(), new BigInteger(results[i]));
 
       computation.getStageByName(backendStage.getName()).addStep(step);
