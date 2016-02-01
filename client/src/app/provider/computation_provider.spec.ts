@@ -12,16 +12,15 @@ describe("ComputationProvider", () => {
     computationProvider = new ComputationProvider();
   });
 
-  it("should create new Computation with the given Scheme", () => {
+  it("should create new Computation with the given Encryption Scheme", () => {
 
     let scheme = jasmine.createSpyObj("scheme", ["getName", "getCapabilities"]);
-    scheme.getName.and.returnValue("Pailler");
     scheme.getCapabilities.and.returnValue(["+"]);
 
     let computation = computationProvider.create(scheme);
 
-    expect(computation.getScheme())
-      .toBe("Pailler")
+    expect(computation.getEncryptionScheme())
+      .toBe(scheme)
     ;
 
     expect(computation.getOperation())

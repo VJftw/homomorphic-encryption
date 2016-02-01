@@ -19,9 +19,7 @@ export class EncryptionSchemeProvider {
     this.schemes = new Map<string, EncryptionScheme>();
 
     this.schemeJsons.forEach(schemeJson => {
-      console.log(schemeJson);
       let scheme = encryptionSchemeResolver.fromJson(schemeJson);
-      console.log(scheme.getReadableName());
       this.schemes.set(scheme.getUniqueName(), scheme);
     });
   }
