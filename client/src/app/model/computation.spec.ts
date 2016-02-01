@@ -58,78 +58,6 @@ describe("Computation", () => {
     ;
   });
 
-  it("should return the private key", () => {
-    expect(computation.getPrivateKey())
-      .toBeUndefined()
-    ;
-  });
-
-  it("should set the private key", () => {
-    let privateKey = jasmine.createSpyObj("privateKey", [""]);
-
-    expect(computation.setPrivateKey(privateKey))
-      .toBe(computation)
-    ;
-
-    expect(computation.getPrivateKey())
-      .toBe(privateKey)
-    ;
-  });
-
-  it("should return the public key", () => {
-    expect(computation.getPublicKey())
-      .toBeUndefined()
-    ;
-  });
-
-  it("should set the public key", () => {
-    let publicKey = jasmine.createSpyObj("publicKey", [""]);
-
-    expect(computation.setPublicKey(publicKey))
-      .toBe(computation)
-    ;
-
-    expect(computation.getPublicKey())
-      .toBe(publicKey)
-    ;
-  });
-
-  it("should return AEncrypted", () => {
-    expect(computation.getAEncrypted())
-      .toBeUndefined()
-    ;
-  });
-
-  it("should set AEncrypted", () => {
-    let aEncrypted = new BigInteger("4");
-
-    expect(computation.setAEncrypted(aEncrypted))
-      .toBe(computation)
-    ;
-
-    expect(computation.getAEncrypted())
-      .toBe(aEncrypted)
-    ;
-  });
-
-  it("should return BEncrypted", () => {
-    expect(computation.getBEncrypted())
-      .toBeUndefined()
-    ;
-  });
-
-  it("should set BEncrypted", () => {
-    let bEncrypted = new BigInteger("8");
-
-    expect(computation.setBEncrypted(bEncrypted))
-      .toBe(computation)
-    ;
-
-    expect(computation.getBEncrypted())
-      .toBe(bEncrypted)
-    ;
-  });
-
   it("should return the timestamp", () => {
     expect(computation.getTimestamp())
       .toBeUndefined()
@@ -144,22 +72,6 @@ describe("Computation", () => {
 
     expect(computation.getTimestamp())
       .toBe(timestamp)
-    ;
-  });
-
-  it("should return the encryption_scheme", () => {
-    expect(computation.getScheme())
-      .toBeUndefined()
-    ;
-  });
-
-  it("should set the encryption_scheme", () => {
-    expect(computation.setScheme("Pailler"))
-      .toBe(computation)
-    ;
-
-    expect(computation.getScheme())
-      .toEqual("Pailler")
     ;
   });
 
@@ -275,39 +187,4 @@ describe("Computation", () => {
     ;
   });
 
-  it("should format to JSON", () => {
-    computation.setScheme("Pailler");
-    computation.setOperation("+");
-    let aEncrypted = new BigInteger("4");
-    computation.setAEncrypted(aEncrypted);
-    let bEncrypted = new BigInteger("7");
-    computation.setBEncrypted(bEncrypted);
-    let publicKey = jasmine.createSpyObj("publicKey", ["toJson"]);
-    publicKey.toJson.and.returnValue({});
-    computation.setPublicKey(publicKey);
-
-    let stage = jasmine.createSpyObj("stage", ["getName", "toJson"]);
-    stage.getName.and.returnValue("abcd");
-    stage.toJson.and.returnValue({
-      "name": "abcd",
-      "steps": []
-    });
-    computation.addStage(stage);
-
-    expect(computation.toJson())
-      .toEqual({
-        "scheme": "Pailler",
-        "operation": "+",
-        "aEncrypted": "4",
-        "bEncrypted": "7",
-        "publicKey": {},
-        "stages": [
-          {
-            "name": "abcd",
-            "steps": []
-          }
-        ]
-      });
-
-  });
 });

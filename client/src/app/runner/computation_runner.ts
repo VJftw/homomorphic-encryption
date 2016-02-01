@@ -118,7 +118,7 @@ export class ComputationRunner {
 
     this.doStage(stage);
 
-    this.computation.setC(this.computation.getFullScope().c);
+    this.computation.setC(this.computation.getFromScope("c"));
 
   }
 

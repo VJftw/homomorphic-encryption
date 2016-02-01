@@ -62,40 +62,4 @@ describe("Stage", () => {
     ;
   });
 
-  it("should format to JSON", () => {
-    let step1 = jasmine.createSpyObj("step", ["toJson"]);
-    step1.toJson.and.returnValue({
-      "action": "abcdef",
-      "result": "3"
-    });
-    let step2 = jasmine.createSpyObj("step", ["toJson"]);
-    step2.toJson.and.returnValue({
-      "action": "zxcvb",
-      "result": "4"
-    });
-
-    stage
-      .setName("Workspace")
-      .setHost(Stage.HOST_CLIENT)
-      .addStep(step1)
-      .addStep(step2)
-    ;
-
-    expect(stage.toJson())
-      .toEqual({
-        "name": "Workspace",
-        "host": Stage.HOST_CLIENT,
-        "steps": [
-          {
-            "action": "abcdef",
-            "result": "3"
-          },
-          {
-            "action": "zxcvb",
-            "result": "4"
-          }
-        ]
-      });
-  });
-
 });

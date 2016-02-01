@@ -61,21 +61,4 @@ describe("Step", () => {
     ;
   });
 
-  it("should format to JSON", () => {
-    let r = new BigInteger("3");
-    let d = new Date();
-    step
-      .setAction("abcdef")
-      .setResult(r)
-      .setTimestamp(d)
-    ;
-
-    expect(step.toJson())
-      .toEqual({
-        "action": "abcdef",
-        "result": "3",
-        "timestamp": d.toString()
-      });
-  });
-
 });

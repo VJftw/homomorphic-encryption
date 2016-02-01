@@ -1,8 +1,6 @@
 import {Step} from "./step";
 
-/**
- * Stage
- */
+
 export class Stage {
 
   public static HOST_CLIENT = 0;
@@ -19,7 +17,7 @@ export class Stage {
   }
 
   /**
-   * getName
+   * Returns the name
    * @returns {string}
    */
   public getName(): string {
@@ -27,7 +25,7 @@ export class Stage {
   }
 
   /**
-   * setName
+   * Sets the name
    * @param name
    * @returns {Stage}
    */
@@ -38,7 +36,7 @@ export class Stage {
   }
 
   /**
-   * getHost
+   * Returns the host
    * @returns {number}
    */
   public getHost(): number {
@@ -46,8 +44,24 @@ export class Stage {
   }
 
   /**
-   * setHost
-   * @param type
+   * Returns whether or not the Stage is executed on the client
+   * @returns {boolean}
+   */
+  public isClient(): boolean {
+    return this.host === Stage.HOST_CLIENT;
+  }
+
+  /**
+   * Returns whether or not the Stage is executed on the server
+   * @returns {boolean}
+   */
+  public isServer(): boolean {
+    return this.host === Stage.HOST_SERVER;
+  }
+
+  /**
+   * Sets the host
+   * @param host
    * @returns {Stage}
    */
   public setHost(host: number) {
@@ -57,7 +71,7 @@ export class Stage {
   }
 
   /**
-   * getSteps
+   * Returns the Steps
    * @returns {Array<Step>}
    */
   public getSteps(): Array<Step> {
@@ -65,7 +79,7 @@ export class Stage {
   }
 
   /**
-   * addStep
+   * Adds a Step
    * @param step
    * @returns {Stage}
    */
@@ -75,15 +89,4 @@ export class Stage {
     return this;
   }
 
-  public toJson() {
-    let steps = [];
-    this.steps.forEach(function(step) {
-      steps.push(step.toJson());
-    });
-    return {
-      "name": this.getName(),
-      "host": this.getHost(),
-      "steps": steps
-    };
-  }
 }
