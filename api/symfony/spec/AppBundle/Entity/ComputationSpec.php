@@ -42,111 +42,21 @@ class ComputationSpec extends ObjectBehavior
         ;
     }
 
-    function it_should_return_the_scheme()
+    function it_should_return_the_encryption_scheme()
     {
-        $this->getScheme()
+        $this->getEncryptionScheme()
             ->shouldReturn(null)
         ;
     }
 
-    function it_should_set_the_scheme()
+    function it_should_set_the_encryption_scheme()
     {
-        $this->setScheme("Pailler")
+        $this->setEncryptionScheme("pailler")
             ->shouldReturn($this)
         ;
 
-        $this->getScheme()
-            ->shouldReturn("Pailler")
-        ;
-    }
-
-    function it_should_return_the_operation()
-    {
-        $this->getOperation()
-            ->shouldReturn(null)
-        ;
-    }
-
-    function it_should_set_the_operation()
-    {
-        $this->setOperation("+")
-            ->shouldReturn($this)
-        ;
-
-        $this->getOperation()
-            ->shouldReturn("+")
-        ;
-    }
-
-    function it_should_return_a_encrypted()
-    {
-        $this->getAEncrypted()
-            ->shouldReturn(null)
-        ;
-    }
-
-    function it_should_set_a_encrypted()
-    {
-        $this->setAEncrypted(123124113)
-            ->shouldReturn($this)
-        ;
-
-        $this->getAEncrypted()
-            ->shouldReturn(123124113)
-        ;
-    }
-
-    function it_should_return_b_encrypted()
-    {
-        $this->getBEncrypted()
-            ->shouldReturn(null)
-        ;
-    }
-
-    function it_should_set_b_encrypted()
-    {
-        $this->setBEncrypted(1231241133)
-            ->shouldReturn($this)
-        ;
-
-        $this->getBEncrypted()
-            ->shouldReturn(1231241133)
-        ;
-    }
-
-    function it_should_return_the_public_key()
-    {
-        $this->getPublicKey()
-            ->shouldReturn(null)
-        ;
-    }
-
-    function it_should_set_the_public_key()
-    {
-        $this->setPublicKey('{"a": "123"}')
-            ->shouldReturn($this)
-        ;
-
-        $this->getPublicKey()
-            ->shouldReturn('{"a": "123"}')
-        ;
-    }
-
-    function it_should_return_the_stages()
-    {
-        $this->getStages()
-            ->shouldReturn(null)
-        ;
-    }
-
-    function it_should_set_the_stages()
-    {
-        $this->setStages(["aa"])
-            ->shouldReturn($this)
-        ;
-
-        $this->getStages()
-            ->shouldReturn(["aa"])
+        $this->getEncryptionScheme()
+            ->shouldReturn("pailler")
         ;
     }
 

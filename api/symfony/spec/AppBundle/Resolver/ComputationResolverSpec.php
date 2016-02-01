@@ -35,35 +35,7 @@ class ComputationResolverSpec extends ObjectBehavior
             ->willReturn($computation)
         ;
 
-        $computation->setScheme("PAILLER")
-            ->shouldBeCalled()
-            ->willReturn($computation)
-        ;
-        $computation->setOperation("+")
-            ->shouldBeCalled()
-            ->willReturn($computation)
-        ;
-        $computation->setAEncrypted("123123")
-            ->shouldBeCalled()
-            ->willReturn($computation)
-        ;
-        $computation->setBEncrypted("143454")
-            ->shouldBeCalled()
-            ->willReturn($computation)
-        ;
-        $computation->setPublicKey([
-            "a" => "123123"
-        ])
-            ->shouldBeCalled()
-            ->willReturn($computation)
-        ;
-        $computation->setStages([
-            [
-                "name" => "Workspace",
-                "steps" => [
-                ]
-            ]
-        ])
+        $computation->setEncryptionScheme("PAILLER")
             ->shouldBeCalled()
             ->willReturn($computation)
         ;
@@ -74,20 +46,7 @@ class ComputationResolverSpec extends ObjectBehavior
         ;
 
         $jsonObj = [
-            "scheme" => "PAILLER",
-            "operation" => "+",
-            "aEncrypted" => "123123",
-            "bEncrypted" => "143454",
-            "publicKey" => [
-                "a" => "123123"
-            ],
-            "stages" => [
-                [
-                    "name" => "Workspace",
-                    "steps" => [
-                    ]
-                ]
-            ]
+            "encryptionScheme" => "PAILLER",
         ];
         $ipAddress = "127.0.0.1";
 
