@@ -1,7 +1,6 @@
 import {Injectable} from "angular2/core";
+
 import {BigInteger} from "jsbn";
-import {PrivateKeyInterface} from "./key";
-import {PublicKeyInterface} from "./key";
 
 
 @Injectable()
@@ -63,25 +62,4 @@ export class EncryptionHelper {
 
   }
 
-}
-
-export class KeyPair {
-  private privateKey: PrivateKeyInterface;
-  private publicKey: PublicKeyInterface;
-
-  constructor(
-    privateKey: PrivateKeyInterface,
-    publicKey: PublicKeyInterface
-  ) {
-    this.privateKey = privateKey;
-    this.publicKey = publicKey;
-  }
-
-  public getPrivateKey() : PrivateKeyInterface {
-    return this.privateKey;
-  }
-
-  public getPublicKey() : PublicKeyInterface {
-    return this.publicKey;
-  }
 }

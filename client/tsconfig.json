@@ -28,10 +28,6 @@
     "src/app/model/step.ts",
     "src/app/model/stage.ts",
 
-    "src/app/resolver/computation_resolver.ts",
-    "src/app/resolver/step_resolver.ts",
-    "src/app/resolver/stage_resolver.ts",
-
     "src/app/provider/step_provider.ts",
     "src/app/provider/stage_provider.ts",
     "src/app/provider/encryption_scheme_provider.ts",

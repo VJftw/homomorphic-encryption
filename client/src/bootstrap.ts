@@ -7,9 +7,6 @@ import {FORM_PROVIDERS} from "angular2/common";
 import {ELEMENT_PROBE_PROVIDERS} from "angular2/platform/common_dom";
 import {ROUTER_PROVIDERS} from "angular2/router";
 import {HTTP_PROVIDERS} from "angular2/http";
-import {ComputationResolver} from "./app/resolver/computation_resolver";
-import {StepResolver} from "./app/resolver/step_resolver";
-import {StageResolver} from "./app/resolver/stage_resolver";
 import {ComputationProvider} from "./app/provider/computation_provider";
 import {StepProvider} from "./app/provider/step_provider";
 import {StageProvider} from "./app/provider/stage_provider";
@@ -41,9 +38,6 @@ function main() {
   ];
 
   let app_deps: Array<any> = [
-    ComputationResolver,
-    StepResolver,
-    StageResolver,
     ComputationProvider,
     StepProvider,
     StageProvider,
