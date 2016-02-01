@@ -18,10 +18,10 @@ stages:
     steps:
       - description: let \(y\) be a random arbitrary number between \(0\) and \(p\)
         compute: y = randomArbitrary(0, p)
-      - description: Encrypt \(a\) by calculating \((a x (h^y \bmod p)) \bmod p\) to get \(aX\)
+      - description: Encrypt \(a\) by calculating \((a \cdot (h^y \bmod p)) \bmod p\) to get \(aX\)
         compute: aX = (a * (h & y,p)) % p
         public: true
-      - description: Encrypt \(b\) by calculating \((b x (h^y \bmod p)) \bmod p\) to get \(bX\)
+      - description: Encrypt \(b\) by calculating \((b \cdot (h^y \bmod p)) \bmod p\) to get \(bX\)
         compute: bX = (b * (h & y,p)) % p
         public: true
   - name: Backend
