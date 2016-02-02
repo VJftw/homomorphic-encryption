@@ -31,7 +31,6 @@
   "homepage": "https://github.com/angularclass/angular2-webpack-starter",
   "dependencies": {
     "angular2": "2.0.0-beta.0",
-    "bower": "^1.7.1",
     "es6-promise": "^3.0.2",
     "es6-shim": "^0.33.3",
     "es7-reflect-metadata": "^1.2.0",

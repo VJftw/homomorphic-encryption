@@ -7,7 +7,9 @@ export class Computation {
 
   public static STATE_NEW = 0;
   public static STATE_STARTED = 1;
-  public static STATE_COMPLETE = 2;
+  public static STATE_BACKEND_CONNECT = 2;
+  public static STATE_BACKEND_CONNECTED = 3;
+  public static STATE_COMPLETE = 4;
 
   protected _hashId: string;
   protected timestamp: Date;

@@ -18,8 +18,3 @@ import "jsbn";
 
 // js-yaml
 import "js-yaml";
-
-// Bootstrap
-require("!!style!css!bootswatch-dist/css/bootstrap.min.css");
-// Animate.css
-require("!!style!css!animate.css/animate.min.css");
