@@ -104,25 +104,6 @@ task :test do
   fail 'Tests failed' unless test_result
 end
 
-desc 'Publish API docs'
-task :publish_api_doc do
-  clone = 'rm -rf site && git clone -b gh-pages --single-branch git@github.com:VJftw/homomorphic-encryption.git site && cd site && git pull && cd ..'
-  system_command(clone)
-
-  copy = 'mkdir -p site/api/coverage && cp -R symfony/coverage/* site/api/coverage'
-  system_command(copy)
-  commit = 'cd site && git status && git add . && git commit -m "Updated API Coverage Report"'
-  system_command(commit)
-
-  puts 'Pushing!'
-  push = 'cd site && git status && git push origin gh-pages'
-  system_command(push)
-
-  puts 'Cleaning up'
-  cleanup = 'rm -rf site'
-  system_command(cleanup)
-end
-
 desc 'Publish Coverage'
 task :publish_coverage do
 
