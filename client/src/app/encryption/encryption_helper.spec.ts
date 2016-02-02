@@ -58,7 +58,9 @@ describe("EncryptionHelper", () => {
 
     root = encryptionHelper.findPrimitiveRootOfPrime(new BigInteger("43"));
     let roots = [3, 5, 12, 18, 19, 20, 26, 28, 29, 30, 33, 34];
-    expect(roots.indexOf(root.intValue())).toBeTruthy();
+    let found = roots.indexOf(root.intValue()) >= 0;
+    console.log(found);
+    expect(found).toBeTruthy();
 
   });
 
