@@ -68,10 +68,17 @@ class ComputationsController
     }
 
     /**
+     *
+     * @Nelmio\ApiDoc(
+     *     description="Create new Computation"
+     * )
+     *
      * @FOS\RequestParam(
      *     name="encryptionScheme",
      *     strict=true,
-     *     allowBlank=false
+     *     allowBlank=false,
+     *     requirements="[a-z]+",
+     *     description="The Computation's Encryption Scheme"
      * )
      *
      * @param ParamFetcher $paramFetcher
