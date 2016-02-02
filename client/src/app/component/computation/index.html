@@ -7,15 +7,20 @@
          *ngFor="#scheme of schemes"
     >
         <div class="panel-body">
-            <div class="col-md-2">
-                <button
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <p>
+                    <button
                         type="submit"
                         class="btn btn-primary "
                         [routerLink]=" ['/Computation/Run', {type: scheme.getUniqueName()} ]">
-                    {{ scheme.getReadableName() }}
-                </button>
+                        {{ scheme.getReadableName() }}
+                    </button>
+                    </p>
+                </div>
             </div>
-            <div class="col-md-10">
+            
+            <div class="col-md-12 text-center">
                 <p>
                     {{ scheme.getDescription() }}
                 </p>
