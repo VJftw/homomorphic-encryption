@@ -1,14 +1,14 @@
 <div class="computation-run">
     <div class="col-md-10 col-md-offset-1">
         <div class="row">
-            <div class="col-md-12"><h2>{{ encryptionScheme.getReadableName() }}</h2></div>
+            <div class="col-md-12"><h3>{{ encryptionScheme.getReadableName() }}</h3></div>
             <div class="col-md-12"><p>{{ encryptionScheme.getDescription() }}</p></div>
         </div>
         <div class="row">
             <div class="text-center col-md-12">
                 <div class="col-md-3"></div>
                 <div *ngIf="!computationRunner.getComputation()" class="col-md-6">
-                    <h3>Enter a Sum</h3>
+                    <h4>Enter a Sum</h4>
                 </div>
                 <div *ngIf="computationRunner.getComputation()" class="col-md-6">
                     <h4>
