@@ -17,13 +17,9 @@ class ComputationResolverTests(unittest.TestCase):
         Set up the instance before each test
         :return:
         """
-        self.key_resolver = mock.Mock()
-        self.stage_resolver = mock.Mock()
         self.log_manager = mock.Mock()
 
         self.computation_resolver = ComputationResolver(
-            self.key_resolver,
-            self.stage_resolver,
             self.log_manager
         )
 
@@ -32,23 +28,15 @@ class ComputationResolverTests(unittest.TestCase):
         ComputationResolver.from_dict - it should resolve a computation from a dictionary
         :return:
         """
-        pub_key = mock.Mock()
-        self.key_resolver.public_from_dict = mock.Mock(return_value=pub_key)
-
-        stage = mock.Mock()
-        self.stage_resolver.from_dict = mock.Mock(return_value=stage)
         d = {
             'hashId': "abcdefg",
-            'scheme': "Pailler",
-            'operation': "+",
-            'aEncrypted': "123123123",
-            'bEncrypted': "456456456",
-            'publicKey': {
-            },
-            'stages': [
-                {}
+            'computeSteps': [
+                "cX = aX + bX"
             ],
-            'timestamp': "2015-04-03 12:34:21"
+            'publicScope': {
+                "aX": "12324",
+                "bX": "13422"
+            }
         }
 
         computation = self.computation_resolver.from_dict(d)
@@ -59,36 +47,11 @@ class ComputationResolverTests(unittest.TestCase):
         )
 
         self.assertEqual(
-            computation.get_scheme(),
-            "Pailler"
+            computation.get_compute_steps(),
+            d['computeSteps']
         )
 
         self.assertEqual(
-            computation.get_operation(),
-            "+"
-        )
-
-        self.assertEqual(
-            computation.get_a_encrypted(),
-            123123123
-        )
-
-        self.assertEqual(
-            computation.get_b_encrypted(),
-            456456456
-        )
-
-        self.assertEqual(
-            computation.get_public_key(),
-            pub_key
-        )
-
-        self.assertEqual(
-            computation.get_stages(),
-            [stage]
-        )
-
-        self.assertEqual(
-            str(computation.get_timestamp()),
-            "2015-04-03 12:34:21"
+            computation.get_public_scope(),
+            d['publicScope']
         )

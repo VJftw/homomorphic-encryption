@@ -22,7 +22,7 @@ task :test do
 
   # start container
   puts 'Starting dev container'
-  start_command = "docker run -d -v #{Dir.getwd}:/app -p 9000:9000 #{container_name}:dev"
+  start_command = "docker run -d -v #{Dir.getwd}:/app #{container_name}:dev"
   container_id = system_command(start_command)[0].strip()
 
   # exec tests

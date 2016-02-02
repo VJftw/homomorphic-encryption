@@ -20,9 +20,12 @@ class ComputationThreadProviderTests(unittest.TestCase):
         """
         self.log_manager = mock.Mock()
         self.socket_manager_provider = mock.Mock()
-        self.computation_thread_provder = ComputationThreadProvider(
+        self.computer = mock.Mock()
+
+        self.computation_thread_provider = ComputationThreadProvider(
                 self.log_manager,
-                self.socket_manager_provider
+                self.socket_manager_provider,
+                self.computer
         )
 
     def test_create(self):
@@ -37,11 +40,9 @@ class ComputationThreadProviderTests(unittest.TestCase):
         self.socket_manager_provider.create = mock.Mock(return_value=socket_manager)
 
         computation = mock.Mock()
-        encryption = mock.Mock()
 
-        thread = self.computation_thread_provder.create(
-            computation,
-            encryption
+        thread = self.computation_thread_provider.create(
+            computation
         )
 
         self.assertEqual(

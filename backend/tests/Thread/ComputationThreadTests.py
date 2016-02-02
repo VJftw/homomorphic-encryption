@@ -6,6 +6,7 @@ import unittest
 import mock
 from HomomorphicEncryptionBackend.Thread.ComputationThread import ComputationThread
 from HomomorphicEncryptionBackend.Model.Computation import Computation
+from HomomorphicEncryptionBackend.Encryption.Computer import Computer
 
 
 class ComputationThreadTests(unittest.TestCase):
@@ -18,14 +19,14 @@ class ComputationThreadTests(unittest.TestCase):
         Set up the instance before each test
         :return:
         """
-        self.computation = mock.Mock()
-        self.encryption = mock.Mock()
+        self.computation = Computation()
         self.logger = mock.Mock()
+        self.computer = Computer(self.logger)
         self.socket_manager = mock.Mock()
 
         self.computation_thread = ComputationThread(
             self.computation,
-            self.encryption,
+            self.computer,
             self.logger,
             self.socket_manager
         )
@@ -55,17 +56,30 @@ class ComputationThreadTests(unittest.TestCase):
         ComputationThread.run - it should run the computation
         :return:
         """
-        self.computation.set_state = mock.Mock()
-        self.encryption.compute = mock.Mock(return_value=self.computation)
         self.socket_manager.send_message = mock.Mock()
+
+        self.computation.set_compute_steps([
+            "cX = aX + bX"
+        ])
+        self.computation.set_public_scope({
+            "aX": "1342",
+            "bX": "4343"
+        })
 
         self.computation_thread.run()
 
-        self.computation.set_state.assert_has_calls([
-            mock.call(Computation.STATE_STARTED),
-            mock.call(Computation.STATE_COMPLETE)
-        ])
+        self.assertEqual(
+            self.computation.get_compute_steps(),
+            []
+        )
 
-        self.encryption.compute.assert_called_with(self.computation, self.socket_manager)
+        self.assertEqual(
+            self.computation.get_public_scope(),
+            {
+                "aX": "1342",
+                "bX": "4343",
+                "cX": "5685"
+            }
+        )
 
         self.socket_manager.send_message.assert_called_with(self.computation)
