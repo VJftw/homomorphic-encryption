@@ -77,7 +77,6 @@ class ComputationsController
      *     name="encryptionScheme",
      *     strict=true,
      *     allowBlank=false,
-     *     requirements="[a-z]+",
      *     description="The Computation's Encryption Scheme"
      * )
      *
