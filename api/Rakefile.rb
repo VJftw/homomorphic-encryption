@@ -39,7 +39,11 @@ def system_command(command, silent=false, show_warnings=true, indent_amount=0)
 end
 
 def get_current_branch
-  system_command('git rev-parse --abbrev-ref HEAD', true)[0].strip()
+  if IS_CI
+    ENV['TRAVIS_BRANCH']
+  else
+    system_command('git rev-parse --abbrev-ref HEAD', true)[0].strip()
+  end
 end
 
 def get_current_commit
