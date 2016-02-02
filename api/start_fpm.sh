@@ -10,8 +10,8 @@ chmod -R 777 var/logs
 
 # Run migrations and warm Symfony cache
 bin/console doctrine:database:create --ansi -e prod --no-interaction --if-not-exists
-# bin/console doctrine:database:create --ansi -e prod --no-interaction --if-not-exists
-# Run twice to fix weirdly.. TODO: TEST with v3
+bin/console doctrine:database:create --ansi -e prod --no-interaction --if-not-exists
+# Run twice to fix weirdly..
 bin/console doctrine:migrations:migrate --ansi -e prod --no-interaction --allow-no-migration
 bin/console cache:warm -e prod
 
