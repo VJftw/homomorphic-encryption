@@ -1,48 +1,47 @@
-proxy:
-  image: 'tutum/haproxy'
-  links:
-    - api
-    - client
-    - backend
-  ports:
-    - '80:80'
-  roles:
-    - global
 api:
-  image: 'tutum.co/vjftw/homomorphic-encryption:api-latest'
+  image: 'tutum.co/vjftw/homomorphic-encryption:api-master'
   environment:
     - SYMFONY__DATABASE_HOST=db
     - SYMFONY__DATABASE_NAME=homomorphic_encryption
     - SYMFONY__DATABASE_PASSWORD=Lh8eCfh4
     - SYMFONY__DATABASE_PORT=3306
     - SYMFONY__DATABASE_USER=he_user
+    - SYMFONY__JMS_SERIALIZER__CAMEL_CASE_NAMING_STRATEGY__CLASS=JMS\Serializer\Naming\IdenticalPropertyNamingStrategy
     - SYMFONY__MAILER_HOST=127.0.0.1
     - SYMFONY__MAILER_PASSWORD=temp
     - SYMFONY__MAILER_TRANSPORT=smtp
     - SYMFONY__MAILER_USER=temp
     - 'SYMFONY__REDIS_HOST=redis://cache'
     - SYMFONY__SECRET=a0d5172eb810f55c5bdb22be331fea6f6841ea2f
-    - 'SYMFONY__JMS_SERIALIZER__CAMEL_CASE_NAMING_STRATEGY__CLASS=JMS\Serializer\Naming\IdenticalPropertyNamingStrategy'
     - VIRTUAL_HOST=api.homomorphic-encryption.vjpatel.me
+  expose:
+    - '80'
   links:
     - 'redis:cache'
     - 'mysql:db'
-  expose:
-    - '80'
+  tags:
+    - homomorphic-encryption
+
 backend:
-  image: 'tutum.co/vjftw/homomorphic-encryption:backend-latest'
+  image: 'tutum.co/vjftw/homomorphic-encryption:backend-master'
   environment:
-    - WS_PORT=80
     - REDIS_HOST=cache
-    - VIRTUAL_HOST=ws://backend.homomorphic-encryption.vjpatel.me
+    - 'VIRTUAL_HOST=ws://backend.homomorphic-encryption.vjpatel.me'
+    - WS_PORT=80
   expose:
     - '80'
   links:
     - 'redis:cache'
+  tags:
+    - homomorphic-encryption
+
 client:
-  image: 'tutum.co/vjftw/homomorphic-encryption:client-latest'
+  image: 'tutum.co/vjftw/homomorphic-encryption:client-master'
   environment:
     - VIRTUAL_HOST=homomorphic-encryption.vjpatel.me
+  tags:
+    - homomorphic-encryption
+
 mysql:
   image: 'tutum/mysql:5.6'
   environment:
@@ -50,6 +49,22 @@ mysql:
     - MYSQL_USER=he_user
   expose:
     - '3306'
+  tags:
+    - homomorphic-encryption
+
+proxy:
+  image: 'tutum/haproxy:latest'
+  links:
+    - api
+    - backend
+    - client
+  ports:
+    - '80:80'
+  roles:
+    - global
+  tags:
+    - homomorphic-encryption
+
 redis:
   image: 'tutum/redis:latest'
   environment:
