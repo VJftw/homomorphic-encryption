@@ -18,6 +18,9 @@ RUN apt-get update && apt-get install -y \
 # Configure PHP
 RUN sed -i 's#.*date.timezone=.*#date.timezone=Europe/London#g' /etc/php/7.0/cli/php.ini
 
+# Remove xdebug loaded by default
+RUN rm /etc/php/7.0/cli/conf.d/20-xdebug.ini
+
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
 
@@ -38,5 +41,8 @@ ENV SYMFONY__MAILER_HOST 127.0.0.1
 ENV SYMFONY__MAILER_PASSWORD temp
 ENV SYMFONY__MAILER_TRANSPORT smtp
 ENV SYMFONY__MAILER_USER temp
+
+RUN mkdir -p /tmp/composer && chmod -R 777 /tmp/composer
+ENV COMPOSER_CACHE_DIR /tmp/composer
 
 EXPOSE 8000
