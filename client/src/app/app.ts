@@ -33,5 +33,5 @@ let template = require("./app.html");
   { as: "Computation", component: ComputationComponent, path: "/computation/..." },
 ])
 export class App {
-  public title: string = "An Implementation of Homomorphic Encryption";
+  public title: string = "Implementations of Homomorphic Encryption";
 }

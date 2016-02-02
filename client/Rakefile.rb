@@ -81,8 +81,8 @@ task :test do
 
   user = IS_CI ? 'root': 'app'
 
-  puts '# Installing NPM, Bower and TSD dependencies'
-  npm_command = 'npm install && node_modules/.bin/bower install && node_modules/.bin/tsd install'
+  puts '# Installing NPM and TSD dependencies'
+  npm_command = 'npm install && node_modules/.bin/tsd install'
   deps_command = "docker exec -t -u #{user} #{container_id} #{npm_command}"
   system_command(deps_command, false, true, 1)
 
@@ -143,8 +143,8 @@ task :build_prod do
 
   user = IS_CI ? 'root': 'app'
 
-  puts 'Installing NPM, Bower and TSD dependencies'
-  npm_command = 'npm install && node_modules/.bin/bower install && node_modules/.bin/tsd install'
+  puts 'Installing NPM and TSD dependencies'
+  npm_command = 'npm install && node_modules/.bin/tsd install'
   deps_command = "docker exec -t #{container_id} #{npm_command}"
   system_command(deps_command, false, true, 1)
 

@@ -27,8 +27,6 @@ export class ComputationRun {
 
   protected capabilities: Array<string> = [];
 
-  protected formSubmitted = false;
-
   constructor(
     protected routeParams: RouteParams,
     protected formBuilder: FormBuilder,
@@ -51,7 +49,6 @@ export class ComputationRun {
 
   public submit(event: Event): void {
     event.preventDefault();
-    this.formSubmitted = true;
     this.computationRunner.setComputation(this.computationModel);
     this.computationRunner.runComputation();
   }

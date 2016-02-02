@@ -54,6 +54,7 @@ export class ComputationRunner {
       this.doStage(schemeStage);
     });
 
+    this.computation.setState(Computation.STATE_BACKEND_CONNECT);
     this.registerComputation();
   }
 
@@ -155,6 +156,7 @@ export class ComputationRunner {
     });
 
     this.socket.addEventListener("message", (ev: MessageEvent) => {
+      this.computation.setState(Computation.STATE_BACKEND_CONNECTED);
       let stage = this.stageProvider.create(
         this.computation.getEncryptionScheme().getBackendStage().getName(),
         Stage.HOST_SERVER
