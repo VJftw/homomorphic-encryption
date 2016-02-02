@@ -4,7 +4,6 @@ namespace AppBundle\Finisher;
 
 use AppBundle\Entity\Computation;
 use Hashids\HashGenerator;
-use Symfony\Component\Security\Core\Util\SecureRandomInterface;
 
 /**
  * Class ComputationFinisher
@@ -19,20 +18,12 @@ class ComputationFinisher
     private $hashGenerator;
 
     /**
-     * @var SecureRandomInterface
-     */
-    private $secureRandom;
-
-    /**
      * @param HashGenerator $hashGenerator
-     * @param SecureRandomInterface $secureRandom
      */
     public function __construct(
-        HashGenerator $hashGenerator,
-        SecureRandomInterface $secureRandom
+        HashGenerator $hashGenerator
     ) {
         $this->hashGenerator = $hashGenerator;
-        $this->secureRandom = $secureRandom;
     }
 
     /**

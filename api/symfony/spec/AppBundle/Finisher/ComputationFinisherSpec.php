@@ -6,7 +6,6 @@ use AppBundle\Entity\Computation;
 use Hashids\HashGenerator;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use Symfony\Component\Security\Core\Util\SecureRandomInterface;
 
 /**
  * Class ComputationFinisherSpec
@@ -16,10 +15,9 @@ class ComputationFinisherSpec extends ObjectBehavior
 {
 
     function let(
-        HashGenerator $hashGenerator,
-        SecureRandomInterface $secureRandom
+        HashGenerator $hashGenerator
     ) {
-        $this->beConstructedWith($hashGenerator, $secureRandom);
+        $this->beConstructedWith($hashGenerator);
     }
 
     function it_is_initializable()
