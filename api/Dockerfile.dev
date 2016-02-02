@@ -1,0 +1,42 @@
+FROM vjftw/ubuntu:latest
+
+# Add Home directory for User
+RUN mkhomedir_helper app && chown -R app:app /home/app
+
+RUN apt-add-repository ppa:ondrej/php -y
+RUN apt-add-repository ppa:git-core/ppa -y
+RUN apt-get update && apt-get install -y \
+    git \
+    php-cli \
+    php-curl \
+    php-intl \
+    php-json \
+    php-mysql \
+    php-redis \
+    php-xdebug
+
+# Configure PHP
+RUN sed -i 's#.*date.timezone=.*#date.timezone=Europe/London#g' /etc/php/7.0/cli/php.ini
+
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
+
+VOLUME /app
+VOLUME /home/app/.composer
+
+ENV SYMFONY_ENV dev
+ENV SYMFONY__SECRET IAmNotSoSecret
+ENV SYMFONY__DATABASE_HOST db
+ENV SYMFONY__DATABASE_NAME homomorphic_encryption
+ENV SYMFONY__DATABASE_PASSWORD test
+ENV SYMFONY__DATABASE_PORT 3306
+ENV SYMFONY__DATABASE_USER he_user
+ENV SYMFONY__REDIS_HOST redis://redis
+ENV SYMFONY__REDIS_TTL 3600
+ENV SYMFONY__JMS_SERIALIZER__CAMEL_CASE_NAMING_STRATEGY__CLASS JMS\Serializer\Naming\IdenticalPropertyNamingStrategy
+ENV SYMFONY__MAILER_HOST 127.0.0.1
+ENV SYMFONY__MAILER_PASSWORD temp
+ENV SYMFONY__MAILER_TRANSPORT smtp
+ENV SYMFONY__MAILER_USER temp
+
+EXPOSE 8000

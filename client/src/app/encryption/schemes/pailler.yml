@@ -1,0 +1,49 @@
+#
+# a and b are reserved variable names. These are set to computation.a and computation.b respectively
+#
+#
+
+uniqueName: pailler
+readableName: Pailler
+description: The Pailler additive somewhat homomorphic encryption scheme
+capabilities:
+ - +
+stages:
+  - name: Key Generation
+    steps:
+      - description: Generate random prime \(p\)
+        compute: p = generateRandomPrime()
+      - description: Generate random prime \(q\)
+        compute: q = generateRandomPrime()
+      - description: Multiply primes \(p\) and \(q\) to get \(n\)
+        compute: n = p * q
+      - description: Calculate \(n^2\)
+        isPublic: true
+        compute: nSq = n * n
+      - description: Add \(1\) to \(n\) to get \(g\)
+        compute: g = n + 1
+      - description: Calculate \(\phi(p\cdot q)\) to get \(l\)
+        compute: l = (p - 1) * (q - 1)
+      - description: Calculate \(l^{-1} \bmod n\) to get \(m\)
+        compute: m = l $ n
+  - name: Encryption
+    steps:
+      - description: Generate \(aR\)
+        compute: aR = generateR(n)
+      - description: Encrypt B by calculating \((g^a \bmod n^2 \cdot aR^n \bmod n^2) \bmod n^2\) to get \(aX\)
+        isPublic: true
+        compute: aX = ((g & a,nSq) * (aR & n,nSq)) % nSq
+      - description: Generate \(bR\)
+        compute: bR = generateR(n)
+      - description: Encrypt B by calculating \((g^b \bmod n^2 \cdot bR^n \bmod n^2) \bmod n^2\) to get \(bX\)
+        isPublic: true
+        compute: bX = ((g & b,nSq) * (bR & n,nSq)) % nSq
+  - name: Backend
+    operation: +
+    steps:
+      - description: Calculate \((aX \cdot bX) \bmod n^2\) to get \(cX\)
+        compute: cX = (aX * bX) % nSq
+  - name: Decryption
+    steps:
+      - description: Calculate \((\frac{(cX^l\bmod n^2) - 1}{n})\cdot cX \bmod n \) to get \(c\)
+        compute: c = ((((cX & l,nSq) - 1) / n) * m) % n

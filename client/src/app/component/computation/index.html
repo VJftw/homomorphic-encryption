@@ -1,0 +1,26 @@
+<div class="computation-index">
+    <div class="text-center">
+        <h1>Choose a Cryptosystem</h1>
+    </div>
+
+    <div class="panel panel-default animated fadeIn"
+         *ngFor="#scheme of schemes"
+    >
+        <div class="panel-body">
+            <div class="col-md-2">
+                <button
+                        type="submit"
+                        class="btn btn-primary "
+                        [routerLink]=" ['/Computation/Run', {type: scheme.getUniqueName()} ]">
+                    {{ scheme.getReadableName() }}
+                </button>
+            </div>
+            <div class="col-md-10">
+                {{ scheme.getDescription() }}
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
