@@ -19,8 +19,15 @@
                     </p>
                 </div>
             </div>
+
+            <div class="col-md-1 text-center">
+                Supports
+                <div class="col-md-1" *ngFor="#capability of scheme.getCapabilities()">
+                    <span class="label label-default">{{ capability }}</span>
+                </div>
+            </div>
             
-            <div class="col-md-12 text-center">
+            <div class="col-md-10 text-center">
                 <p>
                     {{ scheme.getDescription() }}
                 </p>
