@@ -26,6 +26,7 @@ export class ComputationRun {
   protected encryptionScheme: EncryptionScheme;
 
   protected capabilities: Array<string> = [];
+  protected keyBitLengths = [8, 16, 24];
 
   constructor(
     protected routeParams: RouteParams,

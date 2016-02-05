@@ -18,6 +18,7 @@ export class ComputationProvider {
     c
       .setEncryptionScheme(scheme)
       .setOperation(scheme.getCapabilities()[0])
+      .setKeyBitLength(8)
     ;
 
     return c;

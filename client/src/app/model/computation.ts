@@ -13,6 +13,7 @@ export class Computation {
 
   protected _hashId: string;
   protected timestamp: Date;
+  protected keyBitLength: number;
   protected encryptionScheme: EncryptionScheme;
   protected operation: string;
   protected state: number;
@@ -163,6 +164,25 @@ export class Computation {
    */
   public getTimestamp(): Date {
     return this.timestamp;
+  }
+
+  /**
+   * Returns the bit length used in key generation
+   * @returns {number}
+   */
+  public getKeyBitLength(): number {
+    return this.keyBitLength;
+  }
+
+  /**
+   * Sets the bit length used in key generation
+   * @param bits
+   * @returns {Computation}
+   */
+  public setKeyBitLength(bits: number) {
+    this.keyBitLength = bits;
+
+    return this;
   }
 
   /**
