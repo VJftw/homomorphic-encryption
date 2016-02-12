@@ -46,6 +46,7 @@ export class ComputationRunner {
 
     // set bit length
     this.computer.setBitLength(this.computation.getKeyBitLength());
+    console.log("Bit Length: " + this.computation.getKeyBitLength());
 
     this.addWorkspace();
 

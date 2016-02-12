@@ -66,11 +66,11 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-4">
-                                        <label for="keyBitLength" class="control-label col-sm-8">Key bit length</label>
+                                        <label for="bitLength" class="control-label col-sm-8">Key bit length</label>
                                         <div class="col-sm-4">
-                                            <select class="form-control" id="keyBitLength" [disabled]="computationRunner.getComputation()" [(ngModel)]="computationModel.keyBitLength">
-                                                <option *ngFor="#bitLength of keyBitLengths" [value]="bitLength">
-                                                    {{bitLength}}
+                                            <select ngControl="bitLengths" class="form-control" id="bitLength" [disabled]="computationRunner.getComputation()" [(ngModel)]="computationModel.keyBitLength">
+                                                <option *ngFor="#bL of bitLengths" [value]="bL.getBitLength()">
+                                                    {{ bL.getBitLength() }}
                                                 </option>
                                             </select>
                                         </div>

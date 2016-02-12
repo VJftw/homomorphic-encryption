@@ -1,5 +1,7 @@
 import {EncryptionSchemeStage} from "./encryption_scheme_stage";
 import {IEncryptionSchemeStageJson} from "./encryption_scheme_stage";
+import {EncryptionSchemeBitLength} from "./encryption_scheme_bit_length";
+import {IEncryptionSchemeBitLengthJson} from "./encryption_scheme_bit_length";
 
 
 export class EncryptionScheme {
@@ -8,6 +10,8 @@ export class EncryptionScheme {
   private readableName: string;
   private description: string;
   private capabilities: string[];
+
+  private bitLengths: EncryptionSchemeBitLength[];
 
   private stages: EncryptionSchemeStage[];
 
@@ -22,6 +26,7 @@ export class EncryptionScheme {
     this.description = description;
     this.capabilities = capabilities;
 
+    this.bitLengths = [];
     this.stages = [];
   }
 
@@ -39,6 +44,26 @@ export class EncryptionScheme {
 
   public getCapabilities(): string[] {
     return this.capabilities;
+  }
+
+  public addBitLength(bitLength: EncryptionSchemeBitLength): EncryptionScheme {
+    this.bitLengths.push(bitLength);
+
+    return this;
+  }
+
+  public getBitLengths(): EncryptionSchemeBitLength[] {
+    return this.bitLengths;
+  }
+
+  public getBitLength(length: number): EncryptionSchemeBitLength {
+    for (let bitLength of this.bitLengths) {
+      if (bitLength.getBitLength() == length) {
+        return bitLength;
+      }
+    }
+
+    throw new RangeError("Bit Length " + length + " not found.");
   }
 
   public addStage(stage: EncryptionSchemeStage) {
@@ -92,5 +117,6 @@ export interface IEncryptionSchemeJson {
   readableName: string;
   description: string;
   capabilities: string[];
+  bitLengths: IEncryptionSchemeBitLengthJson[];
   stages: IEncryptionSchemeStageJson[];
 }

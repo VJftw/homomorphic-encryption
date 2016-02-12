@@ -3,11 +3,11 @@ readableName: ElGamal ECC
 description: The ElGamal ECC additive somewhat homomorphic encryption scheme
 capabilities:
  - +
-bit_lengths:
-  8:
-    max_int: 99
-  16:
-    max_int: 9999
+bitLengths:
+  - bitLength: 8
+    maxInt: 99
+  - bitLength: 16
+    maxInt: 9999
 stages:
   - name: Key Generation
     steps:

@@ -8,6 +8,11 @@ readableName: Pailler
 description: The Pailler additive somewhat homomorphic encryption scheme
 capabilities:
  - +
+bitLengths:
+  - bitLength: 8
+    maxInt: 99
+  - bitLength: 16
+    maxInt: 9999
 stages:
   - name: Key Generation
     steps:

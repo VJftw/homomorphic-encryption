@@ -21,6 +21,7 @@ import {App} from "./app/app";
 import {EncryptionSchemeResolver} from "./app/resolver/encryption_scheme/encryption_scheme_resolver";
 import {EncryptionSchemeStageResolver} from "./app/resolver/encryption_scheme/encryption_scheme_stage_resolver";
 import {EncryptionSchemeStepResolver} from "./app/resolver/encryption_scheme/encryption_scheme_step_resolver";
+import {EncryptionSchemeBitLengthResolver} from "./app/resolver/encryption_scheme/encryption_scheme_bit_length_resolver";
 import {ComputationRunner} from "./app/runner/computation_runner";
 import {Computer} from "./app/encryption/computer";
 import {MessageProvider} from "./app/provider/message_provider";
@@ -46,6 +47,7 @@ function main() {
     EncryptionSchemeResolver,
     EncryptionSchemeStageResolver,
     EncryptionSchemeStepResolver,
+    EncryptionSchemeBitLengthResolver,
     ComputationRunner,
     Computer,
     MessageProvider,
