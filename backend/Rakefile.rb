@@ -40,7 +40,8 @@ end
 
 def get_current_branch
   if IS_CI
-    ENV['TRAVIS_BRANCH']
+    # ENV['TRAVIS_BRANCH']
+    ENV['branch']
   else
     system_command('git rev-parse --abbrev-ref HEAD', true)[0].strip()
   end
@@ -85,8 +86,7 @@ task :test do
   puts '# Running tests'
   nosetests = 'nosetests --rednose --force-color --with-coverage --cover-html --cover-html-dir=coverage --all-modules --cover-package=HomomorphicEncryptionBackend tests/ -v'
 
-  test_command = "docker exec -u #{user} -t #{container_id} ls -l"
-  # test_command = "docker exec -u #{user} -t #{container_id} #{nosetests}"
+  test_command = "docker exec -u #{user} -t #{container_id} #{nosetests}"
 
   test_result = system_command(test_command, false, true, 1)
 
