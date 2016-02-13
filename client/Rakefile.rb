@@ -49,7 +49,7 @@ def get_current_commit
   system_command('git describe --tags', true)[0].strip()
 end
 
-container_name = "tutum.co/vjftw/homomorphic-encryption:client-#{get_current_branch}"
+container_name = "vjftw/homomorphic-encryption:client-#{get_current_branch}"
 dev_container_name = "#{container_name}-dev"
 prod_container_name = "#{container_name}-#{get_current_commit}"
 
@@ -179,7 +179,7 @@ task :ci do
   docker_email = ENV['DOCKER_EMAIL']
   docker_username = ENV['DOCKER_USERNAME']
   docker_password = ENV['DOCKER_PASSWORD']
-  registry = "tutum.co"
+  registry = ''
   docker_login = "docker login -e #{docker_email} -u #{docker_username} -p #{docker_password} #{registry}"
   system_command(docker_login)
 

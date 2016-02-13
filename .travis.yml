@@ -18,6 +18,7 @@ env:
   - TEST_SUITE=client
 script:
 - ruby --version
+- docker --version
 - cd $TEST_SUITE && rake ci
 - cd ..
 cache:
