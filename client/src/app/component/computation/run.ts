@@ -30,11 +30,11 @@ export class ComputationRun {
   protected bitLengths: EncryptionSchemeBitLength[];
 
   constructor(
-    protected routeParams: RouteParams,
-    protected encryptionSchemeProvider: EncryptionSchemeProvider,
+    protected computationRunner: ComputationRunner,
+    routeParams: RouteParams,
     fb: FormBuilder,
-    protected computationProvider: ComputationProvider,
-    protected computationRunner: ComputationRunner
+    encryptionSchemeProvider: EncryptionSchemeProvider,
+    computationProvider: ComputationProvider
   ) {
 
     this.encryptionScheme = encryptionSchemeProvider.getEncryptionSchemeByName(
@@ -43,7 +43,7 @@ export class ComputationRun {
     this.capabilities = this.encryptionScheme.getCapabilities();
     this.bitLengths = this.encryptionScheme.getBitLengths();
 
-    this.computationModel = this.computationProvider.create(this.encryptionScheme);
+    this.computationModel = computationProvider.create(this.encryptionScheme);
 
     this.computationForm = fb.group({
       a: ["", Validators.required ],

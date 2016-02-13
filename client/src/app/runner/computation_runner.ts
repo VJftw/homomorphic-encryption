@@ -45,8 +45,8 @@ export class ComputationRunner {
     this.computation.addToScope("b", new BigInteger("" + this.computation.getB()), false);
 
     // set bit length
-    this.computer.setBitLength(this.computation.getKeyBitLength());
-    console.log("Bit Length: " + this.computation.getKeyBitLength());
+    this.computer.setBitLength(this.computation.getBitLength());
+    console.log("Bit Length: " + this.computation.getBitLength());
 
     this.addWorkspace();
 

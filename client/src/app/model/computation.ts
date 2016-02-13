@@ -170,7 +170,7 @@ export class Computation {
    * Returns the bit length used in key generation
    * @returns {number}
    */
-  public getKeyBitLength(): number {
+  public getBitLength(): number {
     return this.keyBitLength;
   }
 
@@ -179,7 +179,7 @@ export class Computation {
    * @param bits
    * @returns {Computation}
    */
-  public setKeyBitLength(bits: number) {
+  public setBitLength(bits: number) {
     this.keyBitLength = bits;
 
     return this;

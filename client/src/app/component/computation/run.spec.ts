@@ -7,6 +7,7 @@ import {RouteParams} from "angular2/router";
 import {EncryptionSchemeProvider} from "../../provider/encryption_scheme_provider";
 
 import {ComputationRun} from "./run";
+import {EncryptionSchemeBitLength} from "../../model/encryption_scheme/encryption_scheme_bit_length";
 
 
 describe("ComputationRun", () => {
@@ -19,24 +20,32 @@ describe("ComputationRun", () => {
 
   let computationRun: ComputationRun;
 
-  let encryptionScheme = jasmine.createSpyObj("encryptionScheme", ["getCapabilities", "getName", "setComputation", "doScheme"]);
+  let encryptionScheme = jasmine.createSpyObj("encryptionScheme", [
+    "getCapabilities",
+    "getName",
+    "setComputation",
+    "doScheme",
+    "getBitLengths"
+  ]);
   let computation = jasmine.createSpyObj("computation", [""]);
 
   beforeEach(() => {
     routeParams.get.and.returnValue("pailler");
 
     encryptionScheme.getCapabilities.and.returnValue(["+"]);
+    let bitLength = new EncryptionSchemeBitLength(8, 99);
+    encryptionScheme.getBitLengths.and.returnValue([bitLength]);
 
     encryptionSchemeProvider.getEncryptionSchemeByName.and.returnValue(encryptionScheme);
 
     computationProvider.create.and.returnValue(computation);
 
     computationRun = new ComputationRun(
+      computationRunner,
       routeParams,
       formBuilder,
       encryptionSchemeProvider,
-      computationProvider,
-      computationRunner
+      computationProvider
     );
   });
 
@@ -45,7 +54,10 @@ describe("ComputationRun", () => {
     expect(formBuilder.group.calls.mostRecent().args)
       .toEqual([{
         "a": ["", Validators.required],
-        "b": ["", Validators.required]
+        "b": ["", Validators.required],
+        "bitLengths": ["", Validators.required]
+      }, {
+        validator: jasmine.any(Function)
       }])
     ;
 
