@@ -40,7 +40,8 @@ end
 
 def get_current_branch
   if IS_CI
-    ENV['TRAVIS_BRANCH']
+    # ENV['TRAVIS_BRANCH']
+    ENV['branch']
   else
     system_command('git rev-parse --abbrev-ref HEAD', true)[0].strip()
   end
@@ -184,7 +185,7 @@ end
 desc 'CI'
 task :ci do
   Rake::Task["test"].execute
-  Rake::Task["publish_coverage"].execute
+  # Rake::Task["publish_coverage"].execute
   Rake::Task["build_prod"].execute
 
   docker_email = ENV['DOCKER_EMAIL']

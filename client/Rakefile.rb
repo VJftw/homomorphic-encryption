@@ -173,7 +173,7 @@ end
 desc 'CI'
 task :ci do
   Rake::Task["test"].execute
-  Rake::Task["publish_coverage"].execute
+  # Rake::Task["publish_coverage"].execute
   Rake::Task["build_prod"].execute
 
   docker_email = ENV['DOCKER_EMAIL']
