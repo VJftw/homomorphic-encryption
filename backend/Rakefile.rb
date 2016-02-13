@@ -5,11 +5,12 @@
 #
 if ENV.include? 'CI' and ENV['CI'] == 'true'
   IS_CI = true
-  puts "# Continuous Integration environment\n\n"
+  puts "# Continuous Integration environment\n"
 else
   IS_CI = false
-  puts "# Development environment\n\n"
+  puts "# Development environment\n"
 end
+puts "#{Dir.getwd}\n\n"
 
 def system_command(command, silent=false, show_warnings=true, indent_amount=0)
   output = []
@@ -84,7 +85,8 @@ task :test do
   puts '# Running tests'
   nosetests = 'nosetests --rednose --force-color --with-coverage --cover-html --cover-html-dir=coverage --all-modules --cover-package=HomomorphicEncryptionBackend tests/ -v'
 
-  test_command = "docker exec -u #{user} -t #{container_id} #{nosetests}"
+  test_command = "docker exec -u #{user} -t #{container_id} ls -l"
+  # test_command = "docker exec -u #{user} -t #{container_id} #{nosetests}"
 
   test_result = system_command(test_command, false, true, 1)
 
