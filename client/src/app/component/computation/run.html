@@ -85,7 +85,7 @@
                                     </div>
 
                                     <div class="col-xs-12" *ngIf="computationForm.dirty && !computationForm.valid">
-                                        <span id="helpBlock2" class="help-block">Both numbers must be > 0 and < {{ encryptionScheme.getBitLength(computationForm.controls['bitLengths'].value).getMaxInt() }}</span>
+                                        <span id="helpBlock2" class="help-block">Both numbers must be > 0 and <= {{ encryptionScheme.getBitLength(computationForm.controls['bitLengths'].value).getMaxInt() }}</span>
                                     </div>
                                 </div>
 
