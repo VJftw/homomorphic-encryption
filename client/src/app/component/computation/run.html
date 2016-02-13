@@ -34,7 +34,14 @@
                                     class="form-horizontal"
                                     novalidate
                             >
-                                <div class="form-group">
+                                <div class="form-group"
+                                     [ngClass]="{
+                                     'has-success':
+                                        computationForm.dirty && computationForm.valid,
+                                     'has-error':
+                                        computationForm.dirty && !computationForm.valid
+                                     }"
+                                >
                                     <div class="col-xs-5">
                                         <input
                                                 ngControl="a"
@@ -44,6 +51,7 @@
                                                 class="text-center form-control"
                                                 autofocus
                                                 [disabled]="computationRunner.getComputation()"
+
                                         >
                                     </div>
                                     <div class="col-xs-2">
@@ -63,7 +71,24 @@
                                                 [disabled]="computationRunner.getComputation()"
                                         >
                                     </div>
+                                    <div class="col-xs-12">
+                                        <div class="col-sm-4">
+                                            <label for="bitLength" class="control-label col-sm-8">Key bit length</label>
+                                            <div class="col-sm-4">
+                                                <select ngControl="bitLengths" class="form-control" id="bitLength" [disabled]="computationRunner.getComputation()" [(ngModel)]="computationModel.keyBitLength">
+                                                    <option *ngFor="#bL of bitLengths" [value]="bL.getBitLength()">
+                                                        {{ bL.getBitLength() }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-12" *ngIf="computationForm.dirty && !computationForm.valid">
+                                        <span id="helpBlock2" class="help-block">Both numbers must be > 0 and <= {{ encryptionScheme.getBitLength(computationForm.controls['bitLengths'].value).getMaxInt() }}</span>
+                                    </div>
                                 </div>
+
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-primary pull-right" [disabled]="!computationForm.valid || computationRunner.getComputation()">
                                         <span>Execute</span>

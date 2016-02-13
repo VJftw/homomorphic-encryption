@@ -30,7 +30,7 @@ describe("EncryptionHelper", () => {
 
   });
 
-  it("should generate a Prime number", () => {
+  it("should generate a 8-bit Prime number", () => {
 
     let bits = 8;
     let p;
@@ -39,7 +39,16 @@ describe("EncryptionHelper", () => {
       p = encryptionHelper.generatePrime(bits);
       expect(isPrime(p.intValue())).toBe(true);
     }
+  });
 
+  it("should generate a 16-bit Prime number", () => {
+    let bits = 16;
+    let p;
+
+    for (let i = 0; i < 100; i++) {
+      p = encryptionHelper.generatePrime(bits);
+      expect(isPrime(p.intValue())).toBe(true);
+    }
   });
 
   function isPrime(p: number) {

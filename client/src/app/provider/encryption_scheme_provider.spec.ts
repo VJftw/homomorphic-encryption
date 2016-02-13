@@ -6,12 +6,14 @@ import {EncryptionSchemeProvider} from "./encryption_scheme_provider";
 import {EncryptionSchemeResolver} from "../resolver/encryption_scheme/encryption_scheme_resolver";
 import {EncryptionSchemeStageResolver} from "../resolver/encryption_scheme/encryption_scheme_stage_resolver";
 import {EncryptionSchemeStepResolver} from "../resolver/encryption_scheme/encryption_scheme_step_resolver";
+import {EncryptionSchemeBitLengthResolver} from "../resolver/encryption_scheme/encryption_scheme_bit_length_resolver";
 
 describe("EncryptionSchemeProvider", () => {
 
   let encryptionSchemeStepResolver = new EncryptionSchemeStepResolver();
   let encryptionSchemeStageResolver = new EncryptionSchemeStageResolver(encryptionSchemeStepResolver);
-  let encryptionSchemeResolver = new EncryptionSchemeResolver(encryptionSchemeStageResolver);
+  let encryptionSchemeBitLengthResolver = new EncryptionSchemeBitLengthResolver();
+  let encryptionSchemeResolver = new EncryptionSchemeResolver(encryptionSchemeStageResolver, encryptionSchemeBitLengthResolver);
 
   let encryptionSchemeProvider: EncryptionSchemeProvider;
 

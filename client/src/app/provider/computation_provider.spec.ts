@@ -14,8 +14,11 @@ describe("ComputationProvider", () => {
 
   it("should create new Computation with the given Encryption Scheme", () => {
 
-    let scheme = jasmine.createSpyObj("scheme", ["getName", "getCapabilities"]);
+    let scheme = jasmine.createSpyObj("scheme", ["getName", "getCapabilities", "getBitLengths"]);
     scheme.getCapabilities.and.returnValue(["+"]);
+    let bitLength = jasmine.createSpyObj("bitLength", ["getBitLength"]);
+    bitLength.getBitLength.and.returnValue(8);
+    scheme.getBitLengths.and.returnValue([bitLength]);
 
     let computation = computationProvider.create(scheme);
 
@@ -25,6 +28,10 @@ describe("ComputationProvider", () => {
 
     expect(computation.getOperation())
       .toBe("+")
+    ;
+
+    expect(computation.getBitLength())
+      .toBe(8)
     ;
   });
 

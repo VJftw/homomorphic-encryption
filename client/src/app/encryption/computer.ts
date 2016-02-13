@@ -16,9 +16,15 @@ export class Computer {
     "$"  // inverseMod
   ];
 
+  private bitLength = 16;
+
   constructor(
     private encryptionHelper: EncryptionHelper
   ) {
+  }
+
+  public setBitLength(bits: number) {
+    this.bitLength = bits;
   }
 
   public calculateStepCompute(compute: string, scope: {}): BigInteger {
@@ -35,7 +41,7 @@ export class Computer {
     let matches;
     switch (true) {
       case generateRandomPrimeRegex.test(command):
-        return this.encryptionHelper.generatePrime(16);
+        return this.encryptionHelper.generatePrime(this.bitLength);
       case generateRRegex.test(command):
         matches = generateRRegex.exec(command);
         return this.encryptionHelper.generateR(scope[matches[1]]);

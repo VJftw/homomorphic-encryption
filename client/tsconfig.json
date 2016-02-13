@@ -41,11 +41,13 @@
     "src/app/model/encryption_scheme/encryption_scheme.ts",
     "src/app/model/encryption_scheme/encryption_scheme_stage.ts",
     "src/app/model/encryption_scheme/encryption_scheme_step.ts",
+    "src/app/model/encryption_scheme/encryption_scheme_bit_length.ts",
     "src/app/provider/message_provider.ts",
     "src/app/resolver/message_resolver.ts",
     "src/app/resolver/encryption_scheme/encryption_scheme_resolver.ts",
     "src/app/resolver/encryption_scheme/encryption_scheme_stage_resolver.ts",
     "src/app/resolver/encryption_scheme/encryption_scheme_step_resolver.ts",
+    "src/app/resolver/encryption_scheme/encryption_scheme_bit_length_resolver.ts",
     "src/app/runner/computation_runner.ts"
   ]
 }

@@ -18,6 +18,7 @@ export class ComputationProvider {
     c
       .setEncryptionScheme(scheme)
       .setOperation(scheme.getCapabilities()[0])
+      .setBitLength(scheme.getBitLengths()[0].getBitLength())
     ;
 
     return c;

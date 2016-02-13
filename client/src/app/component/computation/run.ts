@@ -10,6 +10,7 @@ import {EncryptionSchemeProvider} from "../../provider/encryption_scheme_provide
 import {EncryptionScheme} from "../../model/encryption_scheme/encryption_scheme";
 import {ComputationProvider} from "../../provider/computation_provider";
 import {ComputationRunner} from "../../runner/computation_runner";
+import {EncryptionSchemeBitLength} from "../../model/encryption_scheme/encryption_scheme_bit_length";
 
 
 @Component({
@@ -26,31 +27,65 @@ export class ComputationRun {
   protected encryptionScheme: EncryptionScheme;
 
   protected capabilities: Array<string> = [];
+  protected bitLengths: EncryptionSchemeBitLength[];
 
   constructor(
-    protected routeParams: RouteParams,
-    protected formBuilder: FormBuilder,
-    protected encryptionSchemeProvider: EncryptionSchemeProvider,
-    protected computationProvider: ComputationProvider,
-    protected computationRunner: ComputationRunner
+    protected computationRunner: ComputationRunner,
+    routeParams: RouteParams,
+    fb: FormBuilder,
+    encryptionSchemeProvider: EncryptionSchemeProvider,
+    computationProvider: ComputationProvider
   ) {
-    this.computationForm = formBuilder.group({
-      "a": ["", Validators.required],
-      "b": ["", Validators.required]
-    });
 
     this.encryptionScheme = encryptionSchemeProvider.getEncryptionSchemeByName(
       routeParams.get("type")
     );
     this.capabilities = this.encryptionScheme.getCapabilities();
+    this.bitLengths = this.encryptionScheme.getBitLengths();
 
-    this.computationModel = this.computationProvider.create(this.encryptionScheme);
+    this.computationModel = computationProvider.create(this.encryptionScheme);
+
+    this.computationForm = fb.group({
+      a: ["", Validators.required ],
+      b: ["", Validators.required ],
+      bitLengths: ["", Validators.required]
+    }, {
+      validator: this.computationValidator.bind(this)
+    });
+
   }
 
   public submit(event: Event): void {
     event.preventDefault();
     this.computationRunner.setComputation(this.computationModel);
     this.computationRunner.runComputation();
+  }
+
+  protected computationValidator(group: ControlGroup): { [s: string]: boolean } {
+    /* tslint:disable:no-string-literal */
+    let aCtrl = group.controls["a"];
+    let bCtrl = group.controls["b"];
+    let bitLengthCtrl = group.controls["bitLengths"];
+
+    if (this.computationForm && bitLengthCtrl.value) {
+
+      let currentBitLength = this.encryptionScheme.getBitLength(bitLengthCtrl.value);
+
+
+      if (aCtrl.dirty) {
+        if (aCtrl.value < 0 || aCtrl.value > currentBitLength.getMaxInt()) {
+          return {invalidSku: true};
+        }
+      }
+
+      if (bCtrl.dirty) {
+        if (bCtrl.value < 0 || bCtrl.value > currentBitLength.getMaxInt()) {
+          return {invalidSku: true};
+        }
+      }
+
+    }
+
   }
 
 }
