@@ -11,7 +11,6 @@ import {EncryptionScheme} from "../../model/encryption_scheme/encryption_scheme"
 import {ComputationProvider} from "../../provider/computation_provider";
 import {ComputationRunner} from "../../runner/computation_runner";
 import {EncryptionSchemeBitLength} from "../../model/encryption_scheme/encryption_scheme_bit_length";
-import {Control} from "angular2/common";
 
 
 @Component({
@@ -33,14 +32,10 @@ export class ComputationRun {
   constructor(
     protected routeParams: RouteParams,
     protected encryptionSchemeProvider: EncryptionSchemeProvider,
+    fb: FormBuilder,
     protected computationProvider: ComputationProvider,
     protected computationRunner: ComputationRunner
   ) {
-    //this.computationForm = formBuilder.group({
-    //  "a": ["", Validators.compose([Validators.required, this.skuValidator])],
-    //  "b": ["", Validators.compose([Validators.required, this.skuValidator])]
-    //});
-
 
     this.encryptionScheme = encryptionSchemeProvider.getEncryptionSchemeByName(
       routeParams.get("type")
@@ -50,10 +45,12 @@ export class ComputationRun {
 
     this.computationModel = this.computationProvider.create(this.encryptionScheme);
 
-    this.computationForm = new ControlGroup({
-      a: new Control('', this.maxIntValidator.bind(this)),
-      b: new Control('', this.maxIntValidator.bind(this)),
-      bitLengths: new Control('', this.computationValidator.bind(this))
+    this.computationForm = fb.group({
+      a: ["", Validators.required ],
+      b: ["", Validators.required ],
+      bitLengths: ["", Validators.required]
+    }, {
+      validator: this.computationValidator.bind(this)
     });
 
   }
@@ -64,38 +61,31 @@ export class ComputationRun {
     this.computationRunner.runComputation();
   }
 
-  protected computationValidator(control: Control): { [s: string]: boolean } {
-    console.log("switch");
-    if (this.computationForm) {
+  protected computationValidator(group: ControlGroup): { [s: string]: boolean } {
 
-      let aCtrl = this.computationForm.controls['a'];
-      let bCtrl = this.computationForm.controls['b'];
-      console.log(aCtrl.dirty);
+    let aCtrl = group.controls["a"];
+    let bCtrl = group.controls["b"];
+    let bitLengthCtrl = group.controls["bitLengths"];
+
+    if (this.computationForm && bitLengthCtrl.value) {
+
+      let currentBitLength = this.encryptionScheme.getBitLength(bitLengthCtrl.value);
+
+
       if (aCtrl.dirty) {
-        aCtrl.markAsPending();
+        if (aCtrl.value < 0 || aCtrl.value > currentBitLength.getMaxInt()) {
+          return {invalidSku: true};
+        }
       }
 
       if (bCtrl.dirty) {
-        bCtrl.markAsDirty();
+        if (bCtrl.value < 0 || bCtrl.value > currentBitLength.getMaxInt()) {
+          return {invalidSku: true};
+        }
       }
 
-      if (!control.value) {
-        return {invalidSku: true};
-      }
     }
 
-  }
-
-  protected maxIntValidator(control: Control) {
-    console.log(control.dirty);
-    if (this.encryptionScheme && this.computationModel && control.dirty) {
-      let currentBitLength = this.encryptionScheme.getBitLength(this.computationModel.getKeyBitLength());
-
-      console.log(control.value + " | " + currentBitLength.getMaxInt());
-      if (control.value < 0 || control.value > currentBitLength.getMaxInt()) {
-        return {invalidSku: true};
-      }
-    }
   }
 
 }
