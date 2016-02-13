@@ -1,5 +1,5 @@
 api:
-  image: 'tutum.co/vjftw/homomorphic-encryption:api-master'
+  image: 'vjftw/homomorphic-encryption:api-master'
   environment:
     - SYMFONY__DATABASE_HOST=db
     - SYMFONY__DATABASE_NAME=homomorphic_encryption
@@ -23,7 +23,7 @@ api:
     - homomorphic-encryption
 
 backend:
-  image: 'tutum.co/vjftw/homomorphic-encryption:backend-master'
+  image: 'vjftw/homomorphic-encryption:backend-master'
   environment:
     - REDIS_HOST=cache
     - 'VIRTUAL_HOST=ws://backend.homomorphic-encryption.vjpatel.me'
@@ -36,7 +36,7 @@ backend:
     - homomorphic-encryption
 
 client:
-  image: 'tutum.co/vjftw/homomorphic-encryption:client-master'
+  image: 'vjftw/homomorphic-encryption:client-master'
   environment:
     - VIRTUAL_HOST=homomorphic-encryption.vjpatel.me
   tags:
