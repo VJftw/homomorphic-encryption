@@ -62,7 +62,7 @@ export class ComputationRun {
   }
 
   protected computationValidator(group: ControlGroup): { [s: string]: boolean } {
-
+    /* tslint:disable:no-string-literal */
     let aCtrl = group.controls["a"];
     let bCtrl = group.controls["b"];
     let bitLengthCtrl = group.controls["bitLengths"];

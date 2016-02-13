@@ -5,7 +5,7 @@ export class EncryptionSchemeBitLength {
 
   constructor(
     bitLength: number,
-    maxInt: number=99
+    maxInt = 99
   ) {
     this.bitLength = bitLength;
     this.maxInt = maxInt;

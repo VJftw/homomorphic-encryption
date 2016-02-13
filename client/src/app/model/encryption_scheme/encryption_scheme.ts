@@ -58,7 +58,7 @@ export class EncryptionScheme {
 
   public getBitLength(length: number): EncryptionSchemeBitLength {
     for (let bitLength of this.bitLengths) {
-      if (bitLength.getBitLength() == length) {
+      if (bitLength.getBitLength() === length) {
         return bitLength;
       }
     }
