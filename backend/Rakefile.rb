@@ -194,8 +194,13 @@ task :ci do
   })
   prod_main_image = images[0]
   prod_main_image.push do |chunk|
-    puts JSON.parse(chunk)
+    j_chunk = JSON.parse(chunk)
+    puts j_chunk
+    if j_chunk.include? 'aux'
+      puts "Pushed: #{j_chunk['aux']['Tag']}"
+      prod_main_image.remove
+      prod_commit_image.remove
+    end
   end
-  prod_main_image.remove
-  prod_commit_image.remove
+
 end
