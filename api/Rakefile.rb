@@ -267,15 +267,27 @@ task :ci do
   docker_username = ENV['DOCKER_USERNAME']
   docker_password = ENV['DOCKER_PASSWORD']
   registry = ''
-  docker_login = "docker login -e #{docker_email} -u #{docker_username} -p #{docker_password} #{registry}"
-  system_command(docker_login)
+  Docker.authenticate!({
+                           'username' => docker_username,
+                           'password' => docker_password,
+                           'email' => docker_email
+                       })
 
-  docker_push = "docker push #{prod_container_name}"
-  system_command(docker_push)
+  puts "\n# Pushing to Registry"
 
-  docker_push = "docker push #{container_name}"
-  system_command(docker_push)
-end
+  images = Docker::Image.all({
+                                 'filter' => prod_container_name
+                             })
+  images[0].push do |chunk|
+    puts JSON.parse(chunk)
+  end
+
+  images = Docker::Image.all({
+                                 'filter' => container_name
+                             })
+  images[0].push do |chunk|
+    puts JSON.parse(chunk)
+  end
 
 def get_github_token
   auth_json = File.read(Dir.home + '/.composer/auth.json')
