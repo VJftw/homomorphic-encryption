@@ -291,8 +291,6 @@ task :ci do
   prod_main_image.push do |chunk|
     puts JSON.parse(chunk)
   end
-  prod_main_image.remove
-  prod_commit_image.remove
 end
 
 def get_github_token
