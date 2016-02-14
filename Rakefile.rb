@@ -15,6 +15,15 @@ task :jenkins_slave do
   e_name = STDIN.gets.chomp
 
   puts '# Starting Jenkins slave'
+  images = Docker::Image.all({
+     'filter' => 'vjftw/jenkins-slave'
+   })
+
+  if images.empty?
+    image = Docker::Image.create('fromImage' => 'vjftw/jenkins-slave') do |chunk|
+      puts JSON.parse(chunk)
+    end
+  end
 
   container = Docker::Container.create(
       'Image' => 'vjftw/jenkins-slave',
