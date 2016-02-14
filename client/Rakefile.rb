@@ -5,6 +5,7 @@ require 'docker'
 # tutum.co/vjftw/homomorphic-encryption:client-<branch>-commit
 # tutum.co/vjftw/homomorphic-encryption:client-<branch>-dev for development
 #
+Docker.options[:read_timeout] = 600 # Set 10 minute read timeout for long processes with no output
 if ENV.include? 'CI' and ENV['CI'] == 'true'
   IS_CI = true
   puts "# Continuous Integration environment\n\n"
@@ -281,17 +282,21 @@ task :ci do
   images = Docker::Image.all({
      'filter' => prod_container_name
   })
-  images[0].push do |chunk|
+  prod_commit_image = images[0]
+  prod_commit_image.push do |chunk|
     puts JSON.parse(chunk)
   end
-  images[0].remove
 
   images = Docker::Image.all({
      'filter' => container_name
   })
-  images[0].push do |chunk|
+  prod_main_image = images[0]
+  prod_main_image.push do |chunk|
     puts JSON.parse(chunk)
   end
+  prod_main_image.remove
+  prod_commit_image.remove
+
 end
 
 def get_github_token

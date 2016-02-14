@@ -279,17 +279,20 @@ task :ci do
   images = Docker::Image.all({
      'filter' => prod_container_name
   })
-  images[0].push do |chunk|
+  prod_commit_image = images[0]
+  prod_commit_image.push do |chunk|
     puts JSON.parse(chunk)
   end
-  images[0].remove
 
   images = Docker::Image.all({
      'filter' => container_name
   })
-  images[0].push do |chunk|
+  prod_main_image = images[0]
+  prod_main_image.push do |chunk|
     puts JSON.parse(chunk)
   end
+  prod_main_image.remove
+  prod_commit_image.remove
 end
 
 def get_github_token
