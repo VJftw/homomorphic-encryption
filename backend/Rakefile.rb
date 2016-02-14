@@ -198,6 +198,7 @@ task :ci do
     puts j_chunk
     if j_chunk.include? 'aux' and j_chunk['aux']['Tag'] == container_tag
       puts "Pushed: #{j_chunk['aux']['Tag']}"
+      sleep 15
       prod_main_image.remove
       prod_commit_image.remove
     end
