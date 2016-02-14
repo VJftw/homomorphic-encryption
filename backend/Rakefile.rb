@@ -196,7 +196,7 @@ task :ci do
   prod_main_image.push do |chunk|
     j_chunk = JSON.parse(chunk)
     puts j_chunk
-    if j_chunk.include? 'aux'
+    if j_chunk.include? 'aux' and j_chunk['aux']['Tag'] == container_tag
       puts "Pushed: #{j_chunk['aux']['Tag']}"
       prod_main_image.remove
       prod_commit_image.remove
