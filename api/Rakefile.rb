@@ -232,7 +232,6 @@ task :build_prod do
      ]
   })
   container.tap(&:start).attach { |stream, chunk| puts "#{stream}: #{chunk}" }
-  # system_command("docker run -v #{Dir.getwd}:/app -w=/app alpine /bin/sh -c 'rm -rf __build__'")
 end
 
 
