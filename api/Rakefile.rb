@@ -1,4 +1,5 @@
 require 'json'
+require 'docker'
 # Tag structure:
 # tutum.co/vjftw/homomorphic-encryption:api-<branch> for latest production
 # tutum.co/vjftw/homomorphic-encryption:api-<branch>-commit
@@ -51,7 +52,9 @@ def get_current_commit
   system_command('git describe --tags', true)[0].strip()
 end
 
-container_name = "vjftw/homomorphic-encryption:api-#{get_current_branch}"
+container_repo = 'vjftw/homomorphic-encryption'
+container_tag = "api-#{get_current_branch}"
+container_name = "#{container_repo}:#{container_tag}"
 dev_container_name = "#{container_name}-dev"
 prod_container_name = "#{container_name}-#{get_current_commit}"
 
@@ -60,13 +63,27 @@ puts "# Container Tags\n\tProduction:\t#{container_name}\n\tDevelopment:\t#{dev_
 
 def get_dev_container(tag)
   puts '# Looking for Development container'
-  found = system_command("docker images #{tag} | grep B", false, false, 1)
 
-  unless found
+  images = Docker::Image.all({
+                                 'filter' => tag
+                             })
+
+  if images.empty?
     puts '## Building Development container'
-    build_container("#{Dir.getwd}/Dockerfile.dev", "#{Dir.getwd}", "#{tag}")
+
+    image = Docker::Image.build_from_dir(Dir.getwd, {
+        'dockerfile' => "Dockerfile.dev",
+        't' => tag
+    }) do |v|
+      if (log = JSON.parse(v)) && log.has_key?("stream")
+        $stdout.puts log["stream"]
+      end
+    end
+
+    return image
   end
 
+  images[0]
 end
 
 desc 'Run tests'
@@ -76,8 +93,18 @@ task :test do
 
   # start container
   puts '# Starting Development container'
-  start_command = "docker run -d -v #{Dir.getwd}/symfony:/app #{dev_container_name}"
-  container_id = system_command(start_command, false, true, 1)[0].strip()
+  container = Docker::Container.create({
+     'Image' => dev_container_name,
+     'Volumes' => {
+         '/app' => {}
+     },
+     'Binds' => [
+         "#{Dir.getwd}/symfony:/app"
+     ]
+  })
+
+  container.start
+  puts "\n"
 
   user = IS_CI ? 'root': 'app'
 
@@ -88,23 +115,20 @@ task :test do
     github_token = get_github_token
   end
   composer_config = "composer config --global github-oauth.github.com #{github_token}"
-  config_command = "docker exec -t #{container_id} #{composer_config}"
-  system_command(config_command, false, true, 1)
+  container.exec(composer_config.split ' ') { |stream, chunk| puts "#{stream}: #{chunk}" }
 
   puts '# Installing Composer dependencies'
-  composer_command = 'composer --ansi --no-interaction -v install'
-  deps_command = "docker exec -t -u #{user} #{container_id} #{composer_command}"
-  system_command(deps_command, false, true, 1)
+  composer_command = 'composer --ansi --no-interaction -v install'.split ' '
+  container.exec(composer_command, {:user => user}) { |stream, chunk| puts "#{stream}: #{chunk}" }
 
   puts '# Running tests'
-  phpspec_command = 'php -dzend_extension=xdebug.so bin/phpspec run -v -f pretty'
-  test_command = "docker exec -t -u #{user} #{container_id} #{phpspec_command}"
-  test_result = system_command(test_command, false, true, 1)
+  phpspec_command = 'php -dzend_extension=xdebug.so bin/phpspec run --ansi -v -f pretty'
+  test_result = container.exec(phpspec_command.split ' ') { |stream, chunk| puts "#{stream}: #{chunk}" }
 
   # stop and remove container
   puts '# Stopping and Removing Development container'
-  system_command("docker stop #{container_id}", false, true, 1)
-  system_command("docker rm #{container_id}", false, true, 1)
+  container.stop
+  container.delete
 
   fail 'Tests failed' unless test_result
 end
@@ -117,18 +141,46 @@ task :build_prod do
   # 4). start dev container
   # 5). exec composer install
   # 6). build prod container
+  FileUtils.rm_rf('__build__/.', secure: true)
 
   get_dev_container dev_container_name
-  
-  copy = 'mkdir -p __build__ && cp -r symfony/* __build__/'
-  clean = 'cd __build__ && rm -rf var/cache/* var/logs/* var/bootstrap.php.cache app/config/parameters.yml coverage spec vendor'
+  FileUtils.rm_rf('symfony/var/cache/dev', secure: true)
+  FileUtils.rm_rf('symfony/var/cache/test', secure: true)
+  FileUtils.rm_rf('symfony/var/cache/prod', secure: true)
+  FileUtils.rm_rf('symfony/var/logs/dev.log', secure: true)
+  FileUtils.rm_rf('symfony/var/logs/prod.log', secure: true)
 
-  system_command("#{copy} && #{clean}", false, true, 1)
+  FileUtils.mkdir_p '__build__'
+  FileUtils.cp_r 'symfony/.', '__build__'
+
+  FileUtils.rm_rf('__build__/var/cache/.', secure: true)
+  FileUtils.rm_rf('__build__/var/logs/.', secure: true)
+  FileUtils.rm_rf('__build__/coverage/.', secure: true)
+  FileUtils.rm_rf('__build__/spec/.', secure: true)
+  FileUtils.rm_rf('__build__/vendor/.', secure: true)
+  FileUtils.rm_rf [
+              '__build__/var/bootstrap.php.cache',
+              '__build__/app/config/parameters.yml',
+              '__build__/bin/phpspec',
+              '__build__/bin/symfony_requirements',
+              '__build__/bin/security-checker',
+              '__build__/bin/doctrine.php',
+              '__build__/bin/doctrine-migrations',
+              '__build__/bin/doctrine-dbal',
+              '__build__/bin/doctrine']
 
   # start container
   puts '# Starting Development container'
-  start_command = "docker run -d -v #{Dir.getwd}/__build__:/app #{dev_container_name}"
-  container_id = system_command(start_command, false, true, 1)[0].strip()
+  container = Docker::Container.create({
+     'Image' => dev_container_name,
+     'Volumes' => {
+         '/app' => {}
+     },
+     'Binds' => [
+         "#{Dir.getwd}/__build__:/app"
+     ]
+  })
+  container.start
 
   puts '# Adding GitHub composer token'
   if ENV.include? 'GITHUB_AUTH_TOKEN' and ENV['GITHUB_AUTH_TOKEN']
@@ -137,27 +189,50 @@ task :build_prod do
     github_token = get_github_token
   end
   composer_config = "composer config --global github-oauth.github.com #{github_token}"
-  config_command = "docker exec -t #{container_id} #{composer_config}"
-  system_command(config_command, false, true, 1)
+  container.exec(composer_config.split ' ') { |stream, chunk| puts "#{stream}: #{chunk}" }
 
   puts '# Installing Composer dependencies'
   composer_command = 'composer --no-dev --ansi --no-interaction --prefer-dist -v --optimize-autoloader install'
-  deps_command = "docker exec -t #{container_id} #{composer_command}"
-  system_command(deps_command, false, true, 1)
+  container.exec(composer_command.split ' ') { |stream, chunk| puts "#{stream}: #{chunk}" }
 
   puts '# Stopping and Removing Development container'
-  system_command("docker stop #{container_id}", false, true, 1)
-  system_command("docker rm #{container_id}", false, true, 1)
+  container.stop
+  container.delete
 
   puts '# Building Production container'
-  built_container = build_container("#{Dir.getwd}/Dockerfile.app", "#{Dir.getwd}", prod_container_name)
+
+  image = Docker::Image.build_from_dir(Dir.getwd, {
+      'dockerfile' => "Dockerfile.app",
+      't' => prod_container_name
+  }) do |v|
+    if (log = JSON.parse(v)) && log.has_key?("stream")
+      $stdout.puts log["stream"]
+    end
+  end
 
   puts "# Tagging as #{container_name}"
-  tag_command = "docker tag -f #{built_container} #{container_name}"
-  system_command(tag_command)
+  image.tag(
+      'repo' => container_repo,
+      'tag' => container_tag,
+      'force' => true
+  )
 
   puts '# Cleaning up'
-  system_command("docker run -v #{Dir.getwd}:/app -w=/app alpine /bin/sh -c 'rm -rf __build__'")
+  container = Docker::Container.create({
+     'Image' => 'alpine',
+     'Volumes' => {
+         '/app' => {}
+     },
+     'Binds' => [
+         "#{Dir.getwd}:/app"
+     ],
+     'WorkingDir' => '/app',
+     'Cmd': [
+         '/bin/sh', '-c', 'rm -rf __build__'
+     ]
+  })
+  container.tap(&:start).attach { |stream, chunk| puts "#{stream}: #{chunk}" }
+  # system_command("docker run -v #{Dir.getwd}:/app -w=/app alpine /bin/sh -c 'rm -rf __build__'")
 end
 
 
@@ -207,18 +282,4 @@ def get_github_token
   auth = JSON.parse(auth_json)
 
   auth['github-oauth']['github.com']
-end
-
-
-def build_container(docker_file, working_dir, tag='test')
-
-  command = "docker build -f #{docker_file} -t #{tag} #{working_dir}"
-  output = system_command(command)
-
-  output_match = /(Successfully built )(.*)/.match(output.last)
-  fail 'Docker failed to build the container!' unless output_match
-
-  puts "Built Container Image: #{output_match[2]}"
-
-  output_match[2]
 end
