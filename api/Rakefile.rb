@@ -232,6 +232,8 @@ task :build_prod do
      ]
   })
   container.tap(&:start).attach { |stream, chunk| puts "#{stream}: #{chunk}" }
+  container.stop
+  container.delete
 end
 
 
