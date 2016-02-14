@@ -187,6 +187,7 @@ task :ci do
   images[0].push do |chunk|
     puts JSON.parse(chunk)
   end
+  images[0].remove
 
   images = Docker::Image.all({
       'filter' => container_name
