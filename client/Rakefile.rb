@@ -43,7 +43,7 @@ end
 def get_current_branch
   if IS_CI
     # ENV['TRAVIS_BRANCH']
-    ENV['branch']
+    ENV['BRANCH']
   else
     system_command('git rev-parse --abbrev-ref HEAD', true)[0].strip()
   end
@@ -261,41 +261,46 @@ task :build_prod do
 
 end
 
-desc 'CI'
-task :ci do
-  Rake::Task["test"].execute
-  # Rake::Task["publish_coverage"].execute
-  Rake::Task["build_prod"].execute
+task :push_prod do
 
   docker_email = ENV['DOCKER_EMAIL']
   docker_username = ENV['DOCKER_USERNAME']
   docker_password = ENV['DOCKER_PASSWORD']
   registry = ''
   Docker.authenticate!({
-    'username' => docker_username,
-    'password' => docker_password,
-    'email' => docker_email
-  })
+                           'username' => docker_username,
+                           'password' => docker_password,
+                           'email' => docker_email
+                       })
 
   puts "\n# Pushing to Registry"
 
   images = Docker::Image.all({
-     'filter' => prod_container_name
-  })
+                                 'filter' => prod_container_name
+                             })
   prod_commit_image = images[0]
   prod_commit_image.push do |chunk|
     puts JSON.parse(chunk)
   end
 
   images = Docker::Image.all({
-     'filter' => container_name
-  })
+                                 'filter' => container_name
+                             })
   prod_main_image = images[0]
   prod_main_image.push do |chunk|
     puts JSON.parse(chunk)
   end
+end
+
+desc 'CI'
+task :ci do
+  Rake::Task["test"].execute
+  # Rake::Task["publish_coverage"].execute
+  Rake::Task["build_prod"].execute
+  Rake::Task["push_prod"].execute
 
 end
+
 
 def get_github_token
   auth_json = File.read(Dir.home + '/.composer/auth.json')
