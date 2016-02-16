@@ -1,4 +1,5 @@
 require 'docker'
+require 'socket'
 
 desc 'Start Jenkins slave'
 task :jenkins_slave do
@@ -11,8 +12,8 @@ task :jenkins_slave do
   e_jenkins_password = STDIN.gets.chomp
   puts 'Enter Jenkins Executors amount: '
   e_executors = STDIN.gets.chomp
-  puts 'Enter Jenkins Slave name: '
-  e_name = STDIN.gets.chomp
+  e_name = Socket.gethostname
+  puts "Slave name: #{e_name}"
 
   puts '# Starting Jenkins slave'
   images = Docker::Image.all({
