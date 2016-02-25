@@ -18,3 +18,11 @@
 coverage
 coverage.xml
 
+bin/doctrine
+bin/doctrine-dbal
+bin/doctrine-migrations
+bin/doctrine.php
+bin/phpspec
+bin/security-checker
+bin/symfony_requirements
+
