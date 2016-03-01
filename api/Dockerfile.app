@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     php-json \
     php-mysql \
     php-redis \
+    php-xml \
     nginx
 
 # Configure PHP and PHP-FPM
@@ -18,6 +19,9 @@ RUN sed -i 's|.*access.log =.*|access.log=/dev/stdout|g' /etc/php/7.0/fpm/pool.d
 RUN sed -i 's|.*user =.*|user=root|g' /etc/php/7.0/fpm/pool.d/www.conf
 RUN sed -i 's|.*group =.*|group=root|g' /etc/php/7.0/fpm/pool.d/www.conf
 RUN sed -i -e "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" /etc/php/7.0/fpm/pool.d/www.conf
+RUN sed -i 's#.*variables_order.*#variables_order=EGPCS#g' /etc/php/7.0/fpm/pool.d/www.conf
+RUN sed -i 's#.*date.timezone.*#date.timezone=Europe/London#g' /etc/php/7.0/fpm/pool.d/www.conf
+
 RUN mkdir -p /run/php && chmod -R 755 /run/php
 
 COPY ./__build__ /app/

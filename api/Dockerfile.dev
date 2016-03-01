@@ -13,10 +13,12 @@ RUN apt-get update && apt-get install -y \
     php-json \
     php-mysql \
     php-redis \
-    php-xdebug
+    php-xdebug \
+    php-xml
 
 # Configure PHP
-RUN sed -i 's#.*date.timezone=.*#date.timezone=Europe/London#g' /etc/php/7.0/cli/php.ini
+RUN sed -i 's#.*date.timezone.*#date.timezone=Europe/London#g' /etc/php/7.0/cli/php.ini
+RUN sed -i 's#.*variables_order.*#variables_order=EGPCS#g' /etc/php/7.0/cli/php.ini
 
 # Remove xdebug loaded by default
 RUN rm /etc/php/7.0/cli/conf.d/20-xdebug.ini
