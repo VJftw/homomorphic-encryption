@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y \
     php-mysql \
     php-redis \
     php-xdebug \
+    php-zip \
     php-xml
 
 # Configure PHP

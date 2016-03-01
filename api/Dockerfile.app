@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     php-mysql \
     php-redis \
     php-xml \
+    php-zip \
     nginx
 
 # Configure PHP and PHP-FPM
