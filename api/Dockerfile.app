@@ -43,6 +43,7 @@ ENV SYMFONY__MAILER_HOST 127.0.0.1
 ENV SYMFONY__MAILER_PASSWORD temp
 ENV SYMFONY__MAILER_TRANSPORT smtp
 ENV SYMFONY__MAILER_USER temp
+ENV SYMFONY__CORS_ORIGIN *
 
 # Fix permissions for Symfony cache and logs
 RUN mkdir -p /app/var/cache && mkdir -p /app/var/logs && chmod -R 777 /app/var/cache && chmod -R 777 /app/var/logs && rm -rf /app/var/cache/*

@@ -31,6 +31,7 @@ services:
       SYMFONY__REDIS_HOST: redis://cache
       SYMFONY__SECRET: a0d5172eb810f55c5bdb22be331fea6f6841ea2f
       SYMFONY__ENV: dev
+      SYMFONY__CORS_ORIGIN: *
     links:
       - "mysql:database"
       - "redis:cache"
