@@ -18,6 +18,7 @@ services:
       dockerfile: Dockerfile.dev
     command: /bin/bash -c "php -v && composer install && chmod +x setup.sh && ./setup.sh && bin/console server:run 0.0.0.0:8000"
     environment:
+      SYMFONY_ENV: dev
       SYMFONY__DATABASE_HOST: database
       SYMFONY__DATABASE_NAME: homomorphic_encryption
       SYMFONY__DATABASE_PASSWORD: homo_enc_123
@@ -30,8 +31,7 @@ services:
       SYMFONY__MAILER_USER: temp
       SYMFONY__REDIS_HOST: redis://cache
       SYMFONY__SECRET: a0d5172eb810f55c5bdb22be331fea6f6841ea2f
-      SYMFONY__ENV: dev
-      SYMFONY__CORS_ORIGIN: *
+      SYMFONY__CORS_ORIGIN: http://localhost:3000
     links:
       - "mysql:database"
       - "redis:cache"
