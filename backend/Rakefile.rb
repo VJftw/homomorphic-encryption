@@ -1,3 +1,4 @@
+require 'docker'
 # Tag structure:
 # tutum.co/vjftw/homomorphic-encryption:backend-<branch> for latest production
 # tutum.co/vjftw/homomorphic-encryption:backend-<branch>-commit
@@ -5,11 +6,12 @@
 #
 if ENV.include? 'CI' and ENV['CI'] == 'true'
   IS_CI = true
-  puts "# Continuous Integration environment\n\n"
+  puts "# Continuous Integration environment\n"
 else
   IS_CI = false
-  puts "# Development environment\n\n"
+  puts "# Development environment\n"
 end
+puts "#{Dir.getwd}\n\n"
 
 def system_command(command, silent=false, show_warnings=true, indent_amount=0)
   output = []
@@ -39,7 +41,8 @@ end
 
 def get_current_branch
   if IS_CI
-    ENV['TRAVIS_BRANCH']
+    # ENV['TRAVIS_BRANCH']
+    ENV['BRANCH']
   else
     system_command('git rev-parse --abbrev-ref HEAD', true)[0].strip()
   end
@@ -49,7 +52,9 @@ def get_current_commit
   system_command('git describe --tags', true)[0].strip()
 end
 
-container_name = "vjftw/homomorphic-encryption:backend-#{get_current_branch}"
+container_repo = 'vjftw/homomorphic-encryption'
+container_tag = "backend-#{get_current_branch}"
+container_name = "#{container_repo}:#{container_tag}"
 dev_container_name = "#{container_name}-dev"
 prod_container_name = "#{container_name}-#{get_current_commit}"
 
@@ -58,24 +63,47 @@ puts "# Container Tags\n\tProduction:\t#{container_name}\n\tDevelopment:\t#{dev_
 
 def get_dev_container(tag)
   puts '# Looking for Development container'
-  found = system_command("docker images #{tag} | grep B", false, false, 1)
 
-  unless found
+  images = Docker::Image.all({
+      'filter' => tag
+  })
+
+  if images.empty?
     puts '## Building Development container'
-    build_container("#{Dir.getwd}/Dockerfile.dev", "#{Dir.getwd}", "#{tag}")
+
+    image = Docker::Image.build_from_dir(Dir.getwd, {
+        'dockerfile' => "Dockerfile.dev",
+        't' => tag
+    }) do |v|
+      if (log = JSON.parse(v)) && log.has_key?("stream")
+        $stdout.puts log["stream"]
+      end
+    end
+
+    return image
   end
 
+  images[0]
 end
 
 desc 'Run Tests'
 task :test do
   
-  get_dev_container dev_container_name
+  image = get_dev_container dev_container_name
 
   # start container
   puts '# Starting Development container'
-  start_command = "docker run -d -v #{Dir.getwd}:/app #{dev_container_name}"
-  container_id = system_command(start_command, false, true, 1)[0].strip()
+  container = Docker::Container.create({
+      'Image' => dev_container_name,
+      'Volumes' => {
+          '/app' => {}
+      },
+      'Binds' => [
+          "#{Dir.getwd}:/app"
+      ]
+  })
+
+  container.start
 
   puts "\n"
 
@@ -84,13 +112,11 @@ task :test do
   puts '# Running tests'
   nosetests = 'nosetests --rednose --force-color --with-coverage --cover-html --cover-html-dir=coverage --all-modules --cover-package=HomomorphicEncryptionBackend tests/ -v'
 
-  test_command = "docker exec -u #{user} -t #{container_id} #{nosetests}"
-
-  test_result = system_command(test_command, false, true, 1)
+  test_result = container.exec(nosetests.split ' ') { |stream, chunk| puts "#{stream}: #{chunk}" }
 
   puts '# Stopping and Removing Development container'
-  system_command("docker stop #{container_id}", false, true, 1)
-  system_command("docker rm #{container_id}", false, true, 1)
+  container.stop
+  container.delete
 
   fail 'Tests failed' unless test_result
 end
@@ -118,43 +144,61 @@ end
 desc 'Build production container'
 task :build_prod do
   puts '# Building Production container'
-  built_container = build_container("#{Dir.getwd}/Dockerfile.prod", "#{Dir.getwd}", prod_container_name)
+  image = Docker::Image.build_from_dir(Dir.getwd, {
+      'dockerfile' => "Dockerfile.prod",
+      't' => prod_container_name
+  }) do |v|
+    if (log = JSON.parse(v)) && log.has_key?("stream")
+      $stdout.puts log["stream"]
+    end
+  end
 
   puts "# Tagging as #{container_name}"
-  tag_command = "docker tag -f #{built_container} #{container_name}"
-  system_command(tag_command)
+  image.tag(
+      'repo' => container_repo,
+      'tag' => container_tag,
+      'force' => true
+  )
+
+  image
 end
 
-desc 'CI'
-task :ci do
-  Rake::Task["test"].execute
-  Rake::Task["publish_coverage"].execute
-  Rake::Task["build_prod"].execute
+task :push_prod do
 
   docker_email = ENV['DOCKER_EMAIL']
   docker_username = ENV['DOCKER_USERNAME']
   docker_password = ENV['DOCKER_PASSWORD']
   registry = ''
-  docker_login = "docker login -e #{docker_email} -u #{docker_username} -p #{docker_password} #{registry}"
-  system_command(docker_login)
+  Docker.authenticate!({
+                           'username' => docker_username,
+                           'password' => docker_password,
+                           'email' => docker_email
+                       })
 
-  docker_push = "docker push #{prod_container_name}"
-  system_command(docker_push)
+  puts "\n# Pushing to Registry"
 
-  docker_push = "docker push #{container_name}"
-  system_command(docker_push)
+  images = Docker::Image.all({
+                                 'filter' => prod_container_name
+                             })
+  prod_commit_image = images[0]
+  prod_commit_image.push do |chunk|
+    puts JSON.parse(chunk)
+  end
+
+  images = Docker::Image.all({
+                                 'filter' => container_name
+                             })
+  prod_main_image = images[0]
+  prod_main_image.push do |chunk|
+    puts JSON.parse(chunk)
+  end
 end
 
+desc 'CI'
+task :ci do
+  Rake::Task["test"].execute
+  # Rake::Task["publish_coverage"].execute
+  Rake::Task["build_prod"].execute
+  Rake::Task["push_prod"].execute
 
-def build_container(docker_file, working_dir, tag='test')
-
-  command = "docker build -f #{docker_file} -t #{tag} #{working_dir}"
-  output = system_command(command)
-
-  output_match = /(Successfully built )(.*)/.match(output.last)
-  fail 'Docker failed to build the container!' unless output_match
-
-  puts "Built Container Image: #{output_match[2]}"
-
-  output_match[2]
 end

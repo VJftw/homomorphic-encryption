@@ -9,6 +9,8 @@ RUN apt-get update && apt-get install -y \
     php-json \
     php-mysql \
     php-redis \
+    php-xml \
+    php-zip \
     nginx
 
 # Configure PHP and PHP-FPM
@@ -18,6 +20,9 @@ RUN sed -i 's|.*access.log =.*|access.log=/dev/stdout|g' /etc/php/7.0/fpm/pool.d
 RUN sed -i 's|.*user =.*|user=root|g' /etc/php/7.0/fpm/pool.d/www.conf
 RUN sed -i 's|.*group =.*|group=root|g' /etc/php/7.0/fpm/pool.d/www.conf
 RUN sed -i -e "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" /etc/php/7.0/fpm/pool.d/www.conf
+RUN sed -i 's#.*variables_order.*#variables_order=EGPCS#g' /etc/php/7.0/fpm/pool.d/www.conf
+RUN sed -i 's#.*date.timezone.*#date.timezone=Europe/London#g' /etc/php/7.0/fpm/pool.d/www.conf
+
 RUN mkdir -p /run/php && chmod -R 755 /run/php
 
 COPY ./__build__ /app/
@@ -38,9 +43,10 @@ ENV SYMFONY__MAILER_HOST 127.0.0.1
 ENV SYMFONY__MAILER_PASSWORD temp
 ENV SYMFONY__MAILER_TRANSPORT smtp
 ENV SYMFONY__MAILER_USER temp
+ENV SYMFONY__CORS_ORIGIN *
 
 # Fix permissions for Symfony cache and logs
-RUN mkdir -p /app/var/cache && chmod -R 777 /app/var/cache && chmod -R 777 /app/var/logs && rm -rf /app/var/cache/*
+RUN mkdir -p /app/var/cache && mkdir -p /app/var/logs && chmod -R 777 /app/var/cache && chmod -R 777 /app/var/logs && rm -rf /app/var/cache/*
 
 # Temp hack to fix Symfony environment parameters
 RUN mv /app/app/config/config.yml /app/app/config/config.yml.bak && sed '/- { resource: parameters.yml }/d' /app/app/config/config.yml.bak > /app/app/config/config.yml
