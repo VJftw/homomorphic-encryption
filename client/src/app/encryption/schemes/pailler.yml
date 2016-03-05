@@ -12,20 +12,20 @@ stages:
     - name: Key Generation
       preDescription:
       steps:
-        - description: random prime
+        - description: A random prime number
           compute: p = generateRandomPrime()
-        - description: random prime
+        - description: A random prime number
           compute: q = generateRandomPrime()
-        - description: \(p * q\)
+        - description: \(p \times q\)
           compute: n = p * q
           expose: true
         - description: \(n + 1\)
           compute: g = n + 1
-        - description: \(\phi(p \cdot q\)
+        - description: \(\phi(p \cdot q)\)
           compute: l = (p - 1) * (q - 1)
         - description: \(l^{-1} \bmod n\)
           compute: m = l $ n
-      postDescription:
+      postDescription: The Public Key consists of \((n)\) and the Private Key consists of \((l, m)\)
   encryption:
     - name: Encryption
       preDescription:
@@ -35,12 +35,12 @@ stages:
           expose: true
         - description: random number such that
           compute: aR = generateR(n)
-        - description: \((g^a \bmod n^2 \cdot aR^n \bmod n^2) \bmod n^2\)
+        - description: \((g^a \cdot aR^n) \bmod n^2\)
           compute: aX = ((g & a,nSq) * (aR & n,nSq)) % nSq
           expose: true
         - description: random number such that
           compute: bR = generateR(n)
-        - description: \((g^b \bmod n^2 \cdot bR^n \bmod n^2) \bmod n^2\)
+        - description: \((g^b \cdot bR^n) \bmod n^2\)
           compute: bX = ((g & b,nSq) * (bR & n,nSq)) % nSq
           expose: true
       postDescription:

@@ -12,7 +12,7 @@
                 </div>
                 <div *ngIf="computationRunner.getComputation()" class="col-md-6">
                     <h4>
-                        <span mathjax>\({{ computationModel.a }} {{ computationModel.operation }} {{ computationModel.b }}\)</span>
+                        <span>\({{ computationModel.a }} {{ computationModel.operation }} {{ computationModel.b }}\)</span>
                         <span *ngIf="computationModel.isComplete()">\( = {{ computationModel.c }}\)</span>
                     </h4>
                 </div>
@@ -110,9 +110,30 @@
                             <span *ngIf="computationModel.getState() == 2 && i == 2" class="pull-right">Connecting to Backend <i class="fa fa-cog fa-spin"></i></span>
                         </div>
                         <div class="panel-body">
-                            <div *ngFor="#step of stage.getSteps(); #j = index">
-                                <div class="animated fadeInUp" mathjax>{{ step.getEncryptionStep().getDescription() }} <span *ngIf="step.getResult()"> = {{ step.getResult() }}</span></div>
+                            <p>{{ stage.getEncryptionStage().getPreDescription() }}</p>
+                        </div>
+                        <div class="row">
+                            <div *ngFor="#step of stage.getSteps(); #j = index" class="animated fadeInUp col-xs-12" mathjax>
+                                <div class="col-xs-1">
+                                    \({{ step.getVariable() }}\)
+                                </div>
+                                <div class="col-xs-1">
+                                    \(=\)
+                                </div>
+                                <div class="col-xs-6" >
+                                        {{ step.getEncryptionStep().getDescription() }}
+                                </div>
+                                <div class="col-xs-1">
+                                    <span *ngIf="step.getResult()" mathjax>\(=\)</span>
+                                </div>
+                                <div class="col-xs-3">
+                                    <span *ngIf="step.getResult()" mathjax>{{ step.getResult() }}</span>
+                                </div>
                             </div>
+                        </div>
+
+                        <div class="panel-body">
+                            <p>{{ stage.getEncryptionStage().getPostDescription() }}</p>
                         </div>
                     </div>
                 </div>
