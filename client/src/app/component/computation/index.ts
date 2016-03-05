@@ -1,11 +1,12 @@
 import {Component} from 'angular2/core';
 import {EncryptionSchemeProvider} from '../../provider/encryption_scheme_provider';
+import {RouterLink} from "angular2/router";
 
 
 @Component({
-  directives: [],
+  directives: [RouterLink],
   selector: 'computation-index',
-  template: require('./index.html')
+  template: require('./index.html'),
 })
 export class ComputationIndex {
 
@@ -14,7 +15,6 @@ export class ComputationIndex {
   constructor(
     protected encryptionSchemeProvider: EncryptionSchemeProvider
   ) {
-    console.log("WOAS");
     this.schemes = encryptionSchemeProvider.getEncryptionSchemes();
   }
 }
