@@ -52,8 +52,11 @@ export class ComputationRunnerService {
 
     let encryptionScheme = this._computation.getEncryptionScheme();
 
-    let schemeStages = encryptionScheme.getSetupStages();
-    schemeStages.forEach(schemeStage => {
+    encryptionScheme.getSetupStages().forEach(schemeStage => {
+      this.doStage(schemeStage);
+    });
+
+    encryptionScheme.getEncryptionStages().forEach(schemeStage => {
       this.doStage(schemeStage);
     });
 
@@ -115,9 +118,12 @@ export class ComputationRunnerService {
 
 
   private decrypt() {
+    console.log(this._computation.getEncryptionScheme().getDecryptionStages());
     for (let stage of this._computation.getEncryptionScheme().getDecryptionStages()) {
       this.doStage(stage);
     }
+
+    console.log(this._computation.getFullScope());
 
     this._computation.setC(this._computation.getFromScope('c'));
   }
@@ -130,51 +136,51 @@ export class ComputationRunnerService {
     JSON_HEADERS.append('Accept', 'application/json');
     JSON_HEADERS.append('Content-Type', 'application/json');
     let message = this._messageProviderService.createRegisterMessage(this._computation);
-    //this.http.post('http://' + __API_URL__ + '/api/computations', JSON.stringify(message.toJson()), { headers: JSON_HEADERS})
-    //  .subscribe(
-    //    data => this.registerSuccess(data),
-    //    err => console.log(err)
-    //  )
-    //;
+    this._http.post('http://' + process.env.API_ADDRESS + '/api/computations', JSON.stringify(message.toJson()), { headers: JSON_HEADERS})
+      .subscribe(
+        data => this.registerSuccess(data),
+        err => console.log(err)
+      )
+    ;
   }
 
   private registerSuccess(data) {
     this._computation = this._messageResolverService.resolveRegisterMessage(data.json(), this._computation);
 
-    //this.connectToWebSocket();
+    this.connectToWebSocket();
   }
 
-  //private connectToWebSocket(): void {
-  //  console.log('Backend Address: ' +  __BACKEND_URL__);
-  //
-  //  this.socket = new WebSocket('ws://' + __BACKEND_URL__);
-  //
-  //  this.socket.addEventListener('open', (ev: Event) => {
-  //    let message = this.messageProvider.createComputeMessage(this.computation);
-  //    this.socket.send(JSON.stringify(message.toJson()));
-  //
-  //    this.computation.setState(Computation.STATE_STARTED);
-  //  });
-  //
-  //  this.socket.addEventListener('message', (ev: MessageEvent) => {
-  //    this.computation.setState(Computation.STATE_BACKEND_CONNECTED);
-  //    let stage = this.stageProvider.create(
-  //      this.computation.getEncryptionScheme().getBackendStage().getName(),
-  //      Stage.HOST_SERVER
-  //    );
-  //    this.computation.addStage(stage);
-  //
-  //    this.computation = this.messageResolver.resolveComputeMessage(
-  //      JSON.parse(ev.data),
-  //      this.computation
-  //    );
-  //
-  //    if (this.computation.isComplete()) {
-  //      this.socket.close();
-  //
-  //      this.decrypt();
-  //    }
-  //  });
-  //}
+  private connectToWebSocket(): void {
+    console.log('Backend Address: ' +  process.env.BACKEND_ADDRESS);
+
+    this._socket = new WebSocket('ws://' + process.env.BACKEND_ADDRESS);
+
+    this._socket.addEventListener('open', (ev: Event) => {
+      let message = this._messageProviderService.createComputeMessage(this._computation);
+      this._socket.send(JSON.stringify(message.toJson()));
+
+      this._computation.setState(Computation.STATE_STARTED);
+    });
+
+    this._socket.addEventListener('message', (ev: MessageEvent) => {
+      this._computation.setState(Computation.STATE_BACKEND_CONNECTED);
+      let stage = this._stageProviderService.create(
+        this._computation.getEncryptionScheme().getBackendStageByOperation(this._computation.getOperation()).getName(),
+        Stage.HOST_SERVER
+      );
+      this._computation.addStage(stage);
+
+      this._computation = this._messageResolverService.resolveComputeMessage(
+        JSON.parse(ev.data),
+        this._computation
+      );
+
+      if (this._computation.isComplete()) {
+        this._socket.close();
+
+        this.decrypt();
+      }
+    });
+  }
 
 }

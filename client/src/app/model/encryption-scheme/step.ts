@@ -38,5 +38,5 @@ export class Step {
 export interface IStepJson {
   description: string;
   compute: string;
-  isPublic?: boolean;
+  expose?: boolean;
 }

@@ -10,7 +10,7 @@ export class StepResolverService {
     return new Step(
       stepJson.description,
       stepJson.compute,
-      !!stepJson.isPublic
+      !!stepJson.expose
     );
   }
 

@@ -4,6 +4,9 @@ import {IStepJson} from './step';
 
 export class Stage {
 
+  public static HOST_CLIENT = 0;
+  public static HOST_SERVER = 1;
+
   private name: string;
   private operation: string;
   private steps: Step[];
