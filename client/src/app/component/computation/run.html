@@ -105,15 +105,15 @@
         <div *ngIf="computationModel" class="col-md-10 col-md-offset-1">
             <div *ngFor="#phase of computationModel.getPhases(); #i = index">
                 <div *ngFor="#stage of phase">
-                    <div class="panel panel-default animated fadeIn">
+                    <div class="panel panel-default animated fadeIn" [ngClass]="{'panel-info': i == 2, 'panel-primary': i != 2}">
                         <div class="panel-heading">{{ stage.getEncryptionStage().getName() }}
-                            <span *ngIf="computationModel.getState() == 2 && i == 2" class="pull-right">Connecting to Backend <i class="fa fa-cog fa-spin"></i></span>
+                            <span *ngIf="computationModel.getState() == 2 && i == 2" class="pull-right animated fadeIn">Connecting to Backend <i class="fa fa-cog fa-spin"></i></span>
                         </div>
                         <div class="panel-body">
                             <p>{{ stage.getEncryptionStage().getPreDescription() }}</p>
                         </div>
-                        <div class="row">
-                            <div *ngFor="#step of stage.getSteps(); #j = index" class="animated fadeInUp col-xs-12" mathjax>
+                        <div class="row animated fadeIn">
+                            <div *ngFor="#step of stage.getSteps(); #j = index" class="animated fadeIn col-xs-12" mathjax>
                                 <div class="col-xs-1">
                                     \({{ step.getVariable() }}\)
                                 </div>
@@ -124,10 +124,10 @@
                                         {{ step.getEncryptionStep().getDescription() }}
                                 </div>
                                 <div class="col-xs-1">
-                                    <span *ngIf="step.getResult()" mathjax>\(=\)</span>
+                                    <span *ngIf="step.getResult()" class="animated fadeInLeft" mathjax>\(=\)</span>
                                 </div>
                                 <div class="col-xs-3">
-                                    <span *ngIf="step.getResult()" mathjax>{{ step.getResult() }}</span>
+                                    <span *ngIf="step.getResult()" class="animated fadeInLeft" mathjax>{{ step.getResult() }}</span>
                                 </div>
                             </div>
                         </div>
