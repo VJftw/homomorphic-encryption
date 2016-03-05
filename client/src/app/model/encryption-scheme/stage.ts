@@ -4,52 +4,56 @@ import {IStepJson} from './step';
 
 export class Stage {
 
-  public static HOST_CLIENT = 0;
-  public static HOST_SERVER = 1;
-
-  private name: string;
-  private operation: string;
-  private steps: Step[];
+  private _name: string;
+  private _preDescription: string;
+  private _steps: Step[];
+  private _postDescription: string;
 
   constructor(
     name: string
   ) {
-    this.name = name;
-    this.steps = [];
+    this._name = name;
+    this._steps = [];
   }
 
   public getName(): string {
-    return this.name;
+    return this._name;
   }
 
-  public setOperation(operation: string): Stage {
-    this.operation = operation;
+  public getPreDescription() {
+    return this._preDescription;
+  }
+
+  public setPreDescription(description: string) {
+    this._preDescription = description;
 
     return this;
   }
 
-  public getOperation(): string {
-    return this.operation;
+  public getPostDescription() {
+    return this._postDescription;
   }
 
-  public isBackend(): boolean {
-    return this.operation !== undefined;
+  public setPostDescription(description: string) {
+    this._postDescription = description;
+
+    return this;
   }
 
   public addStep(step: Step) {
-    this.steps.push(step);
+    this._steps.push(step);
 
     return this;
   }
 
   public getSteps(): Step[] {
-    return this.steps;
+    return this._steps;
   }
 
   public toJson() {
     let steps = [];
 
-    this.steps.forEach(step => {
+    this._steps.forEach(step => {
       steps.push(step.toJson());
     });
 
@@ -63,6 +67,7 @@ export class Stage {
 
 export interface IStageJson {
   name: string;
-  operation?: string;
+  preDescription?: string;
   steps: IStepJson[];
+  postDescription?: string;
 }

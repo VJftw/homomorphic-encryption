@@ -5,6 +5,7 @@ import {Computation} from '../model/computation';
 import {IRegisterMessageResponseJson} from '../message/register-message';
 import {IComputeMessageResponseJson} from '../message/compute-message';
 import {StepProviderService} from "../provider/step.provider.service";
+import {Stage} from "../model/computation/stage";
 
 
 @Injectable()
@@ -32,15 +33,14 @@ export class MessageResolverService {
     }
 
     // Resolve Backend stage.
-    let backendStage = computation.getEncryptionScheme().getBackendStageByOperation(computation.getOperation());
+    let backendStage = computation.getStagesByPhase(Stage.PHASE_BACKEND)[0];
     let backendSteps = backendStage.getSteps();
 
-    let results = message.results.slice(backendStage.getSteps().length - message.results.length);
+    let results = message.results.slice(backendSteps.length - message.results.length);
     for (let i = 0; i < backendSteps.length; i++) {
-      let schemeStep = backendSteps[i];
-      let step = this.stepProvider.create(schemeStep.getDescription(), new BigInteger(results[i]));
-
-      computation.getStageByName(backendStage.getName()).addStep(step);
+      let step = backendSteps[i];
+      let result = new BigInteger(results[i]);
+      step.setResult(result);
     }
 
     // resolve State

@@ -3,6 +3,7 @@ import {Stage} from "../../model/encryption-scheme/stage";
 import {IStageJson} from "../../model/encryption-scheme/stage";
 import {StepResolverService} from "./step.resolver.service";
 
+
 @Injectable()
 export class StageResolverService {
 
@@ -16,8 +17,12 @@ export class StageResolverService {
       stageJson.name
     );
 
-    if (stageJson.operation) {
-      stage.setOperation(stageJson.operation);
+    if (stageJson.preDescription) {
+      stage.setPreDescription(stageJson.preDescription);
+    }
+
+    if (stageJson.postDescription) {
+      stage.setPostDescription(stageJson.postDescription);
     }
 
     for (let stepJson of stageJson.steps) {

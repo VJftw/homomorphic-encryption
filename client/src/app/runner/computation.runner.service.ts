@@ -7,8 +7,8 @@ import {Http} from "angular2/http";
 import {StepProviderService} from "../provider/step.provider.service";
 import {MessageProviderService} from "../provider/message.provider.service";
 import {BigInteger} from "jsbn";
-import {Stage} from "../model/encryption-scheme/stage";
-import {Step} from "../model/encryption-scheme/step";
+import {Stage} from "../model/computation/stage";
+import {Step} from "../model/computation/step";
 import {Headers} from "angular2/http";
 
 
@@ -19,8 +19,6 @@ export class ComputationRunnerService {
   private _socket: WebSocket;
 
   constructor(
-    private _stageProviderService: StageProviderService,
-    private _stepProviderService: StepProviderService,
     private _computer: Computer,
     private _messageProviderService: MessageProviderService,
     private _messageResolverService: MessageResolverService,
@@ -47,83 +45,72 @@ export class ComputationRunnerService {
     this._computer.setBitLength(this._computation.getBitLength());
     console.log('Bit Length: ' + this._computation.getBitLength());
 
-    this.addWorkspace();
+    //this.addWorkspace();
 
-
-    let encryptionScheme = this._computation.getEncryptionScheme();
-
-    encryptionScheme.getSetupStages().forEach(schemeStage => {
-      this.doStage(schemeStage);
+    this._computation.getStagesByPhase(Stage.PHASE_SETUP).forEach(stage => {
+      this.doStage(stage);
     });
 
-    encryptionScheme.getEncryptionStages().forEach(schemeStage => {
-      this.doStage(schemeStage);
+    this._computation.getStagesByPhase(Stage.PHASE_ENCRYPTION).forEach(stage => {
+      this.doStage(stage);
     });
 
     this._computation.setState(Computation.STATE_BACKEND_CONNECT);
-    this.registerComputation();
+
+    setTimeout(() => this.registerComputation(),
+      2000
+    );
   }
 
-  private addWorkspace(): void {
-    let stage = this._stageProviderService.create('Workspace');
-    stage.addStep(this._stepProviderService.create(
-      'We aim to calculate \\(a ' + this._computation.getOperation() + ' b = c\\)'
-    ));
+  ////private addWorkspace(): void {
+  ////  let stage = this._stageProviderService.create('Workspace');
+  ////  stage.addStep(this._stepProviderService.create(
+  ////    'We aim to calculate \\(a ' + this._computation.getOperation() + ' b = c\\)'
+  ////  ));
+  ////
+  ////  stage.addStep(this._stepProviderService.create(
+  ////    'let \\(a\\)',
+  ////    this._computation.getA()
+  ////  ));
+  ////
+  ////  stage.addStep(this._stepProviderService.create(
+  ////    'let \\(b\\)',
+  ////    this._computation.getB()
+  ////  ));
+  ////
+  ////  this._computation.addStage(stage);
+  ////
+  ////}
 
-    stage.addStep(this._stepProviderService.create(
-      'let \\(a\\)',
-      this._computation.getA()
-    ));
+  private doStage(stage: Stage) {
 
-    stage.addStep(this._stepProviderService.create(
-      'let \\(b\\)',
-      this._computation.getB()
-    ));
+    stage.getSteps().forEach(step => {
+      let r = this.computeStep(step);
 
-    this._computation.addStage(stage);
-
-  }
-
-  private doStage(schemeStage: Stage) {
-    let stage = this._stageProviderService.create(schemeStage.getName());
-    this._computation.addStage(stage);
-
-    schemeStage.getSteps().forEach(schemeStep => {
-      let r = this.computeStep(schemeStep);
-
-      let step = this._stepProviderService.create(
-        schemeStep.getDescription(),
-        r
-      );
-
-      this._computation.getStageByName(schemeStage.getName()).addStep(step);
+      step.setResult(r);
     });
   }
 
   private computeStep(step: Step) {
     // 1) get variable name from compute step
-    let varName = step.getCompute().split(' = ')[0];
+    let varName = step.getEncryptionStep().getCompute().split(' = ')[0];
     // 2) compute based on the command
-    let command = step.getCompute().split(' = ')[1];
+    let command = step.getEncryptionStep().getCompute().split(' = ')[1];
 
     let r = this._computer.calculateStepCompute(command, this._computation.getFullScope());
 
-    this._computation.addToScope(varName, r, step.isPublicScope());
+    this._computation.addToScope(varName, r, step.getEncryptionStep().isPublicScope());
 
-    console.log('Completed: ' + step.getCompute());
+    console.log('Completed: ' + step.getEncryptionStep().getCompute());
 
     return r;
   }
 
-
-
   private decrypt() {
-    console.log(this._computation.getEncryptionScheme().getDecryptionStages());
-    for (let stage of this._computation.getEncryptionScheme().getDecryptionStages()) {
-      this.doStage(stage);
-    }
 
-    console.log(this._computation.getFullScope());
+    this._computation.getStagesByPhase(Stage.PHASE_DECRYPTION).forEach(stage => {
+      this.doStage(stage);
+    });
 
     this._computation.setC(this._computation.getFromScope('c'));
   }
@@ -164,11 +151,6 @@ export class ComputationRunnerService {
 
     this._socket.addEventListener('message', (ev: MessageEvent) => {
       this._computation.setState(Computation.STATE_BACKEND_CONNECTED);
-      let stage = this._stageProviderService.create(
-        this._computation.getEncryptionScheme().getBackendStageByOperation(this._computation.getOperation()).getName(),
-        Stage.HOST_SERVER
-      );
-      this._computation.addStage(stage);
 
       this._computation = this._messageResolverService.resolveComputeMessage(
         JSON.parse(ev.data),

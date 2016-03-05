@@ -1,66 +1,53 @@
 import {BigInteger} from 'jsbn';
 
+import * as EncryptionStep from '../encryption-scheme/step';
 
 export class Step {
 
-  public action: string;
-  protected result: BigInteger;
-  protected timestamp: Date;
+  private _encryptionStep: EncryptionStep.Step;
 
-  /**
-   * Returns the action
-   * @returns {string}
-   */
-  public getAction(): string {
-    return this.action;
+  private _variable: string;
+  private _calculation: string;
+  private _result: BigInteger;
+
+  public getEncryptionStep() {
+    return this._encryptionStep;
   }
 
-  /**
-   * Sets the action
-   * @param instruction
-   * @returns {Step}
-   */
-  public setAction(instruction: string): Step {
-    this.action = instruction;
+  public setEncryptionStep(encryptionStep: EncryptionStep.Step) {
+    this._encryptionStep = encryptionStep;
 
     return this;
   }
 
-  /**
-   * Sets the result
-   * @param result
-   * @returns {Step}
-   */
-  public setResult(result: BigInteger): Step {
-    this.result = result;
+  public getVariable() {
+    return this._variable;
+  }
+
+  public setVariable(v: string) {
+    this._variable = v;
 
     return this;
   }
 
-  /**
-   * Returns the result
-   * @returns {BigInteger}
-   */
-  public getResult(): BigInteger {
-    return this.result;
+  public getCalculation() {
+    return this._calculation;
   }
 
-  /**
-   * Returns the timestamp
-   * @returns {Date}
-   */
-  public getTimestamp(): Date {
-    return this.timestamp;
-  }
-
-  /**
-   * Sets the timestamp
-   * @param timestamp
-   * @returns {Step}
-   */
-  public setTimestamp(timestamp: Date) {
-    this.timestamp = timestamp;
+  public setCalculation(c: string) {
+    this._calculation = c;
 
     return this;
   }
+
+  public getResult() {
+    return this._result;
+  }
+
+  public setResult(r: BigInteger) {
+    this._result = r;
+
+    return this;
+  }
+
 }

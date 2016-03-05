@@ -102,25 +102,22 @@
             </div>
         </div>
 
-        <div *ngIf="computationRunner.getComputation() && computationModel" class="col-md-10 col-md-offset-1">
-            <div *ngFor="#stage of computationModel.getStages()">
-                <div class="panel panel-default animated fadeIn" [ngClass]="{'panel-info': stage.getHost() == 1, 'panel-primary': stage.getHost() == 0}">
-                    <div class="panel-heading">{{ stage.getName() }}</div>
-                    <div class="panel-body">
-                        <div *ngFor="#step of stage.getSteps(); #i = index">
-                            <div class="animated fadeInUp" *mathjax>{{ step.action }} <span *ngIf="step.result"> = {{ step.result }}</span></div>
+        <div *ngIf="computationModel" class="col-md-10 col-md-offset-1">
+            <div *ngFor="#phase of computationModel.getPhases(); #i = index">
+                <div *ngFor="#stage of phase">
+                    <div class="panel panel-default animated fadeIn">
+                        <div class="panel-heading">{{ stage.getEncryptionStage().getName() }}
+                            <span *ngIf="computationModel.getState() == 2 && i == 2" class="pull-right">Connecting to Backend <i class="fa fa-cog fa-spin"></i></span>
+                        </div>
+                        <div class="panel-body">
+                            <div *ngFor="#step of stage.getSteps(); #j = index">
+                                <div class="animated fadeInUp" *mathjax>{{ step.getEncryptionStep().getDescription() }} <span *ngIf="step.getResult()"> = {{ step.getResult() }}</span></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div *ngIf="computationRunner.getComputation() && computationRunner.getComputation().getState() == 2" class="col-md-10 col-md-offset-1">
-            <div  class="panel panel-info">
-                <div class="panel-heading text-right">Connecting to Backend <i class="fa fa-cog fa-spin"></i></div>
-            </div>
-        </div>
-
 
     </div>
 

@@ -18,7 +18,7 @@ export class Computation {
   protected encryptionScheme: EncryptionScheme;
   protected operation: string;
   protected state: number;
-  protected stages: Stage[];
+  protected stages: Map<number, Stage[]>;
 
   private privateScope = {};
   private publicScope = {};
@@ -29,7 +29,7 @@ export class Computation {
 
   constructor() {
     this.state = Computation.STATE_NEW;
-    this.stages = [];
+    this.stages = new Map<number, Stage[]>();
     this.privateScope = {};
     this.publicScope = {};
   }
@@ -268,38 +268,37 @@ export class Computation {
   }
 
   /**
-   * Adds a Stage
+   *
+   * @param phase
    * @param stage
    * @returns {Computation}
    */
-  public addStage(stage: Stage): Computation {
-    this.stages.push(stage);
+  public addPhaseStage(phase: number, stage: Stage): Computation {
+
+    let currentStages = this.stages.get(phase);
+
+    if (!currentStages) {
+      currentStages = [];
+    }
+    currentStages.push(stage);
+
+    this.stages.set(phase, currentStages);
 
     return this;
   }
 
-  /**
-   * Returns the Stages
-   * @returns {Stage[]}
-   */
-  public getStages(): Array<Stage> {
-    return this.stages;
+  public getStagesByPhase(phase: number) {
+    return this.stages.get(phase);
   }
 
-  /**
-   * Returns a Stage given by its name
-   * @param name
-   * @returns {Stage}
-   */
-  public getStageByName(name: string): Stage {
-    let r: Stage = null;
+  public getPhases() {
+    let a = [];
 
-    this.stages.forEach(function(value) {
-      if (value.getName() === name) {
-        r = value;
-      }
-    }, this.stages);
+    this.stages.forEach((value, key) => {
+      a.push(value);
+    });
 
-    return r;
+    return a;
   }
+
 }

@@ -1,71 +1,27 @@
 import {Step} from './step';
-
+import * as EncryptionStage from '../encryption-scheme/stage';
 
 export class Stage {
 
-  public static HOST_CLIENT = 0;
-  public static HOST_SERVER = 1;
+  public static PHASE_SETUP = 0;
+  public static PHASE_ENCRYPTION = 1;
+  public static PHASE_BACKEND = 2;
+  public static PHASE_DECRYPTION = 3;
 
+  private _encryptionStage: EncryptionStage.Stage;
 
-  private name: string;
-  private host: number;
-
-  private steps: Array<Step>;
+  private _steps: Step[];
 
   constructor() {
-    this.steps = [];
+    this._steps = [];
   }
 
-  /**
-   * Returns the name
-   * @returns {string}
-   */
-  public getName(): string {
-    return this.name;
+  public getEncryptionStage() {
+    return this._encryptionStage;
   }
 
-  /**
-   * Sets the name
-   * @param name
-   * @returns {Stage}
-   */
-  public setName(name: string): Stage {
-    this.name = name;
-
-    return this;
-  }
-
-  /**
-   * Returns the host
-   * @returns {number}
-   */
-  public getHost(): number {
-    return this.host;
-  }
-
-  /**
-   * Returns whether or not the Stage is executed on the client
-   * @returns {boolean}
-   */
-  public isClient(): boolean {
-    return this.host === Stage.HOST_CLIENT;
-  }
-
-  /**
-   * Returns whether or not the Stage is executed on the server
-   * @returns {boolean}
-   */
-  public isServer(): boolean {
-    return this.host === Stage.HOST_SERVER;
-  }
-
-  /**
-   * Sets the host
-   * @param host
-   * @returns {Stage}
-   */
-  public setHost(host: number) {
-    this.host = host;
+  public setEncryptionStage(encryptionStage: EncryptionStage.Stage) {
+    this._encryptionStage = encryptionStage;
 
     return this;
   }
@@ -74,8 +30,8 @@ export class Stage {
    * Returns the Steps
    * @returns {Array<Step>}
    */
-  public getSteps(): Array<Step> {
-    return this.steps;
+  public getSteps(): Step[] {
+    return this._steps;
   }
 
   /**
@@ -84,7 +40,7 @@ export class Stage {
    * @returns {Stage}
    */
   public addStep(step: Step): Stage {
-    this.steps.push(step);
+    this._steps.push(step);
 
     return this;
   }
