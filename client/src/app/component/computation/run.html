@@ -12,7 +12,7 @@
                 </div>
                 <div *ngIf="computationRunner.getComputation()" class="col-md-6">
                     <h4>
-                        <span *mathjax>\({{ computationModel.a }} {{ computationModel.operation }} {{ computationModel.b }}\)</span>
+                        <span mathjax>\({{ computationModel.a }} {{ computationModel.operation }} {{ computationModel.b }}\)</span>
                         <span *ngIf="computationModel.isComplete()">\( = {{ computationModel.c }}\)</span>
                     </h4>
                 </div>
@@ -111,7 +111,7 @@
                         </div>
                         <div class="panel-body">
                             <div *ngFor="#step of stage.getSteps(); #j = index">
-                                <div class="animated fadeInUp" *mathjax>{{ step.getEncryptionStep().getDescription() }} <span *ngIf="step.getResult()"> = {{ step.getResult() }}</span></div>
+                                <div class="animated fadeInUp" mathjax>{{ step.getEncryptionStep().getDescription() }} <span *ngIf="step.getResult()"> = {{ step.getResult() }}</span></div>
                             </div>
                         </div>
                     </div>
