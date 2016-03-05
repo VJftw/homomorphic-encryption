@@ -102,7 +102,7 @@
             </div>
         </div>
 
-        <div *ngIf="computationModel" class="col-md-10 col-md-offset-1">
+        <div *ngIf="computationModel" class="col-md-12">
             <div *ngFor="#phase of computationModel.getPhases(); #i = index">
                 <div *ngFor="#stage of phase">
                     <div class="panel panel-default animated fadeIn" [ngClass]="{'panel-info': i == 2, 'panel-primary': i != 2}">
