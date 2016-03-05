@@ -1,10 +1,10 @@
 import {
   it
-} from "angular2/testing";
+} from 'angular2/testing';
 
-import {ComputationProvider} from "./computation_provider";
+import {ComputationProvider} from './computation_provider';
 
-describe("ComputationProvider", () => {
+describe('ComputationProvider', () => {
 
   let computationProvider: ComputationProvider;
 
@@ -12,11 +12,11 @@ describe("ComputationProvider", () => {
     computationProvider = new ComputationProvider();
   });
 
-  it("should create new Computation with the given Encryption Scheme", () => {
+  it('should create new Computation with the given Encryption Scheme', () => {
 
-    let scheme = jasmine.createSpyObj("scheme", ["getName", "getCapabilities", "getBitLengths"]);
-    scheme.getCapabilities.and.returnValue(["+"]);
-    let bitLength = jasmine.createSpyObj("bitLength", ["getBitLength"]);
+    let scheme = jasmine.createSpyObj('scheme', ['getName', 'getCapabilities', 'getBitLengths']);
+    scheme.getCapabilities.and.returnValue(['+']);
+    let bitLength = jasmine.createSpyObj('bitLength', ['getBitLength']);
     bitLength.getBitLength.and.returnValue(8);
     scheme.getBitLengths.and.returnValue([bitLength]);
 
@@ -27,7 +27,7 @@ describe("ComputationProvider", () => {
     ;
 
     expect(computation.getOperation())
-      .toBe("+")
+      .toBe('+')
     ;
 
     expect(computation.getBitLength())

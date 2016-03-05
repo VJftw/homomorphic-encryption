@@ -28,8 +28,8 @@ export class EncryptionSchemeStep {
 
   public toJson() {
     return {
-      "description": this.getDescription(),
-      "compute": this.getCompute()
+      'description': this.getDescription(),
+      'compute': this.getCompute()
     };
   }
 

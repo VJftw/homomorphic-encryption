@@ -1,7 +1,7 @@
-import {Injectable} from "angular2/core";
+import {Injectable} from 'angular2/core';
 
-import {BigInteger} from "jsbn";
-import {Step} from "../model/step";
+import {BigInteger} from 'jsbn';
+import {Step} from '../model/step';
 
 
 @Injectable()

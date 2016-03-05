@@ -1,4 +1,4 @@
-import {BigInteger} from "jsbn";
+import {BigInteger} from 'jsbn';
 
 
 export class Step {

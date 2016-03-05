@@ -1,11 +1,11 @@
 import {
   it
-} from "angular2/testing";
+} from 'angular2/testing';
 
-import {Computation} from "./computation";
-import {BigInteger} from "jsbn";
+import {Computation} from './computation';
+import {BigInteger} from 'jsbn';
 
-describe("Computation", () => {
+describe('Computation', () => {
 
   let computation: Computation;
 
@@ -13,42 +13,42 @@ describe("Computation", () => {
     computation = new Computation();
   });
 
-  it("should return the hashId", () => {
+  it('should return the hashId', () => {
     expect(computation.getHashId())
       .toBeUndefined()
     ;
   });
 
-  it("should set the hashId", () => {
-    expect(computation.setHashId("ax54dc"))
+  it('should set the hashId', () => {
+    expect(computation.setHashId('ax54dc'))
       .toBe(computation)
     ;
 
     expect(computation.getHashId())
-      .toEqual("ax54dc")
+      .toEqual('ax54dc')
     ;
   });
 
-  it("should return A", () => {
+  it('should return A', () => {
     expect(computation.getA())
       .toBeUndefined()
     ;
   });
 
-  it("should return B", () => {
+  it('should return B', () => {
     expect(computation.getB())
       .toBeUndefined()
     ;
   });
 
-  it("should return C", () => {
+  it('should return C', () => {
     expect(computation.getC())
       .toBeUndefined()
     ;
   });
 
-  it("should set C", () => {
-    let c = jasmine.createSpyObj("c", [""]);
+  it('should set C', () => {
+    let c = jasmine.createSpyObj('c', [""]);
     expect(computation.setC(c))
       .toBe(computation)
     ;
@@ -58,13 +58,13 @@ describe("Computation", () => {
     ;
   });
 
-  it("should return the timestamp", () => {
+  it('should return the timestamp', () => {
     expect(computation.getTimestamp())
       .toBeUndefined()
     ;
   });
 
-  it("should set the timestamp", () => {
+  it('should set the timestamp', () => {
     let timestamp = new Date();
     expect(computation.setTimestamp(timestamp))
       .toBe(computation)
@@ -75,29 +75,29 @@ describe("Computation", () => {
     ;
   });
 
-  it("should return the operation", () => {
+  it('should return the operation', () => {
     expect(computation.getOperation())
       .toBeUndefined()
     ;
   });
 
-  it("should set the operation", () => {
-    expect(computation.setOperation("+"))
+  it('should set the operation', () => {
+    expect(computation.setOperation('+'))
       .toBe(computation)
     ;
 
     expect(computation.getOperation())
-      .toEqual("+")
+      .toEqual('+')
     ;
   });
 
-  it("should return the initial state", () => {
+  it('should return the initial state', () => {
     expect(computation.getState())
       .toEqual(Computation.STATE_NEW)
     ;
   });
 
-  it("should set the state", () => {
+  it('should set the state', () => {
     expect(computation.setState(Computation.STATE_STARTED))
       .toBe(computation)
     ;
@@ -107,7 +107,7 @@ describe("Computation", () => {
     ;
   });
 
-  it("should return whether or not it is in the NEW state", () => {
+  it('should return whether or not it is in the NEW state', () => {
     expect(computation.isNew())
       .toEqual(true)
     ;
@@ -121,7 +121,7 @@ describe("Computation", () => {
     ;
   });
 
-  it("should return whether or not it is in the STARTED state", () => {
+  it('should return whether or not it is in the STARTED state', () => {
     computation.setState(Computation.STATE_STARTED);
 
     expect(computation.isNew())
@@ -137,7 +137,7 @@ describe("Computation", () => {
     ;
   });
 
-  it("should return whether or not it is in the COMPLETE state", () => {
+  it('should return whether or not it is in the COMPLETE state', () => {
     computation.setState(Computation.STATE_COMPLETE);
 
     expect(computation.isNew())
@@ -153,15 +153,15 @@ describe("Computation", () => {
     ;
   });
 
-  it("should return the stages", () => {
+  it('should return the stages', () => {
     expect(computation.getStages())
       .toEqual([])
     ;
   });
 
-  it("should add a stage", () => {
-    let stage = jasmine.createSpyObj("stage", ["getName"]);
-    stage.getName.and.returnValue("abcd");
+  it('should add a stage', () => {
+    let stage = jasmine.createSpyObj('stage', ['getName']);
+    stage.getName.and.returnValue('abcd');
 
     expect(computation.addStage(stage))
       .toBe(computation)
@@ -172,17 +172,17 @@ describe("Computation", () => {
     ;
   });
 
-  it("should return a stage given by its name", () => {
-    let stage = jasmine.createSpyObj("stage", ["getName"]);
-    stage.getName.and.returnValue("abcd");
+  it('should return a stage given by its name', () => {
+    let stage = jasmine.createSpyObj('stage', ['getName']);
+    stage.getName.and.returnValue('abcd');
 
     computation.addStage(stage);
 
-    expect(computation.getStageByName("abcd"))
+    expect(computation.getStageByName('abcd'))
       .toBe(stage)
     ;
 
-    expect(computation.getStageByName("aaaa"))
+    expect(computation.getStageByName('aaaa'))
       .toBeNull()
     ;
   });

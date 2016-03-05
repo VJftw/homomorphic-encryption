@@ -1,7 +1,3 @@
-#
-# a and b are reserved variable names. These are set to computation.a and computation.b respectively
-#
-#
 
 uniqueName: pailler
 readableName: Pailler

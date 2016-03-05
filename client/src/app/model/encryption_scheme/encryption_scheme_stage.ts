@@ -1,5 +1,5 @@
-import {EncryptionSchemeStep} from "./encryption_scheme_step";
-import {IEncryptionSchemeStepJson} from "./encryption_scheme_step";
+import {EncryptionSchemeStep} from './encryption_scheme_step';
+import {IEncryptionSchemeStepJson} from './encryption_scheme_step';
 
 
 export class EncryptionSchemeStage {
@@ -51,8 +51,8 @@ export class EncryptionSchemeStage {
     });
 
     return {
-      "name": this.getName(),
-      "steps": steps
+      'name': this.getName(),
+      'steps': steps
     };
   }
 

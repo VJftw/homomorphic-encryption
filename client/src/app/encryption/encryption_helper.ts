@@ -1,6 +1,6 @@
-import {Injectable} from "angular2/core";
+import {Injectable} from 'angular2/core';
 
-import {BigInteger} from "jsbn";
+import {BigInteger} from 'jsbn';
 
 
 @Injectable()
@@ -40,11 +40,11 @@ export class EncryptionHelper {
   public findPrimitiveRootOfPrime(prime: BigInteger): BigInteger {
 
     if (prime.intValue() === 2) {
-      return new BigInteger("1");
+      return new BigInteger('1');
     }
 
-    let p1 = new BigInteger("2");
-    let s = prime.subtract(new BigInteger("1"));
+    let p1 = new BigInteger('2');
+    let s = prime.subtract(new BigInteger('1'));
     let p2 = s.divide(p1);
 
     while (true) {

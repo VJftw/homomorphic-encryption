@@ -1,6 +1,6 @@
-import {Injectable} from "angular2/core";
+import {Injectable} from 'angular2/core';
 
-import {EncryptionSchemeBitLength, IEncryptionSchemeBitLengthJson} from "../../model/encryption_scheme/encryption_scheme_bit_length";
+import {EncryptionSchemeBitLength, IEncryptionSchemeBitLengthJson} from '../../model/encryption_scheme/encryption_scheme_bit_length';
 
 
 @Injectable()

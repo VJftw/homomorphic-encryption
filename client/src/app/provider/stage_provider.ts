@@ -1,6 +1,6 @@
-import {Injectable} from "angular2/core";
+import {Injectable} from 'angular2/core';
 
-import {Stage} from "../model/stage";
+import {Stage} from '../model/stage';
 
 
 @Injectable()

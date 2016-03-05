@@ -1,10 +1,10 @@
-import {Injectable} from "angular2/core";
+import {Injectable} from 'angular2/core';
 
-import {Computation} from "../model/computation";
-import {StepProvider} from "../provider/step_provider";
-import {BigInteger} from "jsbn";
-import {IRegisterMessageResponseJson} from "../message/register_message";
-import {IComputeMessageResponseJson} from "../message/compute_message";
+import {Computation} from '../model/computation';
+import {StepProvider} from '../provider/step_provider';
+import {BigInteger} from 'jsbn';
+import {IRegisterMessageResponseJson} from '../message/register_message';
+import {IComputeMessageResponseJson} from '../message/compute_message';
 
 
 @Injectable()

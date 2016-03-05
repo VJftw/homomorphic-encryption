@@ -1,8 +1,8 @@
-import {Injectable} from "angular2/core";
+import {Injectable} from 'angular2/core';
 
-import {EncryptionScheme, IEncryptionSchemeJson} from "../../model/encryption_scheme/encryption_scheme";
-import {EncryptionSchemeStageResolver} from "./encryption_scheme_stage_resolver";
-import {EncryptionSchemeBitLengthResolver} from "./encryption_scheme_bit_length_resolver";
+import {EncryptionScheme, IEncryptionSchemeJson} from '../../model/encryption_scheme/encryption_scheme';
+import {EncryptionSchemeStageResolver} from './encryption_scheme_stage_resolver';
+import {EncryptionSchemeBitLengthResolver} from './encryption_scheme_bit_length_resolver';
 
 
 @Injectable()

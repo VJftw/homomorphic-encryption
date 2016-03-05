@@ -1,24 +1,23 @@
-import {Component, View} from "angular2/core";
-import {APP_DIRECTIVES} from "../../directives";
-import {FormBuilder} from "angular2/common";
-import {ControlGroup} from "angular2/common";
-import {Validators} from "angular2/common";
-import {MathJaxDirective} from "../../directive/mathjax";
-import {Computation} from "../../model/computation";
-import {RouteParams} from "angular2/router";
-import {EncryptionSchemeProvider} from "../../provider/encryption_scheme_provider";
-import {EncryptionScheme} from "../../model/encryption_scheme/encryption_scheme";
-import {ComputationProvider} from "../../provider/computation_provider";
-import {ComputationRunner} from "../../runner/computation_runner";
-import {EncryptionSchemeBitLength} from "../../model/encryption_scheme/encryption_scheme_bit_length";
+import {Component, View} from 'angular2/core';
+import {FormBuilder} from 'angular2/common';
+import {ControlGroup} from 'angular2/common';
+import {Validators} from 'angular2/common';
+import {MathJaxDirective} from '../../directive/mathjax';
+import {Computation} from '../../model/computation';
+import {RouteParams} from 'angular2/router';
+import {EncryptionSchemeProvider} from '../../provider/encryption_scheme_provider';
+import {EncryptionScheme} from '../../model/encryption_scheme/encryption_scheme';
+import {ComputationProvider} from '../../provider/computation_provider';
+import {ComputationRunner} from '../../runner/computation_runner';
+import {EncryptionSchemeBitLength} from '../../model/encryption_scheme/encryption_scheme_bit_length';
 
 
 @Component({
-  selector: "computation-run"
+  selector: 'computation-run'
 })
 @View({
-  directives: [APP_DIRECTIVES, MathJaxDirective],
-  template: require("./run.html")
+  directives: [MathJaxDirective],
+  template: require('./run.html')
 })
 export class ComputationRun {
 
@@ -38,7 +37,7 @@ export class ComputationRun {
   ) {
 
     this.encryptionScheme = encryptionSchemeProvider.getEncryptionSchemeByName(
-      routeParams.get("type")
+      routeParams.get('type')
     );
     this.capabilities = this.encryptionScheme.getCapabilities();
     this.bitLengths = this.encryptionScheme.getBitLengths();
@@ -46,9 +45,9 @@ export class ComputationRun {
     this.computationModel = computationProvider.create(this.encryptionScheme);
 
     this.computationForm = fb.group({
-      a: ["", Validators.required ],
-      b: ["", Validators.required ],
-      bitLengths: ["", Validators.required]
+      a: ['', Validators.required ],
+      b: ['', Validators.required ],
+      bitLengths: ['', Validators.required]
     }, {
       validator: this.computationValidator.bind(this)
     });
@@ -63,9 +62,9 @@ export class ComputationRun {
 
   protected computationValidator(group: ControlGroup): { [s: string]: boolean } {
     /* tslint:disable:no-string-literal */
-    let aCtrl = group.controls["a"];
-    let bCtrl = group.controls["b"];
-    let bitLengthCtrl = group.controls["bitLengths"];
+    let aCtrl = group.controls['a'];
+    let bCtrl = group.controls['b'];
+    let bitLengthCtrl = group.controls['bitLengths'];
 
     if (this.computationForm && bitLengthCtrl.value) {
 

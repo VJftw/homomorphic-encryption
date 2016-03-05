@@ -1,6 +1,6 @@
-import {BigInteger} from "jsbn";
-import {Stage} from "./stage";
-import {EncryptionScheme} from "./encryption_scheme/encryption_scheme";
+import {BigInteger} from 'jsbn';
+import {Stage} from './stage';
+import {EncryptionScheme} from './encryption_scheme/encryption_scheme';
 
 
 export class Computation {
@@ -90,7 +90,7 @@ export class Computation {
       return this.privateScope[varName];
     }
 
-    throw new RangeError("Variable not found in scope");
+    throw new RangeError('Variable not found in scope');
   }
 
   /**

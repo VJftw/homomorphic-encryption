@@ -1,7 +1,7 @@
-import {Injectable} from "angular2/core";
+import {Injectable} from 'angular2/core';
 
-import {EncryptionScheme} from "../model/encryption_scheme/encryption_scheme";
-import {EncryptionSchemeResolver} from "../resolver/encryption_scheme/encryption_scheme_resolver";
+import {EncryptionScheme} from '../model/encryption_scheme/encryption_scheme';
+import {EncryptionSchemeResolver} from '../resolver/encryption_scheme/encryption_scheme_resolver';
 
 @Injectable()
 export class EncryptionSchemeProvider {
@@ -9,14 +9,14 @@ export class EncryptionSchemeProvider {
   private schemes: Map<string, EncryptionScheme>;
 
   private schemeJsons = [
-    require("json!yaml!../encryption/schemes/pailler.yml"),
-    require("json!yaml!../encryption/schemes/el_gamal_ecc.yml"),
+    require('json!yaml!../encryption/schemes/pailler.yml')
   ];
 
   constructor(
     encryptionSchemeResolver: EncryptionSchemeResolver
   ) {
     this.schemes = new Map<string, EncryptionScheme>();
+    console.log("WOO");
 
     this.schemeJsons.forEach(schemeJson => {
       let scheme = encryptionSchemeResolver.fromJson(schemeJson);
@@ -34,7 +34,7 @@ export class EncryptionSchemeProvider {
     }, this.schemes);
 
     if (r == null) {
-      throw new URIError("Encryption Scheme not found.");
+      throw new URIError('Encryption Scheme not found.');
     }
 
     return r;

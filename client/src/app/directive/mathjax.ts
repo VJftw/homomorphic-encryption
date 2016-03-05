@@ -1,8 +1,7 @@
-/// <reference path="../../../typings/mathjax/mathjax.d.ts" />
-import {Directive, ViewContainerRef, TemplateRef} from "angular2/core";
+import {Directive, ViewContainerRef, TemplateRef} from 'angular2/core';
 
 
-@Directive({inputs: ["mathjax"], selector: "[mathjax]" })
+@Directive({inputs: ['mathjax'], selector: '[mathjax]' })
 export class MathJaxDirective {
 
   constructor(
@@ -12,6 +11,6 @@ export class MathJaxDirective {
 
   set mathjax(x) {
     this._viewContainer.createEmbeddedView(this._templateRef);
-    MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    MathJax.Hub.Queue(['Typeset', MathJax.Hub]);
   }
 }

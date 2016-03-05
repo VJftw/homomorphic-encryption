@@ -1,8 +1,8 @@
-import {Injectable} from "angular2/core";
+import {Injectable} from 'angular2/core';
 
-import {RegisterMessage} from "../message/register_message";
-import {Computation} from "../model/computation";
-import {ComputeMessage} from "../message/compute_message";
+import {RegisterMessage} from '../message/register_message';
+import {Computation} from '../model/computation';
+import {ComputeMessage} from '../message/compute_message';
 
 
 @Injectable()

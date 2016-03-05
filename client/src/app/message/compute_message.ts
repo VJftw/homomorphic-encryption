@@ -1,5 +1,5 @@
-import {MessageInterface} from "./message_interface";
-import {EncryptionSchemeStep} from "../model/encryption_scheme/encryption_scheme_step";
+import {MessageInterface} from './message_interface';
+import {EncryptionSchemeStep} from '../model/encryption_scheme/encryption_scheme_step';
 
 
 export class ComputeMessage implements MessageInterface {
@@ -20,11 +20,11 @@ export class ComputeMessage implements MessageInterface {
 
   public toJson(): {} {
     return {
-      "action": "computation/compute",
-      "data": {
-        "hashId": this.hashId,
-        "computeSteps": this.steps,
-        "publicScope": this.publicScope
+      'action': 'computation/compute',
+      'data': {
+        'hashId': this.hashId,
+        'computeSteps': this.steps,
+        'publicScope': this.publicScope
       }
     };
   }

@@ -1,11 +1,11 @@
 import {
   it
-} from "angular2/testing";
+} from 'angular2/testing';
 
-import {Step} from "./step";
-import {BigInteger} from "jsbn";
+import {Step} from './step';
+import {BigInteger} from 'jsbn';
 
-describe("Step", () => {
+describe('Step', () => {
 
   let step: Step;
 
@@ -13,30 +13,30 @@ describe("Step", () => {
     step = new Step();
   });
 
-  it("should return the action", () => {
+  it('should return the action', () => {
     expect(step.getAction())
       .toBeUndefined()
     ;
   });
 
-  it("should set the action", () => {
-    expect(step.setAction("abcdef"))
+  it('should set the action', () => {
+    expect(step.setAction('abcdef'))
       .toBe(step)
     ;
 
     expect(step.getAction())
-      .toEqual("abcdef")
+      .toEqual('abcdef')
     ;
   });
 
-  it("should return the result", () => {
+  it('should return the result', () => {
     expect(step.getResult())
       .toBeUndefined()
     ;
   });
 
-  it("should set the result", () => {
-    let r = new BigInteger("1");
+  it('should set the result', () => {
+    let r = new BigInteger('1');
 
     expect(step.setResult(r))
       .toBe(step)
@@ -47,13 +47,13 @@ describe("Step", () => {
     ;
   });
 
-  it("should return the timestamp", () => {
+  it('should return the timestamp', () => {
     expect(step.getTimestamp())
       .toBeUndefined()
     ;
   });
 
-  it("should set the timestamp", () => {
+  it('should set the timestamp', () => {
     let d = new Date();
 
     expect(step.setTimestamp(d))

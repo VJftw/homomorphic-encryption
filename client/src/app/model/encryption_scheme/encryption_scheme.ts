@@ -1,7 +1,7 @@
-import {EncryptionSchemeStage} from "./encryption_scheme_stage";
-import {IEncryptionSchemeStageJson} from "./encryption_scheme_stage";
-import {EncryptionSchemeBitLength} from "./encryption_scheme_bit_length";
-import {IEncryptionSchemeBitLengthJson} from "./encryption_scheme_bit_length";
+import {EncryptionSchemeStage} from './encryption_scheme_stage';
+import {IEncryptionSchemeStageJson} from './encryption_scheme_stage';
+import {EncryptionSchemeBitLength} from './encryption_scheme_bit_length';
+import {IEncryptionSchemeBitLengthJson} from './encryption_scheme_bit_length';
 
 
 export class EncryptionScheme {
@@ -63,7 +63,7 @@ export class EncryptionScheme {
       }
     }
 
-    throw new RangeError("Bit Length " + length + " not found.");
+    throw new RangeError('Bit Length ' + length + ' not found.');
   }
 
   public addStage(stage: EncryptionSchemeStage) {
@@ -96,18 +96,18 @@ export class EncryptionScheme {
       }
     }
 
-    throw new RangeError("No Backend Stage found.");
+    throw new RangeError('No Backend Stage found.');
   }
 
   public getDecryptStage(): EncryptionSchemeStage {
 
     for (let stage of this.stages) {
-      if (stage.getName() === "Decryption") {
+      if (stage.getName() === 'Decryption') {
         return stage;
       }
     }
 
-    throw new RangeError("No Decryption Stage found.");
+    throw new RangeError('No Decryption Stage found.');
   }
 
 }

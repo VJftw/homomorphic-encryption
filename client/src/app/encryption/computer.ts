@@ -1,19 +1,19 @@
-import {Injectable} from "angular2/core";
-import {BigInteger} from "jsbn";
+import {Injectable} from 'angular2/core';
+import {BigInteger} from 'jsbn';
 
-import {EncryptionHelper} from "./encryption_helper";
+import {EncryptionHelper} from './encryption_helper';
 
 @Injectable()
 export class Computer {
 
   private static operations = [
-    "+", // add
-    "-", // subtract
-    "/", // divide
-    "*", // multiply
-    "%", // modulus
-    "&", // powerMod
-    "$"  // inverseMod
+    '+', // add
+    '-', // subtract
+    '/', // divide
+    '*', // multiply
+    '%', // modulus
+    '&', // powerMod
+    '$'  // inverseMod
   ];
 
   private bitLength = 16;
@@ -67,9 +67,9 @@ export class Computer {
 
     for (let i = 0; i < expr.length; i++) {
       let char = expr[i];
-      if (char === "(") {
+      if (char === '(') {
         bracketCounter++;
-      } else if (char === ")") {
+      } else if (char === ')') {
         bracketCounter--;
       } else if (bracketCounter === 0 && Computer.operations.indexOf(char) > -1) {
         topLevelLoc = i;
@@ -77,14 +77,14 @@ export class Computer {
     }
 
     if (bracketCounter !== 0 || topLevelLoc === -1) {
-      throw new Error("Broken expression");
+      throw new Error('Broken expression');
     }
 
     return topLevelLoc;
   }
 
   private trimBrackets(expr: string): string {
-    if (expr[0] === "(" && expr[expr.length - 1] === ")") {
+    if (expr[0] === '(' && expr[expr.length - 1] === ')') {
       return expr.substring(1, expr.length - 1);
     } else {
       return expr;
@@ -103,8 +103,8 @@ export class Computer {
     let b;
     let c;
 
-    if (topOp === "&") {
-      let parts = bStr.split(",");
+    if (topOp === '&') {
+      let parts = bStr.split(',');
       bStr = parts[0];
       let cStr = parts[1];
 
@@ -135,7 +135,7 @@ export class Computer {
       b = this.resolveVariable(bStr, scope);
     }
 
-    if (topOp === "&") {
+    if (topOp === '&') {
       return this.calc(a, topOp, b, c);
     }
     return this.calc(a, topOp, b);
@@ -144,22 +144,22 @@ export class Computer {
   private calc(a: BigInteger, operator: string, b: BigInteger, c?: BigInteger) {
 
     switch (operator) {
-      case "+":
+      case '+':
         return a.add(b);
-      case "-":
+      case '-':
         return a.subtract(b);
-      case "*":
+      case '*':
         return a.multiply(b);
-      case "/":
+      case '/':
         return a.divide(b);
-      case "%":
+      case '%':
         return a.mod(b);
-      case "$":
+      case '$':
         return a.modInverse(b);
-      case "&":
+      case '&':
         return a.modPow(b, c);
       default:
-        throw new RangeError("Cannot resolve operation: " + operator);
+        throw new RangeError('Cannot resolve operation: ' + operator);
     }
   }
 
@@ -169,7 +169,7 @@ export class Computer {
     } else if (parseInt(v, 10) !== NaN) {
       return new BigInteger("" + v);
     } else {
-      throw new RangeError("Cannot resolve variable: " + v);
+      throw new RangeError('Cannot resolve variable: ' + v);
     }
   }
 
