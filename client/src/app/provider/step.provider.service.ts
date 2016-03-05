@@ -1,11 +1,11 @@
 import {Injectable} from 'angular2/core';
 
 import {BigInteger} from 'jsbn';
-import {Step} from '../model/step';
+import {Step} from "../model/computation/step";
 
 
 @Injectable()
-export class StepProvider {
+export class StepProviderService {
 
   /**
    * Creates a Step

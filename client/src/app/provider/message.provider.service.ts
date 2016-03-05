@@ -1,12 +1,11 @@
 import {Injectable} from 'angular2/core';
-
-import {RegisterMessage} from '../message/register_message';
-import {Computation} from '../model/computation';
-import {ComputeMessage} from '../message/compute_message';
+import {Computation} from "../model/computation";
+import {RegisterMessage} from "../message/register-message";
+import {ComputeMessage} from "../message/compute-message";
 
 
 @Injectable()
-export class MessageProvider {
+export class MessageProviderService {
 
   public createRegisterMessage(computation: Computation): RegisterMessage {
     return new RegisterMessage(
@@ -26,7 +25,7 @@ export class MessageProvider {
 
     return new ComputeMessage(
       computation.getHashId(),
-      computation.getEncryptionScheme().getBackendStage().getSteps(),
+      computation.getEncryptionScheme().getBackendStageByOperation(computation.getOperation()).getSteps(),
       publicScope
     );
   }

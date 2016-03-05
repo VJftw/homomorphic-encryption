@@ -2,49 +2,54 @@
 uniqueName: pailler
 readableName: Pailler
 description: The Pailler additive somewhat homomorphic encryption scheme
-capabilities:
- - +
 bitLengths:
   - bitLength: 8
     maxInt: 99
   - bitLength: 16
     maxInt: 9999
 stages:
-  - name: Key Generation
+  setup:
+    - name: Key Generation
+      preDescription:
+      steps:
+        - description: random prime
+          compute: p = generateRandomPrime()
+        - description: random prime
+          compute: q = generateRandomPrime()
+        - description: \(p * q\)
+          compute: n = p * q
+          public: true
+        - description: \(n + 1\)
+          compute: g = n + 1
+        - description: \(\phi(p \cdot q\)
+          compute: l = (p - 1) * (q - 1)
+        - description: \(l^{-1} \bmod n\)
+          compute: m = l $ m
+      postDescription:
+  encryption:
+    - name: Encryption
+      preDescription:
+      steps:
+        - description: \(n^2\)
+          compute: nSq = n * n
+          public: true
+        - description: random number such that
+          compute: aR = generateR(n)
+        - description: \((g^a \bmod n^2 \cdot aR^n \bmod n^2) \bmod n^2\)
+          compute: aX = ((g & a,nSq) * (aR & n,nSq)) % nSq
+          public: true
+        - description: random number such that
+          compute: bR = generateR(n)
+        - description: \((g^b \bmod n^2 \cdot bR^n \bmod n^2) \bmod n^2\)
+          compute: bX = ((g & b,nSq) * (bR & n,nSq)) % nSq
+          public: true
+      postDescription:
+  backend:
+    +:
+      steps:
+        - description: \((aX \cdot bX) \bmod n^2\)
+          compute: cX = (aX * bX) % nSq
+  decryption:
     steps:
-      - description: Generate random prime \(p\)
-        compute: p = generateRandomPrime()
-      - description: Generate random prime \(q\)
-        compute: q = generateRandomPrime()
-      - description: Multiply primes \(p\) and \(q\) to get \(n\)
-        compute: n = p * q
-      - description: Calculate \(n^2\)
-        isPublic: true
-        compute: nSq = n * n
-      - description: Add \(1\) to \(n\) to get \(g\)
-        compute: g = n + 1
-      - description: Calculate \(\phi(p\cdot q)\) to get \(l\)
-        compute: l = (p - 1) * (q - 1)
-      - description: Calculate \(l^{-1} \bmod n\) to get \(m\)
-        compute: m = l $ n
-  - name: Encryption
-    steps:
-      - description: Generate \(aR\)
-        compute: aR = generateR(n)
-      - description: Encrypt B by calculating \((g^a \bmod n^2 \cdot aR^n \bmod n^2) \bmod n^2\) to get \(aX\)
-        isPublic: true
-        compute: aX = ((g & a,nSq) * (aR & n,nSq)) % nSq
-      - description: Generate \(bR\)
-        compute: bR = generateR(n)
-      - description: Encrypt B by calculating \((g^b \bmod n^2 \cdot bR^n \bmod n^2) \bmod n^2\) to get \(bX\)
-        isPublic: true
-        compute: bX = ((g & b,nSq) * (bR & n,nSq)) % nSq
-  - name: Backend
-    operation: +
-    steps:
-      - description: Calculate \((aX \cdot bX) \bmod n^2\) to get \(cX\)
-        compute: cX = (aX * bX) % nSq
-  - name: Decryption
-    steps:
-      - description: Calculate \((\frac{(cX^l\bmod n^2) - 1}{n})\cdot cX \bmod n \) to get \(c\)
+      - description: \((\frac{(cX^l\bmod n^2) - 1}{n})\cdot cX \bmod n \)
         compute: c = ((((cX & l,nSq) - 1) / n) * m) % n

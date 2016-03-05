@@ -1,4 +1,4 @@
-export class EncryptionSchemeBitLength {
+export class BitLength {
 
   private bitLength: number;
   private maxInt: number;
@@ -21,7 +21,7 @@ export class EncryptionSchemeBitLength {
 
 }
 
-export interface IEncryptionSchemeBitLengthJson {
+export interface IBitLengthJson {
   bitLength: number;
   maxInt: number;
 }

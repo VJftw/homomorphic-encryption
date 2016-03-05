@@ -1,17 +1,12 @@
 import {Injectable} from 'angular2/core';
 
-import {Computation} from '../model/computation';
-import {EncryptionScheme} from '../model/encryption_scheme/encryption_scheme';
+import {Computation} from "../model/computation";
+import {EncryptionScheme} from "../model/encryption-scheme";
 
 
 @Injectable()
-export class ComputationProvider {
+export class ComputationProviderService {
 
-  /**
-   * creates a Computation
-   * @param scheme
-   * @returns {Computation}
-   */
   public create(scheme: EncryptionScheme): Computation {
     let c = new Computation();
 

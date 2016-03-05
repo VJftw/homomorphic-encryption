@@ -1,12 +1,9 @@
-/*
- * Angular 2 decorators and services
- */
 import {Component} from 'angular2/core';
 import {RouteConfig, Router, ROUTER_DIRECTIVES} from 'angular2/router';
 import {FORM_PROVIDERS} from 'angular2/common';
 
-import {Index} from './component/index/index';
-import {ComputationComponent} from './component/computation/computation';
+import {Index} from './component/index/index.component';
+import {ComputationComponent} from './component/computation/computation.component';
 
 /*
  * App Component

@@ -1,17 +1,17 @@
 import {Injectable} from 'angular2/core';
 
-import {Computation} from '../model/computation';
-import {StepProvider} from '../provider/step_provider';
 import {BigInteger} from 'jsbn';
-import {IRegisterMessageResponseJson} from '../message/register_message';
-import {IComputeMessageResponseJson} from '../message/compute_message';
+import {Computation} from '../model/computation';
+import {IRegisterMessageResponseJson} from '../message/register-message';
+import {IComputeMessageResponseJson} from '../message/compute-message';
+import {StepProviderService} from "../provider/step.provider.service";
 
 
 @Injectable()
-export class MessageResolver {
+export class MessageResolverService {
 
   constructor(
-    private stepProvider: StepProvider
+    private stepProvider: StepProviderService
   ) {
   }
 
@@ -32,7 +32,7 @@ export class MessageResolver {
     }
 
     // Resolve Backend stage.
-    let backendStage = computation.getEncryptionScheme().getBackendStage();
+    let backendStage = computation.getEncryptionScheme().getBackendStageByOperation(computation.getOperation());
     let backendSteps = backendStage.getSteps();
 
     let results = message.results.slice(backendStage.getSteps().length - message.results.length);

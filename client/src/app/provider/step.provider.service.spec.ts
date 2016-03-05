@@ -2,15 +2,15 @@ import {
   it
 } from 'angular2/testing';
 
-import {StepProvider} from './step_provider';
 import {BigInteger} from 'jsbn';
+import {StepProviderService} from "./step.provider.service";
 
-describe('StepProvider', () => {
+describe('StepProviderService', () => {
 
-  let stepProvider: StepProvider;
+  let stepProvider: StepProviderService;
 
   beforeEach(() => {
-    stepProvider = new StepProvider();
+    stepProvider = new StepProviderService();
   });
 
   it('should return a step with the given parameters', () => {

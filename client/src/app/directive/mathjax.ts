@@ -11,6 +11,6 @@ export class MathJaxDirective {
 
   set mathjax(x) {
     this._viewContainer.createEmbeddedView(this._templateRef);
-    MathJax.Hub.Queue(['Typeset', MathJax.Hub]);
+    //MathJax.Hub.Queue(['Typeset', MathJax.Hub]);
   }
 }

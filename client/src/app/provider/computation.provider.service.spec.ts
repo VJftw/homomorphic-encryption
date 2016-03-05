@@ -1,15 +1,15 @@
 import {
   it
 } from 'angular2/testing';
+import {ComputationProviderService} from "./computation.provider.service";
 
-import {ComputationProvider} from './computation_provider';
 
 describe('ComputationProvider', () => {
 
-  let computationProvider: ComputationProvider;
+  let computationProvider: ComputationProviderService;
 
   beforeEach(() => {
-    computationProvider = new ComputationProvider();
+    computationProvider = new ComputationProviderService();
   });
 
   it('should create new Computation with the given Encryption Scheme', () => {

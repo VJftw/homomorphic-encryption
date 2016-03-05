@@ -1,15 +1,14 @@
 import {
   it
 } from 'angular2/testing';
+import {StageProviderService} from "./stage.provider.service";
 
-import {StageProvider} from './stage_provider';
+describe('StageProviderService', () => {
 
-describe('StageProvider', () => {
-
-  let stageProvider: StageProvider;
+  let stageProvider: StageProviderService;
 
   beforeEach(() => {
-    stageProvider = new StageProvider();
+    stageProvider = new StageProviderService();
   });
 
   it('should return a stage with the given parameters', () => {

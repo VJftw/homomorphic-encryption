@@ -1,6 +1,7 @@
 import {BigInteger} from 'jsbn';
-import {Stage} from './stage';
-import {EncryptionScheme} from './encryption_scheme/encryption_scheme';
+import {EncryptionScheme} from "./encryption-scheme";
+import {Stage} from "./computation/stage";
+
 
 
 export class Computation {

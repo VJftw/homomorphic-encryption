@@ -1,4 +1,4 @@
-export class EncryptionSchemeStep {
+export class Step {
 
   private description: string;
   private compute: string;
@@ -35,7 +35,7 @@ export class EncryptionSchemeStep {
 
 }
 
-export interface IEncryptionSchemeStepJson {
+export interface IStepJson {
   description: string;
   compute: string;
   isPublic?: boolean;

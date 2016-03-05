@@ -1,5 +1,5 @@
-import {MessageInterface} from './message_interface';
-import {EncryptionScheme} from '../model/encryption_scheme/encryption_scheme';
+import {MessageInterface} from './message-interface';
+import {EncryptionScheme} from "../model/encryption-scheme";
 
 
 export class RegisterMessage implements MessageInterface {

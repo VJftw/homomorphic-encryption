@@ -1,10 +1,9 @@
 import {Injectable} from 'angular2/core';
-
-import {EncryptionScheme} from '../model/encryption_scheme/encryption_scheme';
-import {EncryptionSchemeResolver} from '../resolver/encryption_scheme/encryption_scheme_resolver';
+import {EncryptionSchemeResolverService} from '../resolver/encryption-scheme.resolver.service';
+import {EncryptionScheme} from "../model/encryption-scheme";
 
 @Injectable()
-export class EncryptionSchemeProvider {
+export class EncryptionSchemeProviderService {
 
   private schemes: Map<string, EncryptionScheme>;
 
@@ -13,15 +12,26 @@ export class EncryptionSchemeProvider {
   ];
 
   constructor(
-    encryptionSchemeResolver: EncryptionSchemeResolver
+    private _encryptionSchemeResolverService: EncryptionSchemeResolverService
   ) {
     this.schemes = new Map<string, EncryptionScheme>();
-    console.log("WOO");
 
     this.schemeJsons.forEach(schemeJson => {
-      let scheme = encryptionSchemeResolver.fromJson(schemeJson);
+      let scheme = _encryptionSchemeResolverService.fromJson(schemeJson);
       this.schemes.set(scheme.getUniqueName(), scheme);
     });
+  }
+
+  public getEncryptionSchemes()  {
+    let a = [];
+
+    this.schemes.forEach((value, key) => {
+      a.push(value);
+    });
+
+    console.log(a);
+
+    return a;
   }
 
   public getEncryptionSchemeByName(name: string): EncryptionScheme {
@@ -38,15 +48,5 @@ export class EncryptionSchemeProvider {
     }
 
     return r;
-  }
-
-  public getEncryptionSchemes()  {
-    let a = [];
-
-    this.schemes.forEach((value, key) => {
-      a.push(value);
-    });
-
-    return a;
   }
 }

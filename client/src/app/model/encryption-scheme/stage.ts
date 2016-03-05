@@ -1,12 +1,12 @@
-import {EncryptionSchemeStep} from './encryption_scheme_step';
-import {IEncryptionSchemeStepJson} from './encryption_scheme_step';
+import {Step} from './step';
+import {IStepJson} from './step';
 
 
-export class EncryptionSchemeStage {
+export class Stage {
 
   private name: string;
   private operation: string;
-  private steps: EncryptionSchemeStep[];
+  private steps: Step[];
 
   constructor(
     name: string
@@ -19,7 +19,7 @@ export class EncryptionSchemeStage {
     return this.name;
   }
 
-  public setOperation(operation: string): EncryptionSchemeStage {
+  public setOperation(operation: string): Stage {
     this.operation = operation;
 
     return this;
@@ -33,13 +33,13 @@ export class EncryptionSchemeStage {
     return this.operation !== undefined;
   }
 
-  public addStep(step: EncryptionSchemeStep) {
+  public addStep(step: Step) {
     this.steps.push(step);
 
     return this;
   }
 
-  public getSteps(): EncryptionSchemeStep[] {
+  public getSteps(): Step[] {
     return this.steps;
   }
 
@@ -58,8 +58,8 @@ export class EncryptionSchemeStage {
 
 }
 
-export interface IEncryptionSchemeStageJson {
+export interface IStageJson {
   name: string;
   operation?: string;
-  steps: IEncryptionSchemeStepJson[];
+  steps: IStepJson[];
 }

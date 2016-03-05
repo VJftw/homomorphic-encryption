@@ -1,5 +1,5 @@
-import {MessageInterface} from './message_interface';
-import {EncryptionSchemeStep} from '../model/encryption_scheme/encryption_scheme_step';
+import {MessageInterface} from './message-interface';
+import {Step} from '../model/encryption-scheme/step';
 
 
 export class ComputeMessage implements MessageInterface {
@@ -8,7 +8,7 @@ export class ComputeMessage implements MessageInterface {
 
   constructor(
     private hashId: string,
-    steps: EncryptionSchemeStep[],
+    steps: Step[],
     private publicScope: {}
   ) {
     this.steps = [];
