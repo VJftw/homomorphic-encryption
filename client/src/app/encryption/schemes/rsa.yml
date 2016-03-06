@@ -1,0 +1,50 @@
+uniqueName: rsa
+readableName: RSA
+description: The RSA multiplicative somewhat homomorphic encryption scheme
+bitLengths:
+  - bitLength: 8
+    maxInt: 99
+  - bitLength: 16
+    maxInt: 9999
+stages:
+  setup:
+    - name: Key Generation
+      preDescription:
+      steps:
+        - description: A random prime number
+          compute: p = generateRandomPrime()
+        - description: A random prime number
+          compute: q = generateRandomPrime()
+        - description: \(p \times q\)
+          compute: n = p * q
+          expose: true
+        - description: \(\phi(p \cdot q)\)
+          compute: l = (p - 1) * (q - 1)
+        - description: A random integer that is coprime with \(l\)
+          compute: e = findCoPrime(l)
+          expose: true
+        - description: \(e^{-1} \bmod l\)
+          compute: d = e $ l
+      postDescription:
+  encryption:
+    - name: Encryption
+      preDescription:
+      steps:
+        - description: \(a^e \bmod n\)
+          compute: aX = a & e,n
+          expose: true
+        - description: \(b^e \bmod n\)
+          compute: bX = b & e,n
+          expose: true
+      postDescription:
+  backend:
+    x:
+      name: Backend multiplication
+      steps:
+        - description: \(aX \cdot bX\)
+          compute: cX = aX * bX
+  decryption:
+    - name: Decryption
+      steps:
+        - description: \(c = cX^d \bmod n\)
+          compute: c = cX & d,n

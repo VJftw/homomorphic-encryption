@@ -8,7 +8,8 @@ export class EncryptionSchemeProviderService {
   private schemes: Map<string, EncryptionScheme>;
 
   private schemeJsons = [
-    require('json!yaml!../encryption/schemes/pailler.yml')
+    require('json!yaml!../encryption/schemes/pailler.yml'),
+    require('json!yaml!../encryption/schemes/rsa.yml'),
   ];
 
   constructor(

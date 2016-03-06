@@ -37,6 +37,7 @@ export class Computer {
     let generateRRegex = /generateR\((.+)\)/;
     let primitiveRootRegex = /primitiveRoot\((.+)\)/;
     let randomArbitraryRegex = /randomArbitrary\((.+),(.+)\)/;
+    let findCoPrimeRegex = /findCoPrime\((.+)\)/;
 
     let matches;
     switch (true) {
@@ -54,6 +55,9 @@ export class Computer {
           this.resolveVariable(matches[1].trim(), scope).intValue(),
           this.resolveVariable(matches[2].trim(), scope).intValue()
         );
+      case findCoPrimeRegex.test(command):
+        matches = findCoPrimeRegex.exec(command);
+        return this.encryptionHelper.findCoPrime(scope[matches[1]]);
 
       default:
         return this.calcExpression(command, scope);

@@ -61,4 +61,15 @@ export class EncryptionHelper {
 
   }
 
+  public findCoPrime(prime: BigInteger): BigInteger {
+    while (true) {
+      let potentialCoPrime = this.getRandomArbitrary(1, prime.intValue());
+      let gcd = prime.gcd(potentialCoPrime);
+
+      if (gcd.intValue() == 1) {
+        return potentialCoPrime;
+      }
+    }
+  }
+
 }

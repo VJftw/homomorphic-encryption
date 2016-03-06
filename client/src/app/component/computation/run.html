@@ -12,7 +12,7 @@
                 </div>
                 <div *ngIf="computationRunner.getComputation()" class="col-md-6">
                     <h4>
-                        <span>\({{ computationModel.a }} {{ computationModel.operation }} {{ computationModel.b }}\)</span>
+                        <span>\({{ computationModel.a }} {{ computationModel.operation | mathjax }} {{ computationModel.b }}\)</span>
                         <span *ngIf="computationModel.isComplete()">\( = {{ computationModel.c }}\)</span>
                     </h4>
                 </div>

@@ -17,6 +17,7 @@ import {Computer} from "../../encryption/computer";
 import {EncryptionHelper} from "../../encryption/encryption_helper";
 import {MessageProviderService} from "../../provider/message.provider.service";
 import {MessageResolverService} from "../../resolver/message.resolver.service";
+import {MathjaxPipe} from "../../pipe/mathjax.pipe";
 
 
 @Component({
@@ -34,7 +35,9 @@ import {MessageResolverService} from "../../resolver/message.resolver.service";
 })
 @View({
   directives: [MathJaxDirective],
-  template: require('./run.html')
+  template: require('./run.html'),
+  pipes: [MathjaxPipe]
+
 })
 export class ComputationRunComponent implements OnInit {
 
