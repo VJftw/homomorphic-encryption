@@ -1,6 +1,6 @@
 import {Injectable} from 'angular2/core';
 import {EncryptionSchemeResolverService} from '../resolver/encryption-scheme.resolver.service';
-import {EncryptionScheme} from "../model/encryption-scheme";
+import {EncryptionScheme} from '../model/encryption-scheme';
 
 @Injectable()
 export class EncryptionSchemeProviderService {

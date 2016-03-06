@@ -173,7 +173,7 @@ export class Computer {
     if (v in scope) {
       return scope[v];
     } else if (parseInt(v, 10) !== NaN) {
-      return new BigInteger("" + v);
+      return new BigInteger('' + v);
     } else {
       throw new RangeError('Cannot resolve variable: ' + v);
     }

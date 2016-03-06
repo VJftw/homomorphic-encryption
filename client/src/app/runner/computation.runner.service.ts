@@ -1,15 +1,15 @@
 import {Injectable} from 'angular2/core';
-import {Computation} from "../model/computation";
-import {Computer} from "../encryption/computer";
-import {StageProviderService} from "../provider/stage.provider.service";
-import {MessageResolverService} from "../resolver/message.resolver.service";
-import {Http} from "angular2/http";
-import {StepProviderService} from "../provider/step.provider.service";
-import {MessageProviderService} from "../provider/message.provider.service";
-import {BigInteger} from "jsbn";
-import {Stage} from "../model/computation/stage";
-import {Step} from "../model/computation/step";
-import {Headers} from "angular2/http";
+import {Computation} from '../model/computation';
+import {Computer} from '../encryption/computer';
+import {StageProviderService} from '../provider/stage.provider.service';
+import {MessageResolverService} from '../resolver/message.resolver.service';
+import {Http} from 'angular2/http';
+import {StepProviderService} from '../provider/step.provider.service';
+import {MessageProviderService} from '../provider/message.provider.service';
+import {BigInteger} from 'jsbn';
+import {Stage} from '../model/computation/stage';
+import {Step} from '../model/computation/step';
+import {Headers} from 'angular2/http';
 
 
 @Injectable()
@@ -38,8 +38,8 @@ export class ComputationRunnerService {
 
   public runComputation(): void {
     // set up a and b
-    this._computation.addToScope('a', new BigInteger("" + this._computation.getA()), false);
-    this._computation.addToScope('b', new BigInteger("" + this._computation.getB()), false);
+    this._computation.addToScope('a', new BigInteger('' + this._computation.getA()), false);
+    this._computation.addToScope('b', new BigInteger('' + this._computation.getB()), false);
 
     // set bit length
     this._computer.setBitLength(this._computation.getBitLength());
@@ -123,8 +123,11 @@ export class ComputationRunnerService {
     JSON_HEADERS.append('Accept', 'application/json');
     JSON_HEADERS.append('Content-Type', 'application/json');
     let message = this._messageProviderService.createRegisterMessage(this._computation);
-    this._http.post('http://' + process.env.API_ADDRESS + '/api/computations', JSON.stringify(message.toJson()), { headers: JSON_HEADERS})
-      .subscribe(
+    this._http.post(
+      'http://' + process.env.API_ADDRESS + '/api/computations',
+      JSON.stringify(message.toJson()),
+      { headers: JSON_HEADERS}
+    ).subscribe(
         data => this.registerSuccess(data),
         err => console.log(err)
       )
@@ -132,7 +135,10 @@ export class ComputationRunnerService {
   }
 
   private registerSuccess(data) {
-    this._computation = this._messageResolverService.resolveRegisterMessage(data.json(), this._computation);
+    this._computation = this._messageResolverService.resolveRegisterMessage(
+      data.json(),
+      this._computation
+    );
 
     this.connectToWebSocket();
   }

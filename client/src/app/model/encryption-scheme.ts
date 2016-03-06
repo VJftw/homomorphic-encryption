@@ -1,7 +1,7 @@
-import {BitLength} from "./encryption-scheme/bit-length";
-import {Stage} from "./encryption-scheme/stage";
-import {IBitLengthJson} from "./encryption-scheme/bit-length";
-import {IStageJson} from "./encryption-scheme/stage";
+import {BitLength} from './encryption-scheme/bit-length';
+import {Stage} from './encryption-scheme/stage';
+import {IBitLengthJson} from './encryption-scheme/bit-length';
+import {IStageJson} from './encryption-scheme/stage';
 
 
 export class EncryptionScheme {
@@ -100,7 +100,7 @@ export class EncryptionScheme {
       return this._backendStages.get(operation);
     }
 
-    throw new RangeError(`Operation not available: ${operation}`)
+    throw new RangeError(`Operation not available: ${operation}`);
   }
 
   public getBackendStages() {
@@ -135,5 +135,5 @@ export interface IEncryptionSchemeJson {
     encryption: IStageJson[],
     backend: Map<string, IStageJson>,
     decryption: IStageJson[]
-  }
+  };
 }

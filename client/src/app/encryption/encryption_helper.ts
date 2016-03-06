@@ -9,7 +9,7 @@ export class EncryptionHelper {
   public getRandomArbitrary(min: number, max: number): BigInteger {
     let x = Math.random() * (max - min) + min;
 
-    return new BigInteger("" + Math.round(x));
+    return new BigInteger('' + Math.round(x));
   }
 
   public generatePrime(bits: number): BigInteger {
@@ -18,7 +18,7 @@ export class EncryptionHelper {
 
     while (true) {
       let n = Math.round(Math.random() * (max - min) + min);
-      let prime = new BigInteger("" + n);
+      let prime = new BigInteger('' + n);
 
       if (prime.isProbablePrime(prime.bitLength())) {
         return prime;
@@ -66,7 +66,7 @@ export class EncryptionHelper {
       let potentialCoPrime = this.getRandomArbitrary(1, prime.intValue());
       let gcd = prime.gcd(potentialCoPrime);
 
-      if (gcd.intValue() == 1) {
+      if (gcd.intValue() === 1) {
         return potentialCoPrime;
       }
     }

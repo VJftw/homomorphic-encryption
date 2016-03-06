@@ -1,6 +1,6 @@
 import {Injectable} from 'angular2/core';
-import {Step} from "../../model/encryption-scheme/step";
-import {IStepJson} from "../../model/encryption-scheme/step";
+import {Step} from '../../model/encryption-scheme/step';
+import {IStepJson} from '../../model/encryption-scheme/step';
 
 
 @Injectable()

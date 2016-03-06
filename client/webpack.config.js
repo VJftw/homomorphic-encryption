@@ -1,5 +1,3 @@
-// @AngularClass
-
 var webpack = require('webpack');
 var helpers = require('./helpers');
 
@@ -10,7 +8,7 @@ var ENV = process.env.ENV = process.env.NODE_ENV = 'development';
 var HMR = helpers.hasProcessFlag('hot');
 
 var metadata = {
-  title: 'Angular2 Webpack Starter by @gdi2990 from @AngularClass',
+  title: 'Implementations of Homomorphic Encryption',
   baseUrl: '/',
   host: 'localhost',
   port: 3000,
@@ -57,7 +55,13 @@ module.exports = helpers.defaults({
       { test: /\.html$/,  loader: 'raw-loader', exclude: [ helpers.root('src/index.html') ] },
 
       { test: /\.scss$/, loaders: ['style', 'css', 'postcss', 'sass'] },
-      { test: /\.(woff2?|ttf|eot|svg)$/, loader: 'url?limit=10000' },
+      // { test: /\.(woff2?|ttf|eot|svg)$/, loader: 'url?limit=10000' },
+      { test: /\.(jpg|png)$/,       loader: 'url-loader?name=[path][name].[ext]&limit=100000' },
+      { test: /\.woff(\?.*)?$/,     loader: "url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/font-woff" },
+      { test: /\.woff2(\?.*)?$/,    loader: "url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/font-woff2" },
+      { test: /\.ttf(\?.*)?$/,      loader: "url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/octet-stream" },
+      { test: /\.eot(\?.*)?$/,      loader: "file-loader?prefix=fonts/&name=[path][name].[ext]" },
+      { test: /\.svg(\?.*)?$/,      loader: "url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=image/svg+xml" },
       // Bootstrap 4
       { test: /bootstrap\/dist\/js\/umd\//, loader: 'imports?jQuery=jquery' }
 

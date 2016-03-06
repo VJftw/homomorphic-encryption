@@ -51,7 +51,7 @@
 //  });
 //
 //  it('should add a step', () => {
-//    let step = jasmine.createSpyObj('step', [""]);
+//    let step = jasmine.createSpyObj('step', ['']);
 //
 //    expect(stage.addStep(step))
 //      .toBe(stage)

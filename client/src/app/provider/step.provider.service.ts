@@ -1,7 +1,7 @@
 import {Injectable} from 'angular2/core';
 
 import {BigInteger} from 'jsbn';
-import {Step} from "../model/computation/step";
+import {Step} from '../model/computation/step';
 import * as EncryptionStep from '../model/encryption-scheme/step';
 
 

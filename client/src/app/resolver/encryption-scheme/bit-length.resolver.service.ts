@@ -1,5 +1,5 @@
 import {Injectable} from 'angular2/core';
-import {BitLength, IBitLengthJson} from "../../model/encryption-scheme/bit-length";
+import {BitLength, IBitLengthJson} from '../../model/encryption-scheme/bit-length';
 
 @Injectable()
 export class BitLengthResolverService {

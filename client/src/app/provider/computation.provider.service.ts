@@ -1,9 +1,9 @@
 import {Injectable} from 'angular2/core';
 
-import {Computation} from "../model/computation";
-import {EncryptionScheme} from "../model/encryption-scheme";
-import {Stage} from "../model/computation/stage";
-import {StageProviderService} from "./stage.provider.service";
+import {Computation} from '../model/computation';
+import {EncryptionScheme} from '../model/encryption-scheme';
+import {Stage} from '../model/computation/stage';
+import {StageProviderService} from './stage.provider.service';
 
 
 @Injectable()

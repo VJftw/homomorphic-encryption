@@ -5,9 +5,9 @@ export class MathjaxPipe implements PipeTransform {
 
   transform(value: string, args: string[]): any {
 
-    switch(value) {
-      case "x":
-        return "\\times";
+    switch (value) {
+      case 'x':
+        return '\\times';
       default:
         return value;
     }

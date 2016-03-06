@@ -4,8 +4,8 @@ import {BigInteger} from 'jsbn';
 import {Computation} from '../model/computation';
 import {IRegisterMessageResponseJson} from '../message/register-message';
 import {IComputeMessageResponseJson} from '../message/compute-message';
-import {StepProviderService} from "../provider/step.provider.service";
-import {Stage} from "../model/computation/stage";
+import {StepProviderService} from '../provider/step.provider.service';
+import {Stage} from '../model/computation/stage';
 
 
 @Injectable()
@@ -16,13 +16,13 @@ export class MessageResolverService {
   ) {
   }
 
-  public resolveRegisterMessage(message: IRegisterMessageResponseJson, computation: Computation): Computation {
+  public resolveRegisterMessage(message: IRegisterMessageResponseJson, computation: Computation) {
     computation.setHashId(message.hashId);
 
     return computation;
   }
 
-  public resolveComputeMessage(message: IComputeMessageResponseJson, computation: Computation): Computation {
+  public resolveComputeMessage(message: IComputeMessageResponseJson, computation: Computation) {
 
     // Resolve scope
     let publicScope = message.publicScope;

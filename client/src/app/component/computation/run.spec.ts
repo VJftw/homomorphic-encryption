@@ -6,7 +6,7 @@ import {FormBuilder, Validators} from 'angular2/common';
 import {RouteParams} from 'angular2/router';
 
 import {ComputationRunComponent} from './run.component';
-import {BitLength} from "../../model/encryption-scheme/bit-length";
+import {BitLength} from '../../model/encryption-scheme/bit-length';
 
 
 describe('ComputationRunComponent', () => {
@@ -26,7 +26,7 @@ describe('ComputationRunComponent', () => {
     'doScheme',
     'getBitLengths'
   ]);
-  let computation = jasmine.createSpyObj('computation', [""]);
+  let computation = jasmine.createSpyObj('computation', ['']);
 
   //beforeEach(() => {
   //  routeParams.get.and.returnValue('pailler');
@@ -52,9 +52,9 @@ describe('ComputationRunComponent', () => {
   //
   //  expect(formBuilder.group.calls.mostRecent().args)
   //    .toEqual([{
-  //      'a': ["", Validators.required],
-  //      'b': ["", Validators.required],
-  //      'bitLengths': ["", Validators.required]
+  //      'a': ['', Validators.required],
+  //      'b': ['', Validators.required],
+  //      'bitLengths': ['', Validators.required]
   //    }, {
   //      validator: jasmine.any(Function)
   //    }])

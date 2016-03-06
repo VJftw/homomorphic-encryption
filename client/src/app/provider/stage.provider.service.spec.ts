@@ -1,7 +1,7 @@
 //import {
 //  it
 //} from 'angular2/testing';
-//import {StageProviderService} from "./stage.provider.service";
+//import {StageProviderService} from './stage.provider.service';
 //
 //describe('StageProviderService', () => {
 //

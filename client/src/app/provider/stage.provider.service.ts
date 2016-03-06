@@ -1,8 +1,8 @@
 import {Injectable} from 'angular2/core';
 
-import {Stage} from "../model/computation/stage";
+import {Stage} from '../model/computation/stage';
 import * as EncryptionStage from '../model/encryption-scheme/stage';
-import {StepProviderService} from "./step.provider.service";
+import {StepProviderService} from './step.provider.service';
 
 @Injectable()
 export class StageProviderService {

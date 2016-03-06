@@ -48,7 +48,7 @@
 //  });
 //
 //  it('should set C', () => {
-//    let c = jasmine.createSpyObj('c', [""]);
+//    let c = jasmine.createSpyObj('c', ['']);
 //    expect(computation.setC(c))
 //      .toBe(computation)
 //    ;

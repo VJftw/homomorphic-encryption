@@ -1,11 +1,11 @@
 import {
   it
 } from 'angular2/testing';
-import {StepResolverService} from "../resolver/encryption-scheme/step.resolver.service";
-import {StageResolverService} from "../resolver/encryption-scheme/stage.resolver.service";
-import {BitLengthResolverService} from "../resolver/encryption-scheme/bit-length.resolver.service";
-import {EncryptionSchemeResolverService} from "../resolver/encryption-scheme.resolver.service";
-import {EncryptionSchemeProviderService} from "./encryption-scheme.provider.service";
+import {StepResolverService} from '../resolver/encryption-scheme/step.resolver.service';
+import {StageResolverService} from '../resolver/encryption-scheme/stage.resolver.service';
+import {BitLengthResolverService} from '../resolver/encryption-scheme/bit-length.resolver.service';
+import {EncryptionSchemeResolverService} from '../resolver/encryption-scheme.resolver.service';
+import {EncryptionSchemeProviderService} from './encryption-scheme.provider.service';
 
 
 describe('EncryptionSchemeProvider', () => {

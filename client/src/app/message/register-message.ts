@@ -1,5 +1,5 @@
 import {MessageInterface} from './message-interface';
-import {EncryptionScheme} from "../model/encryption-scheme";
+import {EncryptionScheme} from '../model/encryption-scheme';
 
 
 export class RegisterMessage implements MessageInterface {
@@ -12,7 +12,6 @@ export class RegisterMessage implements MessageInterface {
   public toJson(): {} {
     return {
       'encryptionScheme': this.encryptionScheme.getUniqueName(),
-      // 'keyBitSize': this.keyBitSize
     };
   }
 

@@ -1,7 +1,7 @@
 import {Injectable} from 'angular2/core';
-import {Stage} from "../../model/encryption-scheme/stage";
-import {IStageJson} from "../../model/encryption-scheme/stage";
-import {StepResolverService} from "./step.resolver.service";
+import {Stage} from '../../model/encryption-scheme/stage';
+import {IStageJson} from '../../model/encryption-scheme/stage';
+import {StepResolverService} from './step.resolver.service';
 
 
 @Injectable()

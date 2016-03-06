@@ -43,10 +43,12 @@ end
 def get_current_branch
   if IS_CI
     # ENV['TRAVIS_BRANCH']
-    ENV['BRANCH']
+    b = ENV['BRANCH']
   else
-    system_command('git rev-parse --abbrev-ref HEAD', true)[0].strip()
+    b = system_command('git rev-parse --abbrev-ref HEAD', true)[0].strip()
   end
+
+  return b.gsub('/', '-')
 end
 
 def get_current_commit
@@ -66,8 +68,8 @@ def get_dev_container(tag)
   puts '# Looking for Development container'
 
   images = Docker::Image.all({
-                                 'filter' => tag
-                             })
+     'filter' => tag
+   })
 
   if images.empty?
     puts '## Building Development container'
@@ -175,8 +177,6 @@ task :build_prod do
   prod_backend_url = 'backend.homomorphic-encryption.vjpatel.me'
 
   puts '# Starting Development container'
-  # start_command = "docker run -d -v #{Dir.getwd}:/app -e NODE_ENV=production -e CLIENT_API_URL=#{prod_api_url} -e CLIENT_BACKEND_URL=#{prod_backend_url} #{dev_container_name}"
-  # container_id = system_command(start_command, false, true, 1)[0].strip()
   # start container
   puts '# Starting Development container'
   puts '# Adding GitHub token'
@@ -196,8 +196,8 @@ task :build_prod do
      'Env' => [
          "TSD_GITHUB_TOKEN=#{github_token}",
          'NODE_ENV=production',
-         "CLIENT_API_URL=#{prod_api_url}",
-         "CLIENT_BACKEND_URL=#{prod_backend_url}"
+         "CLIENT_API_ADDRESS=#{prod_api_url}",
+         "CLIENT_BACKEND_ADDRESS=#{prod_backend_url}"
      ]
   })
 
@@ -208,15 +208,13 @@ task :build_prod do
   puts '# Installing NPM and TSD dependencies'
   npm_command = 'npm install'.split ' '
   container.exec(npm_command, {:user => user}) { |stream, chunk| puts "#{stream}: #{chunk}" }
-  tsd_command = 'node_modules/.bin/tsd install'.split ' '
+  tsd_command = 'node_modules/.bin/typings install'.split ' '
   container.exec(tsd_command, {:user => user}) { |stream, chunk| puts "#{stream}: #{chunk}" }
 
   # Webpack Build
   puts '# Running Webpack Build'
-  webpack_build = 'npm run build'
-  # build_command = "docker exec -t #{container_id} #{webpack_build}"
+  webpack_build = 'npm run build:prod'
   container.exec(webpack_build.split ' ') { |stream, chunk| puts "#{stream}: #{chunk}" }
-  # system_command(build_command, false, true, 1)
 
   puts '# Stopping and Removing Development container'
   container.stop
@@ -224,7 +222,6 @@ task :build_prod do
 
 
   puts '# Building Production container'
-  # built_container = build_container("#{Dir.getwd}/Dockerfile.app", "#{Dir.getwd}", prod_container_name)
   image = Docker::Image.build_from_dir(Dir.getwd, {
       'dockerfile' => "Dockerfile.app",
       't' => prod_container_name
@@ -236,9 +233,9 @@ task :build_prod do
 
   puts "# Tagging as #{container_name}"
   image.tag(
-      'repo' => container_repo,
-      'tag' => container_tag,
-      'force' => true
+    'repo' => container_repo,
+    'tag' => container_tag,
+    'force' => true
   )
 
   puts '# Cleaning up'
@@ -252,7 +249,7 @@ task :build_prod do
      ],
      'WorkingDir' => '/app',
      'Cmd': [
-         '/bin/sh', '-c', 'rm -rf __build__'
+         '/bin/sh', '-c', 'rm -rf dist'
      ]
   })
   container.tap(&:start).attach { |stream, chunk| puts "#{stream}: #{chunk}" }
@@ -268,24 +265,24 @@ task :push_prod do
   docker_password = ENV['DOCKER_PASSWORD']
   registry = ''
   Docker.authenticate!({
-                           'username' => docker_username,
-                           'password' => docker_password,
-                           'email' => docker_email
-                       })
+    'username' => docker_username,
+    'password' => docker_password,
+    'email' => docker_email
+  })
 
   puts "\n# Pushing to Registry"
 
   images = Docker::Image.all({
-                                 'filter' => prod_container_name
-                             })
+    'filter' => prod_container_name
+  })
   prod_commit_image = images[0]
   prod_commit_image.push do |chunk|
     puts JSON.parse(chunk)
   end
 
   images = Docker::Image.all({
-                                 'filter' => container_name
-                             })
+    'filter' => container_name
+  })
   prod_main_image = images[0]
   prod_main_image.push do |chunk|
     puts JSON.parse(chunk)
