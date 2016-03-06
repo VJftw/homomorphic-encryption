@@ -20,7 +20,7 @@ stages:
           expose: true
         - description: \(n + 1\)
           compute: g = n + 1
-        - description: \(\phi(p \cdot q)\)
+        - description: \(\phi(p \times q)\)
           compute: l = (p - 1) * (q - 1)
         - description: \(l^{-1} \bmod n\)
           compute: m = l $ n
@@ -34,12 +34,12 @@ stages:
           expose: true
         - description: random number such that
           compute: aR = generateR(n)
-        - description: \((g^a \cdot aR^n) \bmod n^2\)
+        - description: \((g^a \times aR^n) \bmod n^2\)
           compute: aX = ((g & a,nSq) * (aR & n,nSq)) % nSq
           expose: true
         - description: random number such that
           compute: bR = generateR(n)
-        - description: \((g^b \cdot bR^n) \bmod n^2\)
+        - description: \((g^b \times bR^n) \bmod n^2\)
           compute: bX = ((g & b,nSq) * (bR & n,nSq)) % nSq
           expose: true
       postDescription:
@@ -47,10 +47,10 @@ stages:
     +:
       name: Backend Addition
       steps:
-        - description: \((aX \cdot bX) \bmod n^2\)
+        - description: \((aX \times bX) \bmod n^2\)
           compute: cX = (aX * bX) % nSq
   decryption:
     - name: Decryption
       steps:
-        - description: \((\frac{(cX^l\bmod n^2) - 1}{n})\cdot cX \bmod n \)
+        - description: \((\frac{(cX^l\bmod n^2) - 1}{n})\times cX \bmod n \)
           compute: c = ((((cX & l,nSq) - 1) / n) * m) % n

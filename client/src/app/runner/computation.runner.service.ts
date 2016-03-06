@@ -47,11 +47,11 @@ export class ComputationRunnerService {
 
     //this.addWorkspace();
 
-    this._computation.getStagesByPhase(Stage.PHASE_SETUP).forEach(stage => {
+    this._computation.getSetupStages().forEach(stage => {
       this.doStage(stage);
     });
 
-    this._computation.getStagesByPhase(Stage.PHASE_ENCRYPTION).forEach(stage => {
+    this._computation.getEncryptionStages().forEach(stage => {
       this.doStage(stage);
     });
 
@@ -108,7 +108,7 @@ export class ComputationRunnerService {
 
   private decrypt() {
 
-    this._computation.getStagesByPhase(Stage.PHASE_DECRYPTION).forEach(stage => {
+    this._computation.getDecryptionStages().forEach(stage => {
       this.doStage(stage);
     });
 

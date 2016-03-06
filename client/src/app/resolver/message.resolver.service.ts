@@ -33,7 +33,7 @@ export class MessageResolverService {
     }
 
     // Resolve Backend stage.
-    let backendStage = computation.getStagesByPhase(Stage.PHASE_BACKEND)[0];
+    let backendStage = computation.getBackendStage();
     let backendSteps = backendStage.getSteps();
 
     let results = message.results.slice(backendSteps.length - message.results.length);

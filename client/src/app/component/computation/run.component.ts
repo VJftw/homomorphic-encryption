@@ -71,7 +71,7 @@ export class ComputationRunComponent implements OnInit {
       b: ['', Validators.required ],
       bitLengths: ['', Validators.required]
     }, {
-      //validator: this.computationValidator.bind(this)
+      validator: this.computationValidator.bind(this)
     });
   }
 
@@ -80,32 +80,32 @@ export class ComputationRunComponent implements OnInit {
     this.computationRunner.setComputation(this.computationModel);
     this.computationRunner.runComputation();
   }
-  //
-  //protected computationValidator(group: ControlGroup): { [s: string]: boolean } {
-  //  /* tslint:disable:no-string-literal */
-  //  let aCtrl = group.controls['a'];
-  //  let bCtrl = group.controls['b'];
-  //  let bitLengthCtrl = group.controls['bitLengths'];
-  //
-  //  if (this.computationForm && bitLengthCtrl.value) {
-  //
-  //    let currentBitLength = this.encryptionScheme.getBitLength(bitLengthCtrl.value);
-  //
-  //
-  //    if (aCtrl.dirty) {
-  //      if (aCtrl.value < 0 || aCtrl.value > currentBitLength.getMaxInt()) {
-  //        return {invalidSku: true};
-  //      }
-  //    }
-  //
-  //    if (bCtrl.dirty) {
-  //      if (bCtrl.value < 0 || bCtrl.value > currentBitLength.getMaxInt()) {
-  //        return {invalidSku: true};
-  //      }
-  //    }
-  //
-  //  }
-  //
-  //}
+
+  protected computationValidator(group: ControlGroup): { [s: string]: boolean } {
+    /* tslint:disable:no-string-literal */
+    let aCtrl = group.controls['a'];
+    let bCtrl = group.controls['b'];
+    let bitLengthCtrl = group.controls['bitLengths'];
+
+    if (this.computationForm && bitLengthCtrl.value) {
+
+      let currentBitLength = this.encryptionScheme.getBitLength(bitLengthCtrl.value);
+
+
+      if (aCtrl.dirty) {
+        if (aCtrl.value < 0 || aCtrl.value > currentBitLength.getMaxInt()) {
+          return {invalidSku: true};
+        }
+      }
+
+      if (bCtrl.dirty) {
+        if (bCtrl.value < 0 || bCtrl.value > currentBitLength.getMaxInt()) {
+          return {invalidSku: true};
+        }
+      }
+
+    }
+
+  }
 
 }

@@ -24,10 +24,10 @@ stages:
     - name: Encryption
       preDescription:
       steps:
-        - description: \(aX = (a + r \cdot p^q \bmod m) \bmod m\)
+        - description: \(aX = (a + r \times p^q \bmod m) \bmod m\)
           compute: aX = (a + (r * (p & q,m))) % m
           expose: true
-        - description: \(bX = (b + r \cdot p^q \bmod m) \bmod m\)
+        - description: \(bX = (b + r \times p^q \bmod m) \bmod m\)
           compute: bX = (b + (r * (p & q,m))) % m
           expose: true
       postDescription:
@@ -35,7 +35,7 @@ stages:
     x:
       name: Backend multiplication
       steps:
-        - description: \(aX \cdot bX\)
+        - description: \(aX \times bX\)
           compute: cX = aX * bX
     +:
       name: Backend addition

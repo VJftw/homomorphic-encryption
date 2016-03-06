@@ -18,7 +18,7 @@ stages:
         - description: \(p \times q\)
           compute: n = p * q
           expose: true
-        - description: \(\phi(p \cdot q)\)
+        - description: \(\phi(p \times q)\)
           compute: l = (p - 1) * (q - 1)
         - description: A random integer that is coprime with \(l\)
           compute: e = findCoPrime(l)
@@ -41,7 +41,7 @@ stages:
     x:
       name: Backend multiplication
       steps:
-        - description: \(aX \cdot bX\)
+        - description: \(aX \times bX\)
           compute: cX = aX * bX
   decryption:
     - name: Decryption

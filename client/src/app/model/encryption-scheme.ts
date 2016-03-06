@@ -103,6 +103,10 @@ export class EncryptionScheme {
     throw new RangeError(`Operation not available: ${operation}`)
   }
 
+  public getBackendStages() {
+    return this._backendStages;
+  }
+
   public addBackendStage(operation: string, stage: Stage) {
     this._backendStages.set(operation, stage);
 

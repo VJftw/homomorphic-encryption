@@ -24,21 +24,22 @@ export class ComputationProviderService {
 
     for (let encryptionStage of scheme.getSetupStages()) {
       let stage = this._stageProviderService.createFromEncryptionStage(encryptionStage);
-      c.addPhaseStage(Stage.PHASE_SETUP, stage);
+      c.addSetupStage(stage);
     }
 
     for (let encryptionStage of scheme.getEncryptionStages()) {
       let stage = this._stageProviderService.createFromEncryptionStage(encryptionStage);
-      c.addPhaseStage(Stage.PHASE_ENCRYPTION, stage);
+      c.addEncryptionStage(stage);
     }
 
-    let encryptionStage = scheme.getBackendStageByOperation(c.getOperation());
-    let stage = this._stageProviderService.createFromEncryptionStage(encryptionStage);
-    c.addPhaseStage(Stage.PHASE_BACKEND, stage);
+    scheme.getBackendStages().forEach((value, key) => {
+      let stage = this._stageProviderService.createFromEncryptionStage(value);
+      c.addBackendStage(key, stage);
+    });
 
     for (let encryptionStage of scheme.getDecryptionStages()) {
       let stage = this._stageProviderService.createFromEncryptionStage(encryptionStage);
-      c.addPhaseStage(Stage.PHASE_DECRYPTION, stage);
+      c.addDecryptionStage(stage);
     }
 
     return c;

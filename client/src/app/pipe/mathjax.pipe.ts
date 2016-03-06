@@ -8,9 +8,9 @@ export class MathjaxPipe implements PipeTransform {
     switch(value) {
       case "x":
         return "\\times";
+      default:
+        return value;
     }
-
-    //return Math.pow(value, parseInt(args[0] || '1', 10));
   }
 
 }

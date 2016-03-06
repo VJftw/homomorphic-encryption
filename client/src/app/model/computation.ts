@@ -18,7 +18,11 @@ export class Computation {
   protected encryptionScheme: EncryptionScheme;
   protected operation: string;
   protected state: number;
-  protected stages: Map<number, Stage[]>;
+
+  protected setupStages: Stage[];
+  protected encryptionStages: Stage[];
+  protected backendStages: Map<string, Stage>;
+  protected decryptionStages: Stage[];
 
   private privateScope = {};
   private publicScope = {};
@@ -29,9 +33,13 @@ export class Computation {
 
   constructor() {
     this.state = Computation.STATE_NEW;
-    this.stages = new Map<number, Stage[]>();
     this.privateScope = {};
     this.publicScope = {};
+
+    this.setupStages = [];
+    this.encryptionStages = [];
+    this.backendStages = new Map<string, Stage>();
+    this.decryptionStages = [];
   }
 
   /**
@@ -267,36 +275,66 @@ export class Computation {
     return this.state === Computation.STATE_COMPLETE;
   }
 
-  /**
-   *
-   * @param phase
-   * @param stage
-   * @returns {Computation}
-   */
-  public addPhaseStage(phase: number, stage: Stage): Computation {
-
-    let currentStages = this.stages.get(phase);
-
-    if (!currentStages) {
-      currentStages = [];
-    }
-    currentStages.push(stage);
-
-    this.stages.set(phase, currentStages);
+  public addSetupStage(stage: Stage) {
+    this.setupStages.push(stage);
 
     return this;
   }
 
-  public getStagesByPhase(phase: number) {
-    return this.stages.get(phase);
+  public getSetupStages() {
+    return this.setupStages;
   }
 
-  public getPhases() {
+  public addEncryptionStage(stage: Stage) {
+    this.encryptionStages.push(stage);
+
+    return this;
+  }
+
+  public getEncryptionStages() {
+    return this.encryptionStages;
+  }
+
+  public addBackendStage(operation: string, stage: Stage) {
+    this.backendStages.set(operation, stage);
+
+    return this;
+  }
+
+  public getBackendStage() {
+    return this.backendStages.get(
+      this.getOperation()
+    );
+  }
+
+  public addDecryptionStage(stage: Stage) {
+    this.decryptionStages.push(stage);
+
+    return this;
+  }
+
+  public getDecryptionStages() {
+    return this.decryptionStages;
+  }
+
+  public getStages() {
     let a = [];
 
-    this.stages.forEach((value, key) => {
-      a.push(value);
-    });
+    for (let stage of this.getSetupStages()) {
+      a.push(stage);
+    }
+
+    for (let stage of this.getEncryptionStages()) {
+      a.push(stage);
+    }
+
+    a.push(
+      this.getBackendStage()
+    );
+
+    for (let stage of this.getDecryptionStages()) {
+      a.push(stage);
+    }
 
     return a;
   }
