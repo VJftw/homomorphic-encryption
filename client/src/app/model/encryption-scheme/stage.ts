@@ -8,12 +8,14 @@ export class Stage {
   private _preDescription: string;
   private _steps: Step[];
   private _postDescription: string;
+  private _serverSide: boolean;
 
   constructor(
     name: string
   ) {
     this._name = name;
     this._steps = [];
+    this._serverSide = false;
   }
 
   public getName(): string {
@@ -48,6 +50,16 @@ export class Stage {
 
   public getSteps(): Step[] {
     return this._steps;
+  }
+
+  public setServerSide(serverSide: boolean) {
+    this._serverSide = serverSide;
+
+    return this;
+  }
+
+  public isServerSide() {
+    return this._serverSide;
   }
 
   public toJson() {

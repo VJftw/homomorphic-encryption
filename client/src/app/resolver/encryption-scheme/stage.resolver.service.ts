@@ -11,7 +11,7 @@ export class StageResolverService {
     private _stepResolverService: StepResolverService
   ) {}
 
-  public fromJson(stageJson: IStageJson): Stage {
+  public fromJson(stageJson: IStageJson, serverSide = false): Stage {
 
     let stage = new Stage(
       stageJson.name
@@ -24,6 +24,8 @@ export class StageResolverService {
     if (stageJson.postDescription) {
       stage.setPostDescription(stageJson.postDescription);
     }
+
+    stage.setServerSide(serverSide);
 
     for (let stepJson of stageJson.steps) {
       let step = this._stepResolverService.fromJson(stepJson);

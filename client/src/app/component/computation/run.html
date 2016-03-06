@@ -104,9 +104,9 @@
 
         <div *ngIf="computationModel" class="col-md-12">
                 <div *ngFor="#stage of computationModel.getStages()">
-                    <div class="panel panel-default animated fadeIn">
+                    <div class="panel panel-default animated fadeIn" [ngClass]="{'panel-info': stage.getEncryptionStage().isServerSide(), 'panel-primary': !stage.getEncryptionStage().isServerSide()}">
                         <div class="panel-heading">{{ stage.getEncryptionStage().getName() }}
-                            <span *ngIf="computationModel.getState() == 2" class="pull-right animated fadeIn">Connecting to Backend <i class="fa fa-cog fa-spin"></i></span>
+                            <span *ngIf="computationModel.getState() == 2 && stage.getEncryptionStage().isServerSide()" class="pull-right animated fadeIn">Connecting to Backend <i class="fa fa-cog fa-spin"></i></span>
                         </div>
                         <div class="panel-body">
                             <p>{{ stage.getEncryptionStage().getPreDescription() }}</p>

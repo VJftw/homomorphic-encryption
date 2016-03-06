@@ -41,7 +41,7 @@ export class EncryptionSchemeResolverService {
 
     // backend stage
     for (let operator in schemeJson.stages.backend) {
-      let stage = this._stageResolverService.fromJson(schemeJson.stages.backend[operator]);
+      let stage = this._stageResolverService.fromJson(schemeJson.stages.backend[operator], true);
       scheme.addBackendStage(operator, stage);
     }
 
