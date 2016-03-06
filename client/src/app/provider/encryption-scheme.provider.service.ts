@@ -10,6 +10,7 @@ export class EncryptionSchemeProviderService {
   private schemeJsons = [
     require('json!yaml!../encryption/schemes/pailler.yml'),
     require('json!yaml!../encryption/schemes/rsa.yml'),
+    require('json!yaml!../encryption/schemes/gorti.yml'),
   ];
 
   constructor(

@@ -162,6 +162,8 @@ export class Computer {
         return a.modInverse(b);
       case '&':
         return a.modPow(b, c);
+      case '^':
+        return a.pow(b.intValue());
       default:
         throw new RangeError('Cannot resolve operation: ' + operator);
     }
