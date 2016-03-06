@@ -2,10 +2,10 @@ uniqueName: gorti
 readableName: Gorti
 description: Gorti's enhanced homomorphic cryptosystem
 bitLengths:
-  - bitLength: 8
-    maxInt: 99
   - bitLength: 16
-    maxInt: 9999
+    maxInt: 100
+  - bitLength: 8
+    maxInt: 13
 stages:
   setup:
     - name: Key Generation
