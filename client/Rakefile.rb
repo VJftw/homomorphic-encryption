@@ -234,7 +234,7 @@ task :build_prod do
   )
 
   puts '# Cleaning up'
-  image = Docker::Image.create('fromImage' => 'alpine') do |chunk|
+  image = Docker::Image.create('fromImage' => 'alpine:latest') do |chunk|
     puts JSON.parse(chunk)
   end
   container = Docker::Container.create({
