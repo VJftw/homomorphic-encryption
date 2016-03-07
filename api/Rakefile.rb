@@ -62,29 +62,19 @@ puts "# Container Tags\n\tProduction:\t#{container_name}\n\tDevelopment:\t#{dev_
 
 
 def get_dev_container(tag)
-  puts '# Looking for Development container'
+  puts '## Building Development container'
 
-  images = Docker::Image.all({
-                                 'filter' => tag
-                             })
-
-  if images.empty?
-    puts '## Building Development container'
-
-    image = Docker::Image.build_from_dir(Dir.getwd, {
-        'dockerfile' => "Dockerfile.dev",
-        't' => tag
-    }) do |v|
-      if (log = JSON.parse(v)) && log.has_key?("stream")
-        $stdout.puts log["stream"]
-      end
+  Docker::Image.build_from_dir(Dir.getwd, {
+      'dockerfile' => "Dockerfile.dev",
+      't' => tag
+  }) do |v|
+    if (log = JSON.parse(v)) && log.has_key?("stream")
+      $stdout.puts log["stream"]
     end
-
-    return image
   end
 
-  images[0]
 end
+
 
 desc 'Run tests'
 task :test do
@@ -218,6 +208,9 @@ task :build_prod do
   )
 
   puts '# Cleaning up'
+  image = Docker::Image.create('fromImage' => 'alpine') do |chunk|
+    puts JSON.parse(chunk)
+  end
   container = Docker::Container.create({
      'Image' => 'alpine',
      'Volumes' => {
