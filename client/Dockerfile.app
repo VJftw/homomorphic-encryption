@@ -8,7 +8,7 @@ COPY ./nginx.conf /app/
 
 # Fix Permissions
 RUN chown -R root:nginx /app
-RUN chmod -R 770 /app
+RUN chmod -R 777 /app && chmod -R g+x /app
 
 # Copy NGINX service script
 COPY start_nginx.sh /etc/services.d/nginx/run
