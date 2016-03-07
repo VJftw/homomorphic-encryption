@@ -16,8 +16,8 @@ var metadata = {
   HMR: HMR
 };
 
-var API_ADDRESS = process.env.CLIENT_API_URL || '0.0.0.0:8000';
-var BACKEND_ADDRESS = process.env.CLIENT_BACKEND_URL || '0.0.0.0:9000';
+var API_ADDRESS = process.env.CLIENT_API_ADDRESS || '0.0.0.0:8000';
+var BACKEND_ADDRESS = process.env.CLIENT_BACKEND_ADDRESS || '0.0.0.0:9000';
 /*
  * Config
  * with default values at webpack.default.conf

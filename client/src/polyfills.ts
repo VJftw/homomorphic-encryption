@@ -5,8 +5,6 @@ import 'es6-shim';
 import 'es6-promise';
 import 'es7-reflect-metadata';
 import 'zone.js/dist/zone-microtask';
-import 'jquery';
-import 'bootstrap-loader';
 
 
 if ('production' === process.env.ENV) {

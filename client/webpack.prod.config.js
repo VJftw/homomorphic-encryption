@@ -18,6 +18,9 @@ var ENV = process.env.NODE_ENV = process.env.ENV = 'production';
 var HOST = process.env.HOST || 'localhost';
 var PORT = process.env.PORT || 8080;
 
+var API_ADDRESS = process.env.CLIENT_API_ADDRESS || '0.0.0.0:8000';
+var BACKEND_ADDRESS = process.env.CLIENT_BACKEND_ADDRESS || '0.0.0.0:9000';
+
 var metadata = {
   title: 'Implementations of Homomorphic Encryption',
   baseUrl: '/',
@@ -143,7 +146,9 @@ module.exports = helpers.defaults({
       // Environment helpers
       'process.env': {
         'ENV': JSON.stringify(metadata.ENV),
-        'NODE_ENV': JSON.stringify(metadata.ENV)
+        'NODE_ENV': JSON.stringify(metadata.ENV),
+        'API_ADDRESS': JSON.stringify(API_ADDRESS),
+        'BACKEND_ADDRESS': JSON.stringify(BACKEND_ADDRESS)
       }
     }),
     new ProvidePlugin({
@@ -152,7 +157,10 @@ module.exports = helpers.defaults({
       '__decorate': 'ts-helper/decorate',
       '__awaiter': 'ts-helper/awaiter',
       '__extends': 'ts-helper/extends',
-      '__param': 'ts-helper/param'
+      '__param': 'ts-helper/param',
+      jQuery: 'jquery',
+      $: 'jquery',
+      jquery: 'jquery'
     }),
     new UglifyJsPlugin({
       // to debug prod builds uncomment //debug lines and comment //prod lines
