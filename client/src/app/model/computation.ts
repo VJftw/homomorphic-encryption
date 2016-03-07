@@ -1,6 +1,7 @@
-import {BigInteger} from "jsbn";
-import {Stage} from "./stage";
-import {EncryptionScheme} from "./encryption_scheme/encryption_scheme";
+import {BigInteger} from 'jsbn';
+import {EncryptionScheme} from './encryption-scheme';
+import {Stage} from './computation/stage';
+
 
 
 export class Computation {
@@ -17,7 +18,11 @@ export class Computation {
   protected encryptionScheme: EncryptionScheme;
   protected operation: string;
   protected state: number;
-  protected stages: Stage[];
+
+  protected setupStages: Stage[];
+  protected encryptionStages: Stage[];
+  protected backendStages: Map<string, Stage>;
+  protected decryptionStages: Stage[];
 
   private privateScope = {};
   private publicScope = {};
@@ -28,9 +33,13 @@ export class Computation {
 
   constructor() {
     this.state = Computation.STATE_NEW;
-    this.stages = [];
     this.privateScope = {};
     this.publicScope = {};
+
+    this.setupStages = [];
+    this.encryptionStages = [];
+    this.backendStages = new Map<string, Stage>();
+    this.decryptionStages = [];
   }
 
   /**
@@ -90,7 +99,7 @@ export class Computation {
       return this.privateScope[varName];
     }
 
-    throw new RangeError("Variable not found in scope");
+    throw new RangeError('Variable not found in scope');
   }
 
   /**
@@ -266,39 +275,68 @@ export class Computation {
     return this.state === Computation.STATE_COMPLETE;
   }
 
-  /**
-   * Adds a Stage
-   * @param stage
-   * @returns {Computation}
-   */
-  public addStage(stage: Stage): Computation {
-    this.stages.push(stage);
+  public addSetupStage(stage: Stage) {
+    this.setupStages.push(stage);
 
     return this;
   }
 
-  /**
-   * Returns the Stages
-   * @returns {Stage[]}
-   */
-  public getStages(): Array<Stage> {
-    return this.stages;
+  public getSetupStages() {
+    return this.setupStages;
   }
 
-  /**
-   * Returns a Stage given by its name
-   * @param name
-   * @returns {Stage}
-   */
-  public getStageByName(name: string): Stage {
-    let r: Stage = null;
+  public addEncryptionStage(stage: Stage) {
+    this.encryptionStages.push(stage);
 
-    this.stages.forEach(function(value) {
-      if (value.getName() === name) {
-        r = value;
-      }
-    }, this.stages);
-
-    return r;
+    return this;
   }
+
+  public getEncryptionStages() {
+    return this.encryptionStages;
+  }
+
+  public addBackendStage(operation: string, stage: Stage) {
+    this.backendStages.set(operation, stage);
+
+    return this;
+  }
+
+  public getBackendStage() {
+    return this.backendStages.get(
+      this.getOperation()
+    );
+  }
+
+  public addDecryptionStage(stage: Stage) {
+    this.decryptionStages.push(stage);
+
+    return this;
+  }
+
+  public getDecryptionStages() {
+    return this.decryptionStages;
+  }
+
+  public getStages() {
+    let a = [];
+
+    for (let stage of this.getSetupStages()) {
+      a.push(stage);
+    }
+
+    for (let stage of this.getEncryptionStages()) {
+      a.push(stage);
+    }
+
+    a.push(
+      this.getBackendStage()
+    );
+
+    for (let stage of this.getDecryptionStages()) {
+      a.push(stage);
+    }
+
+    return a;
+  }
+
 }

@@ -22,4 +22,3 @@ RUN apt-get clean
 VOLUME /app
 
 EXPOSE 3000
-

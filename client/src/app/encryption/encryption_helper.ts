@@ -1,6 +1,6 @@
-import {Injectable} from "angular2/core";
+import {Injectable} from 'angular2/core';
 
-import {BigInteger} from "jsbn";
+import {BigInteger} from 'jsbn';
 
 
 @Injectable()
@@ -9,7 +9,7 @@ export class EncryptionHelper {
   public getRandomArbitrary(min: number, max: number): BigInteger {
     let x = Math.random() * (max - min) + min;
 
-    return new BigInteger("" + Math.round(x));
+    return new BigInteger('' + Math.round(x));
   }
 
   public generatePrime(bits: number): BigInteger {
@@ -18,7 +18,7 @@ export class EncryptionHelper {
 
     while (true) {
       let n = Math.round(Math.random() * (max - min) + min);
-      let prime = new BigInteger("" + n);
+      let prime = new BigInteger('' + n);
 
       if (prime.isProbablePrime(prime.bitLength())) {
         return prime;
@@ -40,11 +40,11 @@ export class EncryptionHelper {
   public findPrimitiveRootOfPrime(prime: BigInteger): BigInteger {
 
     if (prime.intValue() === 2) {
-      return new BigInteger("1");
+      return new BigInteger('1');
     }
 
-    let p1 = new BigInteger("2");
-    let s = prime.subtract(new BigInteger("1"));
+    let p1 = new BigInteger('2');
+    let s = prime.subtract(new BigInteger('1'));
     let p2 = s.divide(p1);
 
     while (true) {
@@ -59,6 +59,17 @@ export class EncryptionHelper {
       }
     }
 
+  }
+
+  public findCoPrime(prime: BigInteger): BigInteger {
+    while (true) {
+      let potentialCoPrime = this.getRandomArbitrary(1, prime.intValue());
+      let gcd = prime.gcd(potentialCoPrime);
+
+      if (gcd.intValue() === 1) {
+        return potentialCoPrime;
+      }
+    }
   }
 
 }

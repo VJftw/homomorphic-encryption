@@ -18,4 +18,4 @@ bin/console doctrine:database:create --ansi -e prod --no-interaction --if-not-ex
 
 bin/console doctrine:migrations:migrate --ansi -e prod --no-interaction --allow-no-migration
 
-bin/console cache:warm -e $SYMFONY__ENV
+bin/console cache:warm -e $SYMFONY_ENV

@@ -1,179 +1,102 @@
-// @AngularClass
-
-/*
- * Helper
- * env(), getBanner(), root(), and rootDir()
- * are defined at the bottom
- */
-var sliceArgs = Function.prototype.call.bind(Array.prototype.slice);
-var toString  = Function.prototype.call.bind(Object.prototype.toString);
-var NODE_ENV  = process.env.NODE_ENV || 'development';
-var API_URL = process.env.CLIENT_API_URL || '0.0.0.0:8000';
-var BACKEND_URL = process.env.CLIENT_BACKEND_URL || '0.0.0.0:9000';
-var pkg = require('./package.json');
-
-// Polyfill
-Object.assign = require('object-assign');
-
-// Node
-var path = require('path');
-
-// NPM
 var webpack = require('webpack');
+var helpers = require('./helpers');
 
-// Webpack Plugins
-var OccurenceOrderPlugin = webpack.optimize.OccurenceOrderPlugin;
-var CommonsChunkPlugin   = webpack.optimize.CommonsChunkPlugin;
-var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
-var DefinePlugin   = webpack.DefinePlugin;
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
-var plugins = [
-    new DefinePlugin({
-    'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
-    'VERSION': JSON.stringify(pkg.version),
-    __API_URL__: JSON.stringify(API_URL),
-    __BACKEND_URL__: JSON.stringify(BACKEND_URL)
-    }),
-    new OccurenceOrderPlugin(),
-    new CommonsChunkPlugin({
-    name: 'vendor',
-    filename: 'vendor.js',
-    minChunks: Infinity
-    }),
-    new CommonsChunkPlugin({
-    name: 'common',
-    filename: 'common.js',
-    minChunks: 2,
-    chunks: ['app', 'vendor']
-    }),
-    new HtmlWebpackPlugin({
-    title: 'Homomorphic Encryption',
-    filename: 'index.html',
-    template: 'src/public/prod_index.html',
-    inject: 'body',
-    chunksSortMode: 'none'
-    }),
-    new webpack.ResolverPlugin(
-        new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin("bower.json", ["main"])
-    )
-];
+var ENV = process.env.ENV = process.env.NODE_ENV = 'development';
+var HMR = helpers.hasProcessFlag('hot');
 
-if (NODE_ENV != 'development') {
-  plugins.push(new UglifyJsPlugin({minimize: true}));
-}
+var metadata = {
+  title: 'Implementations of Homomorphic Encryption',
+  baseUrl: '/',
+  host: 'localhost',
+  port: 3000,
+  ENV: ENV,
+  HMR: HMR
+};
 
+var API_ADDRESS = process.env.CLIENT_API_ADDRESS || '0.0.0.0:8000';
+var BACKEND_ADDRESS = process.env.CLIENT_BACKEND_ADDRESS || '0.0.0.0:9000';
 /*
  * Config
+ * with default values at webpack.default.conf
  */
-module.exports = {
-  devtool: 'source-map',
-  debug: true,
-  displayErrorDetails: true,
-  stats: {
-    colors: true,
-    reasons: true
-  },
+module.exports = helpers.defaults({
+  // static data for index.html
+  metadata: metadata,
+  // devtool: 'eval' // for faster builds use 'eval'
 
-  // our Development Server config
-  devServer: {
-    inline: true,
-    colors: true,
-    historyApiFallback: true,
-    contentBase: 'src/public',
-    publicPath: '/__build__'
-  },
-
-  //
-  entry: {
-    'vendor': './src/vendor.ts',
-    'app': './src/bootstrap'
-  },
+  // our angular app
+  entry: { 'polyfills': './src/polyfills.ts', 'main': './src/main.ts' },
 
   // Config for our build files
   output: {
-    path: root('__build__'),
-    filename: '[name].js',
-    sourceMapFilename: '[name].map',
-    chunkFilename: '[id].chunk.js'
-  },
-
-  resolve: {
-    extensions: ['','.ts','.js','.json', '.css', '.html'],
-    root: [path.join(__dirname, "bower_components")]
+    path: helpers.root('dist')
   },
 
   module: {
-    preLoaders: [ { test: /\.ts$/, loader: 'tslint-loader' } ],
+    preLoaders: [
+      // { test: /\.ts$/, loader: 'tslint-loader', exclude: [ helpers.root('node_modules') ] },
+      // TODO(gdi2290): `exclude: [ helpers.root('node_modules/rxjs') ]` fixed with rxjs 5 beta.3 release
+      { test: /\.js$/, loader: "source-map-loader", exclude: [ helpers.root('node_modules/rxjs') ] }
+    ],
     loaders: [
-      // Support for *.yml files
-      { test: /\.yml$/, loader: 'yaml' },
+      // Support for .ts files.
+      { test: /\.ts$/, loader: 'ts-loader', exclude: [ /\.(spec|e2e)\.ts$/ ] },
 
       // Support for *.json files.
-      { test: /\.json$/,  loader: 'json' },
+      { test: /\.json$/,  loader: 'json-loader' },
 
       // Support for CSS as raw text
-      { test: /\.css$/,   loader: 'raw' },
+      { test: /\.css$/,   loader: 'raw-loader' },
 
       // support for .html as raw text
-      { test: /\.html$/,  loader: 'raw' },
+      { test: /\.html$/,  loader: 'raw-loader', exclude: [ helpers.root('src/index.html') ] },
 
-      // Support for .ts files.
-      { 
-        test: /\.ts$/,    
-        loader: 'ts',
-        query: { 'ignoreDiagnostics': [2403, 2300, 2374, 2375 ] },// 2403 -> Subsequent variable declarations
-        exclude: [
-          /\.spec\.ts$/,
-          /\.e2e\.ts$/,
-          /node_modules\/(?!(ng2-bootstrap))/ // exclude all node modules except ng2-bootstrap
-        ]
-      },
-      // Loader for fonts (required for Bootstrap)
-      { test: /\.woff2?($|\?)/, loader: "url?limit=10000&mimetype=application/font-woff" },
-      { test: /\.ttf($|\?)/,    loader: "url?limit=10000&mimetype=application/octet-stream" },
-      { test: /\.eot($|\?)/,    loader: "file" },
-      { test: /\.svg($|\?)/,    loader: "url?limit=10000&mimetype=image/svg+xml" }
-    ],
-    noParse: [
-      // /reflect-metadata/
+      { test: /\.scss$/, loaders: ['style', 'css', 'postcss', 'sass'] },
+      // { test: /\.(woff2?|ttf|eot|svg)$/, loader: 'url?limit=10000' },
+      { test: /\.(jpg|png)$/,       loader: 'url-loader?name=[path][name].[ext]&limit=100000' },
+      { test: /\.woff(\?.*)?$/,     loader: "url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/font-woff" },
+      { test: /\.woff2(\?.*)?$/,    loader: "url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/font-woff2" },
+      { test: /\.ttf(\?.*)?$/,      loader: "url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/octet-stream" },
+      { test: /\.eot(\?.*)?$/,      loader: "file-loader?prefix=fonts/&name=[path][name].[ext]" },
+      { test: /\.svg(\?.*)?$/,      loader: "url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=image/svg+xml" },
+      // Bootstrap 4
+      { test: /bootstrap\/dist\/js\/umd\//, loader: 'imports?jQuery=jquery' }
+
     ]
   },
 
-  plugins: plugins
+  plugins: [
+    new webpack.optimize.OccurenceOrderPlugin(true),
+    new webpack.optimize.CommonsChunkPlugin({ name: 'polyfills', filename: 'polyfills.bundle.js', minChunks: Infinity }),
+    // static assets
+    new CopyWebpackPlugin([ { from: 'src/assets', to: 'assets' } ]),
+    // generating html
+    new HtmlWebpackPlugin({ template: 'src/index.html' }),
+    // replace
+    new webpack.DefinePlugin({
+      'process.env': {
+        'ENV': JSON.stringify(metadata.ENV),
+        'NODE_ENV': JSON.stringify(metadata.ENV),
+        'HMR': HMR,
+        'API_ADDRESS': JSON.stringify(API_ADDRESS),
+        'BACKEND_ADDRESS': JSON.stringify(BACKEND_ADDRESS)
+      }
+    }),
+    new webpack.ProvidePlugin({
+      jQuery: 'jquery',
+      $: 'jquery',
+      jquery: 'jquery'
+    })
+  ],
 
-  /*
-   * When using `templateUrl` and `styleUrls` please use `__filename`
-   * rather than `module.id` for `moduleId` in `@View`
-   */
-  // node: {
-    // crypto: false,
-    // __filename: true
-  // }
-};
+  // Other module loader config
 
-// Helper functions
-
-function env(configEnv) {
-  if (configEnv === undefined) { return configEnv; }
-  switch (toString(configEnv[NODE_ENV])) {
-    case '[object Object]'    : return Object.assign({}, configEnv.all || {}, configEnv[NODE_ENV]);
-    case '[object Array]'     : return [].concat(configEnv.all || [], configEnv[NODE_ENV]);
-    case '[object Undefined]' : return configEnv.all;
-    default                   : return configEnv[NODE_ENV];
+  // our Webpack Development Server config
+  devServer: {
+    port: metadata.port,
+    host: metadata.host
   }
-}
-
-function getBanner() {
-  return 'Angular2 Webpack Starter v'+ pkg.version +' by @gdi2990 from @AngularClass';
-}
-
-function root(args) {
-  args = sliceArgs(arguments, 0);
-  return path.join.apply(path, [__dirname].concat(args));
-}
-
-function rootNode(args) {
-  args = sliceArgs(arguments, 0);
-  return root.apply(path, ['node_modules'].concat(args));
-}
+});

@@ -1,13 +1,13 @@
 import {
   it
-} from "angular2/testing";
-import {Computer} from "./computer";
-import {BigInteger} from "jsbn";
+} from 'angular2/testing';
+import {Computer} from './computer';
+import {BigInteger} from 'jsbn';
 
-describe("Computer", () => {
+describe('Computer', () => {
 
-    let encryptionHelper = jasmine.createSpyObj("encryptionHelper", ["generatePrime"]);
-    encryptionHelper.generatePrime.and.returnValue(new BigInteger("11"));
+    let encryptionHelper = jasmine.createSpyObj('encryptionHelper', ['generatePrime']);
+    encryptionHelper.generatePrime.and.returnValue(new BigInteger('11'));
 
     let computer: Computer;
 
@@ -15,9 +15,9 @@ describe("Computer", () => {
         computer = new Computer(encryptionHelper);
     });
 
-    it("should compute 'generateRandomPrime()'", () => {
+    it('should compute \'generateRandomPrime()\'', () => {
 
-        let step = "generateRandomPrime()";
+        let step = 'generateRandomPrime()';
 
         let result = computer.calculateStepCompute(step, {});
 
@@ -26,9 +26,9 @@ describe("Computer", () => {
         ;
     });
 
-    it("should compute '1 + 1'", () => {
+    it('should compute \'1 + 1\'', () => {
 
-        let step = "1 + 1";
+        let step = '1 + 1';
 
         let result = computer.calculateStepCompute(step, {});
 
@@ -37,9 +37,9 @@ describe("Computer", () => {
         ;
     });
 
-    it("should compute '1 - 1'", () => {
+    it('should compute \'1 - 1\'', () => {
 
-        let step = "1 - 1";
+        let step = '1 - 1';
 
         let result = computer.calculateStepCompute(step, {});
 
@@ -48,9 +48,9 @@ describe("Computer", () => {
         ;
     });
 
-    it("should compute '4 * 3'", () => {
+    it('should compute \'4 * 3\'', () => {
 
-        let step = "4 * 3";
+        let step = '4 * 3';
 
         let result = computer.calculateStepCompute(step, {});
 
@@ -59,9 +59,9 @@ describe("Computer", () => {
         ;
     });
 
-    it("should compute '6 / 3'", () => {
+    it('should compute \'6 / 3\'', () => {
 
-        let step = "6 / 3";
+        let step = '6 / 3';
 
         let result = computer.calculateStepCompute(step, {});
 
@@ -70,9 +70,9 @@ describe("Computer", () => {
         ;
     });
 
-    it("should compute '(1 + 1) * (3 + 2)'", () => {
+    it('should compute \'(1 + 1) * (3 + 2)\'', () => {
 
-        let step = "(1 + 1) * (3 + 2)";
+        let step = '(1 + 1) * (3 + 2)';
 
         let result = computer.calculateStepCompute(step, {});
 
@@ -81,9 +81,9 @@ describe("Computer", () => {
         ;
     });
 
-    it("should compute '(1 + (5 * 2)) + (3 + 2)'", () => {
+    it('should compute \'(1 + (5 * 2)) + (3 + 2)\'', () => {
 
-        let step = "(1 + (5 * 2)) + (3 + 2)";
+        let step = '(1 + (5 * 2)) + (3 + 2)';
 
         let result = computer.calculateStepCompute(step, {});
 
@@ -92,9 +92,9 @@ describe("Computer", () => {
         ;
     });
 
-    it("should compute '((1 + 3) + (5 * 2)) + (3 + 2)'", () => {
+    it('should compute \'((1 + 3) + (5 * 2)) + (3 + 2)\'', () => {
 
-        let step = "((1 + 3) + (5 * 2)) + (3 + 2)";
+        let step = '((1 + 3) + (5 * 2)) + (3 + 2)';
 
         let result = computer.calculateStepCompute(step, {});
 
@@ -103,13 +103,13 @@ describe("Computer", () => {
         ;
     });
 
-    it("should compute 'p * q'", () => {
+    it('should compute \'p * q\'', () => {
 
-        let step = "p * q";
+        let step = 'p * q';
 
         let result = computer.calculateStepCompute(step, {
-            "p": new BigInteger("16"),
-            "q": new BigInteger("3"),
+            'p': new BigInteger('16'),
+            'q': new BigInteger('3'),
         });
 
         expect(result.intValue())
@@ -117,20 +117,9 @@ describe("Computer", () => {
         ;
     });
 
-    it("should compute '13 % 4'", () => {
+    it('should compute \'13 % 4\'', () => {
 
-        let step = "13 % 4";
-
-        let result = computer.calculateStepCompute(step, {});
-
-        expect(result.intValue())
-          .toBe(1)
-        ;
-    });
-
-    it("should compute '13 & 4,3'", () => {
-
-        let step = "13 & 4,3";
+        let step = '13 % 4';
 
         let result = computer.calculateStepCompute(step, {});
 
@@ -139,9 +128,9 @@ describe("Computer", () => {
         ;
     });
 
-    it("should compute '13 $ 4'", () => {
+    it('should compute \'13 & 4,3\'', () => {
 
-        let step = "13 $ 4";
+        let step = '13 & 4,3';
 
         let result = computer.calculateStepCompute(step, {});
 
@@ -150,13 +139,24 @@ describe("Computer", () => {
         ;
     });
 
-    it("should compute '(p - 1) * (q - 1)'", () => {
+    it('should compute \'13 $ 4\'', () => {
 
-        let step = "(p - 1) * (q - 1)";
+        let step = '13 $ 4';
+
+        let result = computer.calculateStepCompute(step, {});
+
+        expect(result.intValue())
+          .toBe(1)
+        ;
+    });
+
+    it('should compute \'(p - 1) * (q - 1)\'', () => {
+
+        let step = '(p - 1) * (q - 1)';
 
         let result = computer.calculateStepCompute(step, {
-            "p": new BigInteger("16"),
-            "q": new BigInteger("3"),
+            'p': new BigInteger('16'),
+            'q': new BigInteger('3'),
         });
 
         expect(result.intValue())
@@ -164,28 +164,28 @@ describe("Computer", () => {
         ;
     });
 
-    //it("should encrypt with Pailler", () => {
+    //it('should encrypt with Pailler', () => {
     //
     //    let steps = [
-    //        "a = 3 + 1",
-    //        "b = 1 + 2",
+    //        'a = 3 + 1',
+    //        'b = 1 + 2',
     //        // Key Generation
-    //        "p = 190 + 1",
-    //        "q = 148 + 1",
-    //        "n = p * q",
-    //        "nSq = n * n",
-    //        "g = n + 1",
-    //        "l = (p - 1) * (q - 1)",
-    //        "m = l $ n",
+    //        'p = 190 + 1',
+    //        'q = 148 + 1',
+    //        'n = p * q',
+    //        'nSq = n * n',
+    //        'g = n + 1',
+    //        'l = (p - 1) * (q - 1)',
+    //        'm = l $ n',
     //        // Encryption
-    //        "aR = 15348 + 1",
-    //        "aX = ((g & a,nSq) * (aR & n,nSq)) % nSq",
-    //        "bR = 11436 + 1",
-    //        "bX = ((g & b,nSq) * (bR & n,nSq)) % nSq",
+    //        'aR = 15348 + 1',
+    //        'aX = ((g & a,nSq) * (aR & n,nSq)) % nSq',
+    //        'bR = 11436 + 1',
+    //        'bX = ((g & b,nSq) * (bR & n,nSq)) % nSq',
     //        // Add (in Backend)
-    //        "cX = (aX * bX) % nSq",
+    //        'cX = (aX * bX) % nSq',
     //        // Decryption
-    //        "c = ((((cX & l,nSq) - 1) / n) * m) % n"
+    //        'c = ((((cX & l,nSq) - 1) / n) * m) % n'
     //    ];
     //
     //    computer.computeSteps(steps);

@@ -1,12 +1,12 @@
 import {
   it
-} from "angular2/testing";
+} from 'angular2/testing';
 
-import {EncryptionHelper} from "./encryption_helper";
-import {BigInteger} from "jsbn";
+import {EncryptionHelper} from './encryption_helper';
+import {BigInteger} from 'jsbn';
 
 
-describe("EncryptionHelper", () => {
+describe('EncryptionHelper', () => {
 
   let encryptionHelper: EncryptionHelper;
 
@@ -14,7 +14,7 @@ describe("EncryptionHelper", () => {
     encryptionHelper = new EncryptionHelper();
   });
 
-  it("should return a random arbitrary number", () => {
+  it('should return a random arbitrary number', () => {
 
     let r = encryptionHelper.getRandomArbitrary(3, 5);
     expect(r.intValue() >= 3).toBe(true);
@@ -30,7 +30,7 @@ describe("EncryptionHelper", () => {
 
   });
 
-  it("should generate a 8-bit Prime number", () => {
+  it('should generate a 8-bit Prime number', () => {
 
     let bits = 8;
     let p;
@@ -41,7 +41,7 @@ describe("EncryptionHelper", () => {
     }
   });
 
-  it("should generate a 16-bit Prime number", () => {
+  it('should generate a 16-bit Prime number', () => {
     let bits = 16;
     let p;
 
@@ -60,12 +60,12 @@ describe("EncryptionHelper", () => {
     return true;
   }
 
-  it("should return a primitive root of a prime number", () => {
+  it('should return a primitive root of a prime number', () => {
 
-    let root = encryptionHelper.findPrimitiveRootOfPrime(new BigInteger("2"));
+    let root = encryptionHelper.findPrimitiveRootOfPrime(new BigInteger('2'));
     expect(root.intValue()).toBe(1);
 
-    root = encryptionHelper.findPrimitiveRootOfPrime(new BigInteger("43"));
+    root = encryptionHelper.findPrimitiveRootOfPrime(new BigInteger('43'));
     let roots = [3, 5, 12, 18, 19, 20, 26, 28, 29, 30, 33, 34];
     let index = roots.indexOf(root.intValue());
     console.log(index);

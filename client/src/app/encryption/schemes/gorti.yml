@@ -1,0 +1,49 @@
+uniqueName: gorti
+readableName: Gorti
+description: Gorti's enhanced homomorphic cryptosystem
+bitLengths:
+  - bitLength: 16
+    maxInt: 100
+  - bitLength: 8
+    maxInt: 13
+stages:
+  setup:
+    - name: Key Generation
+      preDescription:
+      steps:
+        - description: A random prime number
+          compute: p = generateRandomPrime()
+        - description: A random prime number
+          compute: q = generateRandomPrime()
+        - description: \(p \times q\)
+          compute: m = p * q
+        - description: A random number
+          compute: r = generateRandomPrime()
+      postDescription:
+  encryption:
+    - name: Encryption
+      preDescription:
+      steps:
+        - description: \(aX = (a + r \times p^q \bmod m) \bmod m\)
+          compute: aX = (a + (r * (p & q,m))) % m
+          expose: true
+        - description: \(bX = (b + r \times p^q \bmod m) \bmod m\)
+          compute: bX = (b + (r * (p & q,m))) % m
+          expose: true
+      postDescription:
+  backend:
+    x:
+      name: Backend multiplication
+      steps:
+        - description: \(aX \times bX\)
+          compute: cX = aX * bX
+    +:
+      name: Backend addition
+      steps:
+        - description: \(aX + bX\)
+          compute: cX = aX + bX
+  decryption:
+    - name: Decryption
+      steps:
+        - description: \(c = cX \bmod p\)
+          compute: c = cX % p
