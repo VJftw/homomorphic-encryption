@@ -1,6 +1,6 @@
 GEM
   specs:
-    docker-api (1.26.0)
+    docker-api (1.26.2)
       excon (>= 0.38.0)
       json
     excon (0.45.4)
