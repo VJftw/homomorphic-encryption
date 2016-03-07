@@ -6,12 +6,11 @@ RUN apk add --update nginx && rm -rf /var/cache/apk
 COPY ./dist/* /app/
 COPY ./nginx.conf /app/
 
-# Fix Permissions
-RUN chown -R root:nginx /app
-RUN chmod -R 777 /app && chmod -R g+x /app
-
 # Copy NGINX service script
-COPY start_nginx.sh /etc/services.d/nginx/run
+COPY s6/start_nginx.sh /etc/services.d/nginx/run
 RUN chmod 755 /etc/services.d/nginx/run
+
+# Copy fix-attrs scripts
+COPY s6/01-app-dir /etc/fix-attrs.d/01-app-dir
 
 EXPOSE 80
