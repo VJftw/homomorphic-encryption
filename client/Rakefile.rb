@@ -120,6 +120,12 @@ task :test do
 
   user = IS_CI ? 'root': 'app'
 
+  puts '# Node and NPM versions'
+  npm_command = 'node --version'.split ' '
+  container.exec(npm_command, {:user => user}) { |stream, chunk| puts "#{stream}: #{chunk}" }
+  npm_command = 'npm --version'.split ' '
+  container.exec(npm_command, {:user => user}) { |stream, chunk| puts "#{stream}: #{chunk}" }
+
   puts '# Installing NPM and TSD dependencies'
   npm_command = 'npm install'.split ' '
   container.exec(npm_command, {:user => user}) { |stream, chunk| puts "#{stream}: #{chunk}" }
