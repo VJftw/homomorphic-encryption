@@ -1,10 +1,17 @@
-FROM alpine:3.2
+FROM vjftw/alpine:latest
 
 RUN apk add --update nginx && rm -rf /var/cache/apk
 
+# Copy built app
 COPY ./dist/* /app/
 COPY ./nginx.conf /app/
 
-EXPOSE 80
+# Fix Permissions
+RUN chown -R root:nginx /app
+RUN chmod -R 770 /app
 
-CMD ["nginx", "-c", "/app/nginx.conf"]
+# Copy NGINX service script
+COPY start_nginx.sh /etc/services.d/nginx/run
+RUN chmod 755 /etc/services.d/nginx/run
+
+EXPOSE 80
