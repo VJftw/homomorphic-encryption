@@ -41,11 +41,13 @@ end
 
 def get_current_branch
   if IS_CI
-    # ENV['TRAVIS_BRANCH']
-    ENV['BRANCH']
+    b = ENV['GIT_BRANCH']
+    b = b.gsub('origin/', '')
   else
-    system_command('git rev-parse --abbrev-ref HEAD', true)[0].strip()
+    b = system_command('git rev-parse --abbrev-ref HEAD', true)[0].strip()
   end
+
+  return b.gsub('/', '-')
 end
 
 def get_current_commit
