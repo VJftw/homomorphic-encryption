@@ -328,9 +328,11 @@ export class Computation {
       a.push(stage);
     }
 
-    a.push(
-      this.getBackendStage()
-    );
+    if (this.getBackendStage()) {
+      a.push(
+        this.getBackendStage()
+      );
+    }
 
     for (let stage of this.getDecryptionStages()) {
       a.push(stage);
