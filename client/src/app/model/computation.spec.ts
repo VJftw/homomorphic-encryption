@@ -191,6 +191,25 @@ describe('Computation', () => {
     expect(computation.getStages())
       .toEqual([])
     ;
+
+    let setupStage = jasmine.createSpyObj('setupStage', ['']);
+    computation.addSetupStage(setupStage);
+    let encryptionStage = jasmine.createSpyObj('encryptionStage', ['']);
+    computation.addEncryptionStage(encryptionStage);
+    let backendStage = jasmine.createSpyObj('backendStage', ['']);
+    computation.addBackendStage('+', backendStage);
+    computation.setOperation('+');
+    let decryptionStage = jasmine.createSpyObj('decryptionStage', ['']);
+    computation.addDecryptionStage(decryptionStage);
+
+    expect(computation.getStages())
+      .toEqual([
+        setupStage,
+        encryptionStage,
+        backendStage,
+        decryptionStage
+      ])
+    ;
   });
 
   it('should return the setup stages', () => {
@@ -267,5 +286,46 @@ describe('Computation', () => {
     ;
   });
 
+  it('should return the public scope', () => {
+    expect(computation.getPublicScope())
+      .toEqual({})
+    ;
+  });
+
+  it('should return the full scope', () => {
+    let privateBigInt = jasmine.createSpyObj('BigInteger(4)', ['']);
+    let publicBigInt = jasmine.createSpyObj('BigInteger(6)', ['']);
+    computation.addToScope('a', privateBigInt);
+    computation.addToScope('aX', publicBigInt, true);
+
+    expect(computation.getFullScope())
+      .toEqual({
+        'a': privateBigInt,
+        'aX': publicBigInt
+      });
+
+  });
+
+  it('should return a value from the scope', () => {
+    let privateBigInt = jasmine.createSpyObj('BigInteger(4)', ['']);
+    let publicBigInt = jasmine.createSpyObj('BigInteger(6)', ['']);
+    computation.addToScope('a', privateBigInt);
+    computation.addToScope('aX', publicBigInt, true);
+
+    expect(computation.getFromScope('a'))
+      .toEqual(privateBigInt)
+    ;
+
+    expect(computation.getFromScope('aX'))
+      .toEqual(publicBigInt)
+    ;
+  });
+
+  it('should throw an exception if not in scope', () => {
+    expect(() => {
+      computation.getFromScope('d');
+    }).toThrowError()
+    ;
+  });
 
 });
