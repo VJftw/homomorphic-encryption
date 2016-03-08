@@ -45,8 +45,8 @@ class Computation:
 
         return self
 
-    def add_public_scope(self, var_name, result):
-        self.__public_scope[var_name] = result
+    def add_public_scope(self, var_name, value):
+        self.__public_scope[var_name] = value
 
         return self
 

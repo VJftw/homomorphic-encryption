@@ -157,3 +157,11 @@ class ComputerTests(unittest.TestCase):
         """
         with self.assertRaises(Exception):
             self.computer.compute("((4 + 5)", {})
+
+    def test_missing_scope(self):
+        """
+        Computer.compute - it should throw an exception when a variable is missing
+        :return:
+        """
+        with self.assertRaises(Exception):
+            self.computer.compute("p + 5", {})
