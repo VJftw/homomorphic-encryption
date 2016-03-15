@@ -19,9 +19,6 @@ import {ComputationComponent} from './component/computation/computation.componen
   { as: 'Computation', component: ComputationComponent, path: '/computation/...', useAsDefault: true },
 ])
 export class App {
-  public title: string = 'Implementations of Homomorphic Encryption';
+  title: string = 'Implementations of Homomorphic Encryption';
 
-  constructor() {
-    console.log('API Address: ' + process.env['API_ADDRESS']);
-  }
 }

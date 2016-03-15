@@ -45,9 +45,7 @@ export function main() {
  * For vendors for example jQuery, Lodash, angular2-jwt just import them anywhere in your app
  * Also see custom-typings.d.ts as you also need to do `typings install x` where `x` is your module
  */
-import 'jquery';
-import 'bootstrap-loader';
-import 'mathjax';
+
 
 /*
  * Hot Module Reload

@@ -1,4 +1,3 @@
-/// <reference path="jsbn.d.ts" />
 /*
  * Custom Type Definitions
  * When including 3rd party modules you also need to include the type definition for the module
@@ -9,7 +8,7 @@ typings install node --save
  * If you can't find the type definition in the registry we can make an ambient definition in
  * this file for now. For example
 
-declare module 'my-module' {
+declare module "my-module" {
   export function doesSomething(value: string): string;
 }
 
@@ -30,6 +29,18 @@ import * as _ from 'lodash'
  *
  */
 
+// Extra variables that live on Global that will be replaced by webpack DefinePlugin
+declare var ENV: string;
+declare var HMR: boolean;
+declare var API_ADDRESS: string;
+declare var BACKEND_ADDRESS: string;
+
+interface GlobalEnvironment {
+  ENV;
+  HMR;
+  API_ADDRESS;
+  BACKEND_ADDRESS;
+}
 
 interface WebpackModule {
   hot: {
@@ -44,9 +55,20 @@ interface WebpackModule {
     apply(options?: any, callback?: (err?: Error, outdatedModules?: any[]) => void): void;
     status(callback?: (status?: string) => void): void | string;
     removeStatusHandler(callback?: (status?: string) => void): void;
-  }
+  };
+}
+interface WebpackRequire extends NodeRequireFunction {
+  context(file: string, flag?: boolean, exp?: RegExp): any;
 }
 
-interface NodeModule extends WebpackModule {
 
+interface ErrorStackTraceLimit {
+  stackTraceLimit: number;
 }
+
+
+// Extend typings
+interface NodeRequire extends WebpackRequire {}
+interface ErrorConstructor extends ErrorStackTraceLimit {}
+interface NodeModule extends WebpackModule {}
+interface Global extends GlobalEnvironment  {}
