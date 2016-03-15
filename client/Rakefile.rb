@@ -63,8 +63,29 @@ prod_container_name = "#{container_name}-#{get_current_commit}"
 
 puts "# Container Tags\n\tProduction:\t#{container_name}\n\tDevelopment:\t#{dev_container_name} \n\tBuild:\t\t#{prod_container_name}\n\n"
 
+def clean_long_cache
+  # Clean Awesome TypeScript Loader's cache.
+  puts '### temp: Clearing node_modules/.awesome-typescript-loader-cache as filenames are too long'
+  container = Docker::Container.create({
+     'Image' => 'alpine',
+     'Volumes' => {
+         '/app' => {}
+     },
+     'Binds' => [
+         "#{Dir.getwd}:/app"
+     ],
+     'WorkingDir' => '/app',
+     'Cmd': [
+         '/bin/sh', '-c', 'rm -rf node_modules/.awesome-typescript-loader-cache'
+     ]
+  })
+  container.tap(&:start).attach { |stream, chunk| puts "#{stream}: #{chunk}" }
+  container.stop
+  container.delete
+end
 
 def get_dev_container(tag)
+  clean_long_cache()
   puts '## Building Development container'
 
   Docker::Image.build_from_dir(Dir.getwd, {
@@ -215,7 +236,7 @@ task :build_prod do
   container.stop
   container.delete
 
-
+  clean_long_cache()
   puts '# Building Production container'
   image = Docker::Image.build_from_dir(Dir.getwd, {
       'dockerfile' => "Dockerfile.app",
