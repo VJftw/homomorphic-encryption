@@ -47,6 +47,7 @@ export function main() {
  */
 import 'jquery';
 import 'bootstrap-loader';
+import 'mathjax';
 
 /*
  * Hot Module Reload

@@ -6,7 +6,7 @@
   "homepage": "https://github.com/angularclass/angular2-webpack-starter",
   "license": "MIT",
   "scripts": {
-    "clean": "npm cache clean && rimraf node_modules doc typings coverage dist",
+    "clean": "npm cache clean && node_modules/.bin/rimraf node_modules doc typings coverage dist",
     "clean:dist": "rimraf dist",
     "preclean:install": "npm run clean",
     "clean:install": "npm set progress=false && npm install",
@@ -51,6 +51,7 @@
     "es7-reflect-metadata": "^1.6.0",
     "jquery": "^2.2.1",
     "jsbn": "^0.1.0",
+    "mathjax": "^2.6.1",
     "node-sass": "^3.4.2",
     "resolve-url-loader": "^1.4.3",
     "rxjs": "5.0.0-beta.2",

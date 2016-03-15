@@ -118,7 +118,7 @@ task :test do
   puts '# Installing NPM and TSD dependencies'
   npm_command = 'npm install'.split ' '
   container.exec(npm_command, {:user => user}) { |stream, chunk| puts "#{stream}: #{chunk}" }
-  tsd_command = 'node_modules/.bin/typings install'.split ' '
+  tsd_command = 'nnpm run postinstall'.split ' '
   container.exec(tsd_command, {:user => user}) { |stream, chunk| puts "#{stream}: #{chunk}" }
 
   puts '# Running tests'
