@@ -66,6 +66,7 @@ puts "# Container Tags\n\tProduction:\t#{container_name}\n\tDevelopment:\t#{dev_
 def clean_long_cache
   # Clean Awesome TypeScript Loader's cache.
   puts '### temp: Clearing node_modules/.awesome-typescript-loader-cache as filenames are too long'
+  cmd = IS_CI ? 'rm -rf node_modules doc typings coverage dist': 'rm -rf node_modules/.awesome-typescript-loader-cache'
   container = Docker::Container.create({
      'Image' => 'alpine',
      'Volumes' => {
@@ -76,7 +77,7 @@ def clean_long_cache
      ],
      'WorkingDir' => '/app',
      'Cmd': [
-         '/bin/sh', '-c', 'rm -rf node_modules/.awesome-typescript-loader-cache'
+         '/bin/sh', '-c', cmd
      ]
   })
   container.tap(&:start).attach { |stream, chunk| puts "#{stream}: #{chunk}" }
@@ -106,12 +107,12 @@ task :test do
 
   # start container
   puts '# Starting Development container'
-  puts '# Adding GitHub token'
-  if ENV.include? 'GITHUB_AUTH_TOKEN' and ENV['GITHUB_AUTH_TOKEN']
-    github_token = ENV['GITHUB_AUTH_TOKEN']
-  else
-    github_token = get_github_token
-  end
+  # puts '# Adding GitHub token'
+  # if ENV.include? 'GITHUB_AUTH_TOKEN' and ENV['GITHUB_AUTH_TOKEN']
+    # github_token = ENV['GITHUB_AUTH_TOKEN']
+  # else
+    # github_token = get_github_token
+  # end
   container = Docker::Container.create({
      'Image' => dev_container_name,
      'Volumes' => {
@@ -121,7 +122,7 @@ task :test do
          "#{Dir.getwd}:/app"
      ],
      'Env' => [
-         "TSD_GITHUB_TOKEN=#{github_token}"
+         # "TSD_GITHUB_TOKEN=#{github_token}"
      ]
   })
 
@@ -139,8 +140,8 @@ task :test do
   puts '# Installing NPM and TSD dependencies'
   npm_command = 'npm install'.split ' '
   container.exec(npm_command, {:user => user}) { |stream, chunk| puts "#{stream}: #{chunk}" }
-  tsd_command = 'nnpm run postinstall'.split ' '
-  container.exec(tsd_command, {:user => user}) { |stream, chunk| puts "#{stream}: #{chunk}" }
+  # tsd_command = 'nnpm run postinstall'.split ' '
+  # container.exec(tsd_command, {:user => user}) { |stream, chunk| puts "#{stream}: #{chunk}" }
 
   puts '# Running tests'
   node_test = 'npm run test'
@@ -194,13 +195,12 @@ task :build_prod do
 
   puts '# Starting Development container'
   # start container
-  puts '# Starting Development container'
-  puts '# Adding GitHub token'
-  if ENV.include? 'GITHUB_AUTH_TOKEN' and ENV['GITHUB_AUTH_TOKEN']
-    github_token = ENV['GITHUB_AUTH_TOKEN']
-  else
-    github_token = get_github_token
-  end
+  # puts '# Adding GitHub token'
+  # if ENV.include? 'GITHUB_AUTH_TOKEN' and ENV['GITHUB_AUTH_TOKEN']
+    # github_token = ENV['GITHUB_AUTH_TOKEN']
+  # else
+    # github_token = get_github_token
+  # end
   container = Docker::Container.create({
      'Image' => dev_container_name,
      'Volumes' => {
@@ -210,7 +210,7 @@ task :build_prod do
          "#{Dir.getwd}:/app"
      ],
      'Env' => [
-         "TSD_GITHUB_TOKEN=#{github_token}",
+         # "TSD_GITHUB_TOKEN=#{github_token}",
          'NODE_ENV=production',
          "CLIENT_API_ADDRESS=#{prod_api_url}",
          "CLIENT_BACKEND_ADDRESS=#{prod_backend_url}"
@@ -224,8 +224,8 @@ task :build_prod do
   puts '# Installing NPM and TSD dependencies'
   npm_command = 'npm install'.split ' '
   container.exec(npm_command, {:user => user}) { |stream, chunk| puts "#{stream}: #{chunk}" }
-  tsd_command = 'node_modules/.bin/typings install'.split ' '
-  container.exec(tsd_command, {:user => user}) { |stream, chunk| puts "#{stream}: #{chunk}" }
+  # tsd_command = 'node_modules/.bin/typings install'.split ' '
+  # container.exec(tsd_command, {:user => user}) { |stream, chunk| puts "#{stream}: #{chunk}" }
 
   # Webpack Build
   puts '# Running Webpack Build'
