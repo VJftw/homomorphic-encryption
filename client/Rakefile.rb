@@ -66,7 +66,6 @@ puts "# Container Tags\n\tProduction:\t#{container_name}\n\tDevelopment:\t#{dev_
 def clean_long_cache
   # Clean Awesome TypeScript Loader's cache.
   puts '### temp: Clearing node_modules/.awesome-typescript-loader-cache as filenames are too long'
-  cmd = IS_CI ? 'rm -rf node_modules doc typings coverage dist': 'rm -rf node_modules/.awesome-typescript-loader-cache'
   container = Docker::Container.create({
      'Image' => 'alpine',
      'Volumes' => {
@@ -77,7 +76,7 @@ def clean_long_cache
      ],
      'WorkingDir' => '/app',
      'Cmd': [
-         '/bin/sh', '-c', cmd
+         '/bin/sh', '-c', 'rm -rf node_modules/.awesome-typescript-loader-cache'
      ]
   })
   container.tap(&:start).attach { |stream, chunk| puts "#{stream}: #{chunk}" }
@@ -310,6 +309,22 @@ end
 
 desc 'CI'
 task :ci do
+  container = Docker::Container.create({
+     'Image' => 'alpine',
+     'Volumes' => {
+         '/app' => {}
+     },
+     'Binds' => [
+         "#{Dir.getwd}:/app"
+     ],
+     'WorkingDir' => '/app',
+     'Cmd': [
+         '/bin/sh', '-c', 'rm -rf node_modules doc typings coverage dist'
+     ]
+  })
+  container.tap(&:start).attach { |stream, chunk| puts "#{stream}: #{chunk}" }
+  container.stop
+  container.delete
   Rake::Task["test"].execute
   # Rake::Task["publish_coverage"].execute
   Rake::Task["build_prod"].execute
