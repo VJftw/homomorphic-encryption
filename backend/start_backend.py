@@ -26,8 +26,7 @@ if __name__ == '__main__':
         ws_port = os.environ['WS_PORT']
 
     factory = WebSocketServerFactory(
-        "ws://{0}".format("0.0.0.0:{0}".format(ws_port)),
-        debug=True
+        "ws://{0}".format("0.0.0.0:{0}".format(ws_port))
     )
     factory.protocol = WebSocketProtocol
 
