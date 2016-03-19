@@ -56,8 +56,10 @@ task :test do
   npm_command = 'npm --version'.split ' '
   container.exec(npm_command, {:user => user}) { |stream, chunk| puts "#{stream}: #{chunk}" }
 
-  puts '# Installing NPM and TSD dependencies'
+  puts '# Installing NPM and Typings dependencies'
   npm_command = 'npm install'.split ' '
+  container.exec(npm_command, {:user => user}) { |stream, chunk| puts "#{stream}: #{chunk}" }
+  npm_command = 'npm run postinstall'.split ' '
   container.exec(npm_command, {:user => user}) { |stream, chunk| puts "#{stream}: #{chunk}" }
 
   puts '# Running tests'
@@ -133,6 +135,8 @@ task :build_prod do
 
   puts '# Installing NPM and TSD dependencies'
   npm_command = 'npm install'.split ' '
+  container.exec(npm_command, {:user => user}) { |stream, chunk| puts "#{stream}: #{chunk}" }
+  npm_command = 'npm run postinstall'.split ' '
   container.exec(npm_command, {:user => user}) { |stream, chunk| puts "#{stream}: #{chunk}" }
 
   # Webpack Build
