@@ -31,8 +31,6 @@ export class EncryptionSchemeProviderService {
       a.push(value);
     });
 
-    console.log(a);
-
     return a;
   }
 
