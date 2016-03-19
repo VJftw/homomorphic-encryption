@@ -12,7 +12,7 @@ import {HTTP_PROVIDERS} from 'angular2/http';
  */
 const ENV_PROVIDERS = [];
 
-if ('production' === process.env.ENV) {
+if ('production' === ENV) {
   ngCore.enableProdMode();
   ENV_PROVIDERS.push(browser.ELEMENT_PROBE_PROVIDERS_PROD_MODE);
 } else {
@@ -57,7 +57,7 @@ function bootstrapDomReady() {
   return document.addEventListener('DOMContentLoaded', main);
 }
 
-if ('development' === process.env.ENV) {
+if ('development' === ENV) {
   // activate hot module reload
   if (process.env.HMR) {
     if (document.readyState === 'complete') {
