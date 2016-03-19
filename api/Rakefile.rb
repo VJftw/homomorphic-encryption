@@ -1,67 +1,9 @@
 require 'json'
 require 'docker'
-# Tag structure:
-# tutum.co/vjftw/homomorphic-encryption:api-<branch> for latest production
-# tutum.co/vjftw/homomorphic-encryption:api-<branch>-commit
-# tutum.co/vjftw/homomorphic-encryption:api-<branch>-dev for development
-#
-if ENV.include? 'CI' and ENV['CI'] == 'true'
-  IS_CI = true
-  puts "# Continuous Integration environment\n\n"
-else
-  IS_CI = false
-  puts "# Development environment\n\n"
-end
+require 'docker-rake-flow'
 
-def system_command(command, silent=false, show_warnings=true, indent_amount=0)
-  output = []
-  indent = ''
-  indent_amount.times do
-    indent += "\t"
-  end
-  IO.popen(command) do |io|
-    while line = io.gets
-      unless silent
-        puts "#{indent}#{line.chomp}"
-      end
-      output << line.chomp
-    end
-    io.close
-
-    if $?.to_i != 0
-      if show_warnings
-        puts "Warning: #{command} returned: #{$?.to_i}"
-      end
-      return false
-    end
-  end
-
-  output
-end
-
-def get_current_branch
-  if IS_CI
-    b = ENV['GIT_BRANCH']
-    b = b.gsub('origin/', '')
-  else
-    b = system_command('git rev-parse --abbrev-ref HEAD', true)[0].strip()
-  end
-
-  return b.gsub('/', '-')
-end
-
-def get_current_commit
-  system_command('git describe --tags', true)[0].strip()
-end
-
-container_repo = 'vjftw/homomorphic-encryption'
-container_tag = "api-#{get_current_branch}"
-container_name = "#{container_repo}:#{container_tag}"
-dev_container_name = "#{container_name}-dev"
-prod_container_name = "#{container_name}-#{get_current_commit}"
-
-puts "# Container Tags\n\tProduction:\t#{container_name}\n\tDevelopment:\t#{dev_container_name} \n\tBuild:\t\t#{prod_container_name}\n\n"
-
+flow = DockerFlow::RakeBuilder.new 'Homomorphic Encryption - API', 'vjftw/homomorphic-encryption', 'api'
+dev_container_name = "vjftw/homomorphic-encryption:#{flow.branch_container_tag}-dev"
 
 def get_dev_container(tag)
   puts '## Building Development container'
@@ -76,7 +18,6 @@ def get_dev_container(tag)
   end
 
 end
-
 
 desc 'Run tests'
 task :test do
@@ -98,7 +39,7 @@ task :test do
   container.start
   puts "\n"
 
-  user = IS_CI ? 'root': 'app'
+  user = flow.is_ci ? 'root': 'app'
 
   puts '# Adding GitHub composer token'
   if ENV.include? 'GITHUB_AUTH_TOKEN' and ENV['GITHUB_AUTH_TOKEN']
@@ -195,43 +136,23 @@ task :build_prod do
 
   image = Docker::Image.build_from_dir(Dir.getwd, {
       'dockerfile' => "Dockerfile.app",
-      't' => prod_container_name
+      't' => flow.build_container_name
   }) do |v|
     if (log = JSON.parse(v)) && log.has_key?("stream")
       $stdout.puts log["stream"]
     end
   end
 
-  puts "# Tagging as #{container_name}"
+  puts "# Tagging as #{flow.branch_container_name}"
   image.tag(
-      'repo' => container_repo,
-      'tag' => container_tag,
+      'repo' => flow.repository,
+      'tag' => flow.branch_container_tag,
       'force' => true
   )
 
   puts '# Cleaning up'
-  image = Docker::Image.create('fromImage' => 'alpine:latest') do |chunk|
-    puts JSON.parse(chunk)
-  end
-  container = Docker::Container.create({
-     'Image' => 'alpine',
-     'Volumes' => {
-         '/app' => {}
-     },
-     'Binds' => [
-         "#{Dir.getwd}:/app"
-     ],
-     'WorkingDir' => '/app',
-     'Cmd': [
-         '/bin/sh', '-c', 'rm -rf __build__'
-     ]
-  })
-  container.tap(&:start).attach { |stream, chunk| puts "#{stream}: #{chunk}" }
-  container.stop
-  container.delete
+  DockerFlow::Utils.clean_dirs ['__build__']
 end
-
-
 
 desc 'Publish Coverage'
 task :publish_coverage do
@@ -268,16 +189,16 @@ task :push_prod do
   puts "\n# Pushing to Registry"
 
   images = Docker::Image.all({
-                                 'filter' => prod_container_name
-                             })
+     'filter' => flow.build_container_name
+  })
   prod_commit_image = images[0]
   prod_commit_image.push do |chunk|
     puts JSON.parse(chunk)
   end
 
   images = Docker::Image.all({
-                                 'filter' => container_name
-                             })
+     'filter' => flow.branch_container_name
+  })
   prod_main_image = images[0]
   prod_main_image.push do |chunk|
     puts JSON.parse(chunk)
