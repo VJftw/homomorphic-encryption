@@ -1,3 +1,5 @@
+// @AngularClass
+
 /*
  * Helper: root(), and rootDir() are defined at the bottom
  */
@@ -14,6 +16,7 @@ var CompressionPlugin = require('compression-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var WebpackMd5Hash    = require('webpack-md5-hash');
+var ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
 var ENV = process.env.NODE_ENV = process.env.ENV = 'production';
 var HOST = process.env.HOST || 'localhost';
 var PORT = process.env.PORT || 8080;
@@ -32,17 +35,17 @@ var metadata = {
 /*
  * Config
  */
-module.exports = helpers.defaults({
+module.exports = {
   // static data for index.html
   metadata: metadata,
 
   devtool: 'source-map',
-  cache: false,
   debug: false,
 
   entry: {
-    'polyfills':'./src/polyfills.ts',
-    'main':'./src/main.ts' // our angular app
+    'polyfills': './src/polyfills.ts',
+    'vendor': './src/vendor.ts',
+    'main': './src/main.ts'
   },
 
   // Config for our build files
@@ -54,7 +57,7 @@ module.exports = helpers.defaults({
   },
 
   resolve: {
-    cache: false,
+    extensions: ['', '.ts', '.js']
   },
 
   module: {
@@ -79,12 +82,11 @@ module.exports = helpers.defaults({
       // Support for .ts files.
       {
         test: /\.ts$/,
-        loader: 'ts-loader',
+        loader: 'awesome-typescript-loader',
         query: {
           // remove TypeScript helpers to be injected below by DefinePlugin
           'compilerOptions': {
             'removeComments': true,
-            'noEmitHelpers': true,
           }
         },
         exclude: [
@@ -121,17 +123,22 @@ module.exports = helpers.defaults({
       // Bootstrap 4
       { test: /bootstrap\/dist\/js\/umd\//, loader: 'imports?jQuery=jquery' }
 
+    ],
+    noParse: [
+      helpers.root('zone.js', 'dist'),
+      helpers.root('angular2', 'bundles')
     ]
   },
 
   plugins: [
+    new ForkCheckerPlugin(),
     new WebpackMd5Hash(),
     new DedupePlugin(),
     new OccurenceOrderPlugin(true),
     new CommonsChunkPlugin({
-      name: 'polyfills',
-      filename: 'polyfills.[chunkhash].bundle.js',
-      chunks: Infinity
+      name: ['main', 'vendor', 'polyfills'],
+      filename: '[name].bundle.js',
+      minChunks: Infinity
     }),
     // static assets
     new CopyWebpackPlugin([
@@ -141,15 +148,12 @@ module.exports = helpers.defaults({
       }
     ]),
     // generating html
-    new HtmlWebpackPlugin({ template: 'src/index.html' }),
+    new HtmlWebpackPlugin({ template: 'src/index.html', chunksSortMode: 'none' }),
     new DefinePlugin({
       // Environment helpers
-      'process.env': {
-        'ENV': JSON.stringify(metadata.ENV),
-        'NODE_ENV': JSON.stringify(metadata.ENV),
-        'API_ADDRESS': JSON.stringify(API_ADDRESS),
-        'BACKEND_ADDRESS': JSON.stringify(BACKEND_ADDRESS)
-      }
+      'ENV': JSON.stringify(metadata.ENV),
+      'API_ADDRESS': JSON.stringify(API_ADDRESS),
+      'BACKEND_ADDRESS': JSON.stringify(BACKEND_ADDRESS)
     }),
     new ProvidePlugin({
       // TypeScript helpers
@@ -177,7 +181,58 @@ module.exports = helpers.defaults({
       // disable mangling because of a bug in angular2 beta.1, beta.2 and beta.3
       // TODO(mastertinner): enable mangling as soon as angular2 beta.4 is out
       // mangle: { screw_ie8 : true },//prod
-      mangle: false,
+      mangle: {
+        screw_ie8 : true,
+        except: [
+          'App',
+          'About',
+          'Contact',
+          'Home',
+          'Menu',
+          'Footer',
+          'XLarge',
+          'RouterActive',
+          'RouterLink',
+          'RouterOutlet',
+          'NgFor',
+          'NgIf',
+          'NgClass',
+          'NgSwitch',
+          'NgStyle',
+          'NgSwitchDefault',
+          'NgControl',
+          'NgControlName',
+          'NgControlGroup',
+          'NgFormControl',
+          'NgModel',
+          'NgFormModel',
+          'NgForm',
+          'NgSelectOption',
+          'DefaultValueAccessor',
+          'NumberValueAccessor',
+          'CheckboxControlValueAccessor',
+          'SelectControlValueAccessor',
+          'RadioControlValueAccessor',
+          'NgControlStatus',
+          'RequiredValidator',
+          'MinLengthValidator',
+          'MaxLengthValidator',
+          'PatternValidator',
+          'AsyncPipe',
+          'DatePipe',
+          'JsonPipe',
+          'NumberPipe',
+          'DecimalPipe',
+          'PercentPipe',
+          'CurrencyPipe',
+          'LowerCasePipe',
+          'UpperCasePipe',
+          'SlicePipe',
+          'ReplacePipe',
+          'I18nPluralPipe',
+          'I18nSelectPipe'
+        ] // needed for uglify RouterLink problem
+      }, //prod
       compress : { screw_ie8 : true },//prod
       comments: false//prod
 
@@ -192,10 +247,11 @@ module.exports = helpers.defaults({
   // Other module loader config
   tslint: {
     emitErrors: true,
-    failOnHint: false, //true, : https://github.com/AngularClass/angular2-webpack-starter/issues/374
+    failOnHint: true,
     resourcePath: 'src',
   },
 
+  //Needed to workaround Angular 2's html syntax => #id [bind] (event) *ngFor
   htmlLoader: {
     minimize: true,
     removeAttributeQuotes: false,
@@ -203,6 +259,15 @@ module.exports = helpers.defaults({
     customAttrSurround: [ [/#/, /(?:)/], [/\*/, /(?:)/], [/\[?\(?/, /(?:)/] ],
     customAttrAssign: [ /\)?\]?=/ ]
   },
-  // don't use devServer for production
 
-});
+  // don't use devServer for production
+  node: {
+    global: 'window',
+    process: false,
+    crypto: 'empty',
+    module: false,
+    clearImmediate: false,
+    setImmediate: false
+  }
+
+};

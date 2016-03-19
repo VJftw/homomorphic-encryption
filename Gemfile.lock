@@ -1,18 +1,50 @@
 GEM
+  remote: https://rubygems.org/
   specs:
+    chef-config (12.8.1)
+      mixlib-config (~> 2.0)
+      mixlib-shellout (~> 2.0)
     docker-api (1.26.2)
       excon (>= 0.38.0)
       json
+    docker-rake-flow (0.0.1)
+      docker-api (~> 1.26, >= 1.26.2)
+      ohai (~> 8.12.1, >= 8.12.1)
     excon (0.45.4)
+    ffi (1.9.10)
+    ffi-yajl (2.2.3)
+      libyajl2 (~> 1.2)
+    ipaddress (0.8.3)
     json (1.8.3)
+    libyajl2 (1.2.0)
+    mixlib-cli (1.5.0)
+    mixlib-config (2.2.1)
+    mixlib-log (1.6.0)
+    mixlib-shellout (2.2.6)
+    ohai (8.12.1)
+      chef-config (>= 12.5.0.alpha.1, < 13)
+      ffi (~> 1.9)
+      ffi-yajl (~> 2.2)
+      ipaddress
+      mixlib-cli
+      mixlib-config (~> 2.0)
+      mixlib-log
+      mixlib-shellout (~> 2.0)
+      plist
+      systemu (~> 2.6.4)
+      wmi-lite (~> 1.0)
+    plist (3.2.0)
     rake (10.4.2)
+    systemu (2.6.5)
+    wmi-lite (1.0.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   docker-api
+  docker-rake-flow
   rake
 
 BUNDLED WITH
-   1.10.6
+   1.11.2
