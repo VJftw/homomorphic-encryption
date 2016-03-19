@@ -291,79 +291,81 @@ module.exports = {
     //
     // See: https://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
     // NOTE: To debug prod builds uncomment //debug lines and comment //prod lines
-    // new UglifyJsPlugin({
-    //   // beautify: true, //debug
-    //   // mangle: false, //debug
-    //   // dead_code: false, //debug
-    //   // unused: false, //debug
-    //   // deadCode: false, //debug
-    //   // compress: {
-    //   //   screw_ie8: true,
-    //   //   keep_fnames: true,
-    //   //   drop_debugger: false,
-    //   //   dead_code: false,
-    //   //   unused: false
-    //   // }, // debug
-    //   // comments: true, //debug
-    //
-    //   beautify: false,//prod
-    //
-    //   // mangle: { screw_ie8 : true }, //prod
-    //   mangle: {
-    //     screw_ie8: true,
-    //     except: [
-    //       'App',
-    //       'About',
-    //       'Contact',
-    //       'Home',
-    //       'Menu',
-    //       'Footer',
-    //       'XLarge',
-    //       'RouterActive',
-    //       'RouterLink',
-    //       'RouterOutlet',
-    //       'NgFor',
-    //       'NgIf',
-    //       'NgClass',
-    //       'NgSwitch',
-    //       'NgStyle',
-    //       'NgSwitchDefault',
-    //       'NgControl',
-    //       'NgControlName',
-    //       'NgControlGroup',
-    //       'NgFormControl',
-    //       'NgModel',
-    //       'NgFormModel',
-    //       'NgForm',
-    //       'NgSelectOption',
-    //       'DefaultValueAccessor',
-    //       'NumberValueAccessor',
-    //       'CheckboxControlValueAccessor',
-    //       'SelectControlValueAccessor',
-    //       'RadioControlValueAccessor',
-    //       'NgControlStatus',
-    //       'RequiredValidator',
-    //       'MinLengthValidator',
-    //       'MaxLengthValidator',
-    //       'PatternValidator',
-    //       'AsyncPipe',
-    //       'DatePipe',
-    //       'JsonPipe',
-    //       'NumberPipe',
-    //       'DecimalPipe',
-    //       'PercentPipe',
-    //       'CurrencyPipe',
-    //       'LowerCasePipe',
-    //       'UpperCasePipe',
-    //       'SlicePipe',
-    //       'ReplacePipe',
-    //       'I18nPluralPipe',
-    //       'I18nSelectPipe'
-    //     ] // Needed for uglify RouterLink problem
-    //   }, // prod
-    //   compress: {screw_ie8: true}, //prod
-    //   comments: false //prod
-    // }),
+    new UglifyJsPlugin({
+      // beautify: true, //debug
+      // mangle: false, //debug
+      // dead_code: false, //debug
+      // unused: false, //debug
+      // deadCode: false, //debug
+      // compress: {
+      //   screw_ie8: true,
+      //   keep_fnames: true,
+      //   drop_debugger: false,
+      //   dead_code: false,
+      //   unused: false
+      // }, // debug
+      // comments: true, //debug
+
+      beautify: false,//prod
+
+      // mangle: { screw_ie8 : true }, //prod
+      mangle: {
+        screw_ie8: true,
+        except: [
+          'App',
+          'ComputationComponent',
+          'ComputationRunComponent',
+          'ComputationSchemesComponent',
+          'MathJaxDirective',
+          'Index',
+          'Menu',
+          'Footer',
+          'XLarge',
+          'RouterActive',
+          'RouterLink',
+          'RouterOutlet',
+          'NgFor',
+          'NgIf',
+          'NgClass',
+          'NgSwitch',
+          'NgStyle',
+          'NgSwitchDefault',
+          'NgControl',
+          'NgControlName',
+          'NgControlGroup',
+          'NgFormControl',
+          'NgModel',
+          'NgFormModel',
+          'NgForm',
+          'NgSelectOption',
+          'DefaultValueAccessor',
+          'NumberValueAccessor',
+          'CheckboxControlValueAccessor',
+          'SelectControlValueAccessor',
+          'RadioControlValueAccessor',
+          'NgControlStatus',
+          'RequiredValidator',
+          'MinLengthValidator',
+          'MaxLengthValidator',
+          'PatternValidator',
+          'AsyncPipe',
+          'DatePipe',
+          'JsonPipe',
+          'NumberPipe',
+          'DecimalPipe',
+          'PercentPipe',
+          'CurrencyPipe',
+          'LowerCasePipe',
+          'UpperCasePipe',
+          'SlicePipe',
+          'ReplacePipe',
+          'I18nPluralPipe',
+          'I18nSelectPipe'
+        ] // Needed for uglify RouterLink problem
+      }, // prod
+      compress: {screw_ie8: true}, //prod
+      comments: false //prod
+    }),
 
     // Plugin: CompressionPlugin
     // Description: Prepares compressed versions of assets to serve
