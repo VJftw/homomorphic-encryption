@@ -18,9 +18,11 @@ class ComputationResolverTests(unittest.TestCase):
         :return:
         """
         self.log_manager = mock.Mock()
+        self.redis_service = mock.Mock()
 
         self.computation_resolver = ComputationResolver(
-            self.log_manager
+            self.log_manager,
+            self.redis_service
         )
 
     def test_from_dict(self):
@@ -30,6 +32,7 @@ class ComputationResolverTests(unittest.TestCase):
         """
         d = {
             'hashId': "abcdefg",
+            'authToken': "zxcvb",
             'computeSteps': [
                 "cX = aX + bX"
             ],
@@ -39,11 +42,18 @@ class ComputationResolverTests(unittest.TestCase):
             }
         }
 
+        self.redis_service.get = mock.Mock(return_value="zxcvb")
+
         computation = self.computation_resolver.from_dict(d)
 
         self.assertEqual(
             computation.get_hash_id(),
             "abcdefg"
+        )
+
+        self.assertEqual(
+            computation.get_auth_token(),
+            "zxcvb"
         )
 
         self.assertEqual(

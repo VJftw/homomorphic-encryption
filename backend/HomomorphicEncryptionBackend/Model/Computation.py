@@ -12,6 +12,7 @@ class Computation:
 
     def __init__(self):
         self.__hash_id = None
+        self.__auth_token = None
         self.__compute_steps = []
         self.__public_scope = {}
         self.__results = []
@@ -21,6 +22,14 @@ class Computation:
 
     def set_hash_id(self, hash_id):
         self.__hash_id = hash_id
+
+        return self
+
+    def get_auth_token(self):
+        return self.__auth_token
+
+    def set_auth_token(self, auth_token):
+        self.__auth_token = auth_token
 
         return self
 

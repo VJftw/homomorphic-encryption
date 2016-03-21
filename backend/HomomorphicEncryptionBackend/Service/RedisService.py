@@ -5,6 +5,7 @@ HomomorphicEncryptionBackend.Service.RedisService
 
 import redis
 import os
+import json
 
 __author__ = "VJ Patel (vj@vjpatel.me)"
 
@@ -26,4 +27,4 @@ class RedisService:
         :param key:
         :return:
         """
-        return self.__r.get(key).decode('utf8')
+        return json.loads(self.__r.get(key).decode('utf8'))
