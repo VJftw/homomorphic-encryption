@@ -19,4 +19,5 @@ export class RegisterMessage implements MessageInterface {
 
 export interface IRegisterMessageResponseJson {
   hashId: string;
+  authToken: string;
 }
