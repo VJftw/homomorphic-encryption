@@ -14,6 +14,7 @@ describe('ComputeMessage', () => {
 
     let computeMessage = new ComputeMessage(
       "abcdef",
+      "zxcvb",
       [step],
       {
         'p': '4'
@@ -25,6 +26,7 @@ describe('ComputeMessage', () => {
         'action': 'computation/compute',
         'data': {
           'hashId': 'abcdef',
+          'authToken': 'zxcvb',
           'computeSteps': ['3 + 4'],
           'publicScope': {
             'p': '4'

@@ -25,6 +25,7 @@ export class MessageProviderService {
 
     return new ComputeMessage(
       computation.getHashId(),
+      computation.getAuthToken(),
       computation.getEncryptionScheme().getBackendStageByOperation(
         computation.getOperation()
       ).getSteps(),

@@ -17,10 +17,11 @@ class RedisServiceTests(unittest.TestCase):
     @patch('redis.StrictRedis')
     def test_get(self, redis_mock):
         """
+        RedisService.get - It should return the redis service
         :return:
         """
         decoded = mock.Mock()
-        decoded.decode = mock.Mock(return_value="abcdef")
+        decoded.decode = mock.Mock(return_value='"abcdef"')
         redis = mock.Mock()
         redis.get = mock.Mock(return_value=decoded)
         redis_mock.return_value = redis

@@ -13,6 +13,7 @@ export class Computation {
   public static STATE_COMPLETE = 4;
 
   protected _hashId: string;
+  protected _authToken: string;
   protected timestamp: Date;
   protected keyBitLength: number;
   protected encryptionScheme: EncryptionScheme;
@@ -119,6 +120,25 @@ export class Computation {
    */
   public getHashId(): string {
     return this._hashId;
+  }
+
+  /**
+   * Returns the auth token
+   * @returns {string}
+   */
+  public getAuthToken(): string {
+    return this._authToken;
+  }
+
+  /**
+   * Sets the auth token
+   * @param authToken
+   * @returns {Computation}
+   */
+  public setAuthToken(authToken: string): Computation {
+    this._authToken = authToken;
+
+    return this;
   }
 
   /**

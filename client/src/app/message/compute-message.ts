@@ -8,6 +8,7 @@ export class ComputeMessage implements MessageInterface {
 
   constructor(
     private hashId: string,
+    private authToken: string,
     steps: Step[],
     private publicScope: {}
   ) {
@@ -23,6 +24,7 @@ export class ComputeMessage implements MessageInterface {
       'action': 'computation/compute',
       'data': {
         'hashId': this.hashId,
+        'authToken': this.authToken,
         'computeSteps': this.steps,
         'publicScope': this.publicScope
       }

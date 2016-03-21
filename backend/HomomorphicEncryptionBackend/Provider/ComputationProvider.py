@@ -29,7 +29,7 @@ class ComputationProvider:
         self.__computation_resolver = computation_resolver
 
     def get_computation_by_hash(self, hash_id):
-        computation_json = self.__redis_service.get(hash_id)
+        computation_json = self.__redis_service.get("computation:{0}".format(hash_id))
 
         if not computation_json:
             raise Exception("Computation not Found in Redis.")

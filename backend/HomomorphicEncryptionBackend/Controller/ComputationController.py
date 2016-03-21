@@ -31,7 +31,6 @@ class ComputationController:
     def compute(self, data, socket):
         """
         1) resolve Computation
-        2) TODO: Cross-check with redis, could use a token
         2) start new thread and compute
         :param data:
         :param socket:

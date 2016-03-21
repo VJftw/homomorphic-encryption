@@ -41,13 +41,19 @@ class ComputationManagerSpec extends ObjectBehavior
             ->shouldBeCalled()
         ;
 
-        $computation->getHashId()
-            ->willReturn("abcdef")
+        $redisService->provideKeyForComputation($computation)
+            ->shouldBeCalled()
+            ->willReturn("computation:abcde")
+        ;
+
+        $computation->getAuthToken()
+            ->shouldBeCalled()
+            ->willReturn("zxcvb")
         ;
 
         $redisService->set(
-            "abcdef",
-            $computation
+            "computation:abcde",
+            "zxcvb"
         )
             ->shouldBeCalled()
         ;

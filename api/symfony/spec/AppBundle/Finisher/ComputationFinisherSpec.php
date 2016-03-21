@@ -46,6 +46,12 @@ class ComputationFinisherSpec extends ObjectBehavior
 
         $computation->setHashId("abcdef")
             ->shouldBeCalled()
+            ->willReturn($computation)
+        ;
+
+        $computation->setAuthToken(Argument::any())
+            ->shouldBeCalled()
+            ->willReturn($computation)
         ;
 
         $this->finishComputation($computation)

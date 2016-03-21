@@ -18,6 +18,7 @@ export class MessageResolverService {
 
   public resolveRegisterMessage(message: IRegisterMessageResponseJson, computation: Computation) {
     computation.setHashId(message.hashId);
+    computation.setAuthToken(message.authToken);
 
     return computation;
   }

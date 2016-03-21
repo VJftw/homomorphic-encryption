@@ -47,8 +47,8 @@ class ComputationManager
         $this->entityManager->flush();
 
         $this->redisService->set(
-            $computation->getHashId(),
-            $computation
+            $this->redisService->provideKeyForComputation($computation),
+            $computation->getAuthToken()
         );
 
         return $computation;
