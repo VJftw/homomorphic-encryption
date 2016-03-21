@@ -4,6 +4,8 @@ namespace AppBundle\Finisher;
 
 use AppBundle\Entity\Computation;
 use Hashids\HashGenerator;
+use Hashids\Hashids;
+
 
 /**
  * Class ComputationFinisher
@@ -38,8 +40,11 @@ class ComputationFinisher
                 ->getTimestamp()
         );
 
+        $authToken = base64_encode(random_bytes(32));
+
         $computation
             ->setHashId($hashId)
+            ->setAuthToken($authToken)
         ;
 
         return $computation;

@@ -55,6 +55,11 @@ class Computation
     private $ipAddress;
 
     /**
+     * @var String
+     */
+    private $authToken;
+
+    /**
      * Get id
      *
      * @return integer
@@ -146,6 +151,26 @@ class Computation
     public function getIpAddress()
     {
         return $this->ipAddress;
+    }
+
+    /**
+     * @param $authToken
+     * 
+     * @return $this
+     */
+    public function setAuthToken($authToken)
+    {
+        $this->authToken = $authToken;
+
+        return $this;
+    }
+
+    /**
+     * @return String
+     */
+    public function getAuthToken()
+    {
+        return $this->authToken;
     }
 }
 

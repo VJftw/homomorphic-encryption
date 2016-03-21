@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
     php-redis \
     php-xml \
     php-zip \
+    php-bcmath \
     nginx
 
 # Configure PHP and PHP-FPM

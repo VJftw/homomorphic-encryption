@@ -15,7 +15,8 @@ RUN apt-get update && apt-get install -y \
     php-redis \
     php-xdebug \
     php-zip \
-    php-xml
+    php-xml \
+    php-bcmath
 
 # Configure PHP
 RUN sed -i 's#.*date.timezone.*#date.timezone=Europe/London#g' /etc/php/7.0/cli/php.ini

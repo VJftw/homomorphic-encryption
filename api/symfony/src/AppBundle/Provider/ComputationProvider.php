@@ -60,8 +60,6 @@ class ComputationProvider
             throw new NotFoundHttpException();
         }
 
-        // TODO: Put in Redis
-
         return $computation;
     }
 }

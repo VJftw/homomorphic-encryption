@@ -2,6 +2,7 @@
 
 namespace AppBundle\Service;
 
+use AppBundle\Entity\Computation;
 use JMS\Serializer\SerializerInterface;
 use Predis\Client;
 
@@ -69,5 +70,15 @@ class RedisService
         }
 
         return null;
+    }
+
+    public function provideKeyForComputation(Computation $computation) {
+        $key = sprintf(
+            "%s:%s",
+            "computation",
+            $computation->getHashId()
+        );
+
+        return $key;
     }
 }

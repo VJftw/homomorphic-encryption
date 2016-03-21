@@ -81,4 +81,17 @@ class RedisServiceSpec extends ObjectBehavior
             ->shouldReturn(null)
         ;
     }
+
+    function it_should_provide_a_key_for_a_computation(
+        Computation $computation
+    ) {
+        $computation->getHashId()
+            ->shouldBeCalled()
+            ->willReturn("abcde")
+        ;
+
+        $this->provideKeyForComputation($computation)
+            ->shouldReturn("computation:abcde")
+        ;
+    }
 }

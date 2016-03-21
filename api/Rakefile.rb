@@ -21,7 +21,12 @@ end
 
 desc 'Run tests'
 task :test do
-
+  DockerFlow::Utils.clean_dirs [
+    'symfony/var/cache/dev',
+    'symfony/var/cache/prod',
+    'symfony/var/logs/*.log',
+    'symfony/coverage'
+  ]
   get_dev_container dev_container_name
 
   # start container
