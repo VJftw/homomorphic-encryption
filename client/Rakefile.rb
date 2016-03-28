@@ -202,9 +202,12 @@ task :push_prod do
   end
 end
 
+task :clean do
+  DockerFlow::Utils.clean_dirs ['node_modules', 'doc', 'typings', 'coverage', 'dist']  
+end
+
 desc 'CI'
 task :ci do
-  DockerFlow::Utils.clean_dirs ['node_modules', 'doc', 'typings', 'coverage', 'dist']
 
   Rake::Task["test"].execute
   # Rake::Task["publish_coverage"].execute
