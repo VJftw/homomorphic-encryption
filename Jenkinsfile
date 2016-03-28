@@ -22,6 +22,7 @@ node {
   ]) {
       sh '''
         set +x
+        env
         cd api
         rake clean
         rake test
