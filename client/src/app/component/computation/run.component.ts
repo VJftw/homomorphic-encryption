@@ -1,4 +1,4 @@
-import {Component, View} from 'angular2/core';
+import {Component} from 'angular2/core';
 import {FormBuilder, ControlGroup, Validators} from 'angular2/common';
 import {RouteParams} from 'angular2/router';
 
@@ -31,13 +31,10 @@ import {MathjaxPipe} from '../../pipe/mathjax.pipe';
     EncryptionHelper,
     MessageProviderService,
     MessageResolverService
-  ]
-})
-@View({
+  ],
   directives: [MathJaxDirective],
   template: require('./run.html'),
   pipes: [MathjaxPipe]
-
 })
 export class ComputationRunComponent implements OnInit {
 

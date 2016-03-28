@@ -1,6 +1,5 @@
 import {Component} from 'angular2/core';
-import {RouteConfig, Router, ROUTER_DIRECTIVES} from 'angular2/router';
-import {FORM_PROVIDERS} from 'angular2/common';
+import {RouteConfig, ROUTER_DIRECTIVES} from 'angular2/router';
 
 import {Index} from './component/index/index.component';
 import {ComputationComponent} from './component/computation/computation.component';
@@ -10,7 +9,7 @@ import {ComputationComponent} from './component/computation/computation.componen
  * Top Level Component
  */
 @Component({
-  directives: [ ...ROUTER_DIRECTIVES ],
+  directives: [ ROUTER_DIRECTIVES ],
   selector: 'app', // <app></app>
   template: require('./app.html')
 })

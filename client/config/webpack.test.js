@@ -16,6 +16,12 @@ var DefinePlugin = require('webpack/lib/DefinePlugin');
 const ENV = process.env.ENV = process.env.NODE_ENV = 'test';
 
 /**
+ * Homomorphic Encryption Constants
+ */
+const API_ADDRESS = process.env.CLIENT_API_ADDRESS || '0.0.0.0:8000';
+const BACKEND_ADDRESS = process.env.CLIENT_BACKEND_ADDRESS || '0.0.0.0:9000';
+
+/**
  * Webpack configuration
  *
  * See: http://webpack.github.io/docs/configuration.html#cli
@@ -36,7 +42,10 @@ module.exports = {
     // An array of extensions that should be used to resolve modules.
     //
     // See: http://webpack.github.io/docs/configuration.html#resolve-extensions
-    extensions: ['', '.ts', '.js']
+    extensions: ['', '.ts', '.js'],
+
+    // Make sure root is src
+    root: helpers.root('src'),
 
   },
 
@@ -59,7 +68,11 @@ module.exports = {
       // Extracts SourceMaps for source files that as added as sourceMappingURL comment.
       //
       // See: https://github.com/webpack/source-map-loader
-      {test: /\.js$/, loader: "source-map-loader", exclude: [helpers.root('node_modules/rxjs')]}
+      {test: /\.js$/, loader: "source-map-loader", exclude: [
+        // these packages have problems with their sourcemaps
+        helpers.root('node_modules/rxjs'),
+        helpers.root('node_modules/@angular2-material')
+      ]}
 
     ],
 
@@ -105,15 +118,20 @@ module.exports = {
       //
       // See: https://github.com/webpack/raw-loader
       {test: /\.css$/, loader: 'raw-loader', exclude: [helpers.root('src/index.html')]},
-      // Boostrap
+
+      // Bootstrap
+      { test: /\.scss$/, loaders: ['style', 'css', 'postcss', 'sass'] },
+      // { test: /\.(woff2?|ttf|eot|svg)$/, loader: 'url?limit=10000' },
       { test: /\.(jpg|png)$/,       loader: 'url-loader?name=[path][name].[ext]&limit=100000' },
       { test: /\.woff(\?.*)?$/,     loader: "url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/font-woff" },
       { test: /\.woff2(\?.*)?$/,    loader: "url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/font-woff2" },
       { test: /\.ttf(\?.*)?$/,      loader: "url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/octet-stream" },
       { test: /\.eot(\?.*)?$/,      loader: "file-loader?prefix=fonts/&name=[path][name].[ext]" },
       { test: /\.svg(\?.*)?$/,      loader: "url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=image/svg+xml" },
+      // Bootstrap 4
       { test: /bootstrap\/dist\/js\/umd\//, loader: 'imports?jQuery=jquery' }
     ],
+
     // An array of applied pre and post loaders.
     //
     // See: http://webpack.github.io/docs/configuration.html#module-preloaders-module-postloaders
@@ -148,8 +166,17 @@ module.exports = {
     //
     // See: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
     // NOTE: when adding more properties make sure you include them in custom-typings.d.ts
-    new DefinePlugin({'ENV': JSON.stringify(ENV), 'HMR': false})
-
+    new DefinePlugin({
+      'API_ADDRESS': JSON.stringify(API_ADDRESS),
+      'BACKEND_ADDRESS': JSON.stringify(BACKEND_ADDRESS)
+    }),
+    // Plugin: ProvidePlugin
+    // Description: Provides other libraries
+    new ProvidePlugin({
+      jQuery: 'jquery',
+      $: 'jquery',
+      jquery: 'jquery'
+    })
   ],
 
   // Static analysis linter for TypeScript advanced options configuration
