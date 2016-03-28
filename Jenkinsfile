@@ -141,7 +141,7 @@ node {
       sh '''
         set +x
         cd client
-        rake clean && rake build_prod && rake push_prod
+        rake build_prod && rake push_prod
       '''
   }
 }
