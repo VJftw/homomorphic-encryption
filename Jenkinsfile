@@ -5,22 +5,26 @@ node {
   withCredentials([
   [
     $class: 'StringBinding',
-    credentialsId: 'test',
-    variable: 'test'
+    credentialsId: 'VjPatelGithubToken',
+    variable: 'GITHUB_AUTH_TOKEN'
+  ],
+  [
+    $class: 'StringBinding',
+    credentialsId: 'VjPatelDockerEmail',
+    variable: 'DOCKER_EMAIL'
   ],
   [
     $class: 'UsernamePasswordMultiBinding',
-    credentialsId: 'userpasswordtest',
-    passwordVariable: 'username',
-    usernameVariable: 'password'
+    credentialsId: 'VjPatelDockerCredentials',
+    passwordVariable: 'DOCKER_USERNAME',
+    usernameVariable: 'DOCKER_PASSWORD'
   ]
   ]) {
       sh '''
         set +x
         cd api
-        echo $test
-        echo $username
-        echo $password
+        rake clean
+        rake test
       '''
   }  
 }
@@ -32,22 +36,27 @@ node {
   withCredentials([
   [
     $class: 'StringBinding',
-    credentialsId: 'test',
-    variable: 'test'
+    credentialsId: 'VjPatelGithubToken',
+    variable: 'GITHUB_AUTH_TOKEN'
+  ],
+  [
+    $class: 'StringBinding',
+    credentialsId: 'VjPatelDockerEmail',
+    variable: 'DOCKER_EMAIL'
   ],
   [
     $class: 'UsernamePasswordMultiBinding',
-    credentialsId: 'userpasswordtest',
-    passwordVariable: 'username',
-    usernameVariable: 'password'
+    credentialsId: 'VjPatelDockerCredentials',
+    passwordVariable: 'DOCKER_USERNAME',
+    usernameVariable: 'DOCKER_PASSWORD'
   ]
   ]) {
       sh '''
         set +x
         cd api
-        echo $test
-        echo $username
-        echo $password
+        rake clean
+        rake build_prod
+        rake push_prod
       '''
   }  
 }
