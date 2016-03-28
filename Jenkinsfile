@@ -22,12 +22,10 @@ node {
   ]) {
       sh '''
         set +x
-        env
         cd api
-        rake clean
         rake test
       '''
-  }  
+  }
 }
 
 stage 'API: Build and push production image'
@@ -55,9 +53,8 @@ node {
       sh '''
         set +x
         cd api
-        rake clean
         rake build_prod
         rake push_prod
       '''
-  }  
+  }
 }
