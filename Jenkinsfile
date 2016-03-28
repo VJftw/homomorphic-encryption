@@ -46,8 +46,8 @@ node {
   [
     $class: 'UsernamePasswordMultiBinding',
     credentialsId: 'VjPatelDockerCredentials',
-    passwordVariable: 'DOCKER_USERNAME',
-    usernameVariable: 'DOCKER_PASSWORD'
+    passwordVariable: 'DOCKER_PASSWORD',
+    usernameVariable: 'DOCKER_USERNAME'
   ]
   ]) {
       sh '''
