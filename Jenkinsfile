@@ -1,26 +1,53 @@
-stage 'Build development image'
-node {
-  env.CI = "true"
-  sh "echo WOOHOO"
-}
-
-stage 'Unit tests'
+stage 'API: Unit tests'
 node {
   env.CI = "true"
   checkout scm
-  sh "echo WOOHOO"
+  withCredentials([
+  [
+    $class: 'StringBinding',
+    credentialsId: 'test',
+    variable: 'test'
+  ],
+  [
+    $class: 'UsernamePasswordMultiBinding',
+    credentialsId: 'userpasswordtest',
+    passwordVariable: 'username',
+    usernameVariable: 'password'
+  ]
+  ]) {
+      sh '''
+        set +x
+        cd api
+        echo $test
+        echo $username
+        echo $password
+      '''
+  }  
 }
 
-stage 'Build production image'
+stage 'API: Build and push production image'
 node {
   env.CI = "true"
   checkout scm
-  sh "echo WOOHOO"
-}
-
-stage 'Push production image'
-node {
-  env.CI = "true"
-  checkout scm
-  sh "echo WOOHOO"
+  withCredentials([
+  [
+    $class: 'StringBinding',
+    credentialsId: 'test',
+    variable: 'test'
+  ],
+  [
+    $class: 'UsernamePasswordMultiBinding',
+    credentialsId: 'userpasswordtest',
+    passwordVariable: 'username',
+    usernameVariable: 'password'
+  ]
+  ]) {
+      sh '''
+        set +x
+        cd api
+        echo $test
+        echo $username
+        echo $password
+      '''
+  }  
 }
