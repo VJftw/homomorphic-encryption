@@ -281,14 +281,14 @@ module.exports = {
     //
     // See: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
     // NOTE: when adding more properties make sure you include them in custom-typings.d.ts
-    new webpack.DefinePlugin({
+    new DefinePlugin({
       'ENV': JSON.stringify(METADATA.ENV),
       'API_ADDRESS': JSON.stringify(API_ADDRESS),
       'BACKEND_ADDRESS': JSON.stringify(BACKEND_ADDRESS)
     }),
     // Plugin: ProvidePlugin
     // Description: Provides other libraries
-    new webpack.ProvidePlugin({
+    new ProvidePlugin({
       jQuery: 'jquery',
       $: 'jquery',
       jquery: 'jquery'
