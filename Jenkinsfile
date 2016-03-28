@@ -1,5 +1,5 @@
-stage 'API: Unit tests'
 node {
+stage 'API: Unit tests'
   env.CI = "true"
   checkout scm
   withCredentials([
@@ -81,8 +81,7 @@ node {
       sh '''
         set +x
         cd api
-        rake build_prod
-        rake push_prod
+        rake build_prod && rake push_prod
       '''
   }
 }
@@ -112,8 +111,7 @@ node {
       sh '''
         set +x
         cd backend
-        rake build_prod
-        rake push_prod
+        rake build_prod && rake push_prod
       '''
   }
 }
@@ -143,9 +141,7 @@ node {
       sh '''
         set +x
         cd client
-        rake clean
-        rake build_prod
-        rake push_prod
+        rake clean && rake build_prod && rake push_prod
       '''
   }
 }
