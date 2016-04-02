@@ -69,7 +69,7 @@ We use the component approach in our starter. This is the new standard for devel
 ```
 angular2-webpack-starter/
  ├──src/                       * our source files that will be compiled to javascript
- |   ├──main.ts                * our entry file for our browser environment
+ |   ├──main.browser.ts                * our entry file for our browser environment
  │   │
  |   ├──index.html             * Index.html: where we generate our index page
  │   │
@@ -95,8 +95,8 @@ angular2-webpack-starter/
  ├──package.json               * what npm uses to manage it's dependencies
  │
  ├──webpack.config.js          * our development webpack config
- ├──webpack.test.config.js     * our testing webpack config
- └──webpack.prod.config.js     * our production webpack config
+ ├──webpack.test.js     * our testing webpack config
+ └──webpack.prod.js     * our production webpack config
 ```
 
 # Getting Started

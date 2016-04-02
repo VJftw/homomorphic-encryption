@@ -1,0 +1,154 @@
+node {
+stage 'API: Unit tests'
+  env.CI = "true"
+  checkout scm
+  withCredentials([
+  [
+    $class: 'StringBinding',
+    credentialsId: 'VjPatelGithubToken',
+    variable: 'GITHUB_AUTH_TOKEN'
+  ]
+  ]) {
+      sh '''
+        set +x
+        cd api
+        rake test
+      '''
+  }
+}
+
+stage 'Backend: Unit tests'
+node {
+  env.CI = "true"
+  checkout scm
+  withCredentials([
+  [
+    $class: 'StringBinding',
+    credentialsId: 'VjPatelGithubToken',
+    variable: 'GITHUB_AUTH_TOKEN'
+  ]
+  ]) {
+      sh '''
+        set +x
+        cd backend
+        rake test
+      '''
+  }
+}
+
+stage 'Client: Unit tests'
+node {
+  env.CI = "true"
+  checkout scm
+  withCredentials([
+  [
+    $class: 'StringBinding',
+    credentialsId: 'VjPatelGithubToken',
+    variable: 'GITHUB_AUTH_TOKEN'
+  ]
+  ]) {
+      sh '''
+        set +x
+        cd client
+        rake clean
+        rake test
+        echo "Compressing node modules"
+        tar cf - node_modules | pv -s $(du -sk node_modules | cut -f 1)k | bzip2 -c > node_modules.tar.bz2
+      '''
+  }
+  stash includes: 'client/node_modules.tar.bz2', name: 'node_modules'
+}
+
+stage 'API: Build and push production image'
+node {
+  env.CI = "true"
+  checkout scm
+  withCredentials([
+  [
+    $class: 'StringBinding',
+    credentialsId: 'VjPatelGithubToken',
+    variable: 'GITHUB_AUTH_TOKEN'
+  ],
+  [
+    $class: 'StringBinding',
+    credentialsId: 'VjPatelDockerEmail',
+    variable: 'DOCKER_EMAIL'
+  ],
+  [
+    $class: 'UsernamePasswordMultiBinding',
+    credentialsId: 'VjPatelDockerCredentials',
+    passwordVariable: 'DOCKER_PASSWORD',
+    usernameVariable: 'DOCKER_USERNAME'
+  ]
+  ]) {
+      sh '''
+        set +x
+        cd api
+        rake build_prod && rake push_prod
+      '''
+  }
+}
+
+stage 'Backend: Build and push production image'
+node {
+  env.CI = "true"
+  checkout scm
+  withCredentials([
+  [
+    $class: 'StringBinding',
+    credentialsId: 'VjPatelGithubToken',
+    variable: 'GITHUB_AUTH_TOKEN'
+  ],
+  [
+    $class: 'StringBinding',
+    credentialsId: 'VjPatelDockerEmail',
+    variable: 'DOCKER_EMAIL'
+  ],
+  [
+    $class: 'UsernamePasswordMultiBinding',
+    credentialsId: 'VjPatelDockerCredentials',
+    passwordVariable: 'DOCKER_PASSWORD',
+    usernameVariable: 'DOCKER_USERNAME'
+  ]
+  ]) {
+      sh '''
+        set +x
+        cd backend
+        rake build_prod && rake push_prod
+      '''
+  }
+}
+
+stage 'Client: Build and push production image'
+node {
+  env.CI = "true"
+  checkout scm
+  unstash 'node_modules'
+  withCredentials([
+  [
+    $class: 'StringBinding',
+    credentialsId: 'VjPatelGithubToken',
+    variable: 'GITHUB_AUTH_TOKEN'
+  ],
+  [
+    $class: 'StringBinding',
+    credentialsId: 'VjPatelDockerEmail',
+    variable: 'DOCKER_EMAIL'
+  ],
+  [
+    $class: 'UsernamePasswordMultiBinding',
+    credentialsId: 'VjPatelDockerCredentials',
+    passwordVariable: 'DOCKER_PASSWORD',
+    usernameVariable: 'DOCKER_USERNAME'
+  ]
+  ]) {
+      sh '''
+        set +x
+        cd client
+        rake clean
+        echo "Extracting node modules"
+        pv node_modules.tar.bz2 | tar xjf -
+        rake build_prod && rake push_prod
+      '''
+  }
+}

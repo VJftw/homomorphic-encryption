@@ -11,7 +11,6 @@ import {EncryptionSchemeResolverService} from '../../resolver/encryption-scheme.
   directives: [RouterLink],
   selector: 'computation-index',
   template: require('./index.html'),
-
 })
 export class ComputationSchemesComponent implements OnInit {
 

@@ -26,10 +26,6 @@ var ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 8080;
-
-var API_ADDRESS = process.env.CLIENT_API_ADDRESS || '0.0.0.0:8000';
-var BACKEND_ADDRESS = process.env.CLIENT_BACKEND_ADDRESS || '0.0.0.0:9000';
-
 const METADATA = {
   title: 'Implementations of Homomorphic Encryption',
   baseUrl: '/',
@@ -37,6 +33,12 @@ const METADATA = {
   port: PORT,
   ENV: ENV
 };
+
+/**
+ * Homomorphic Encryption Constants
+ */
+const API_ADDRESS = process.env.CLIENT_API_ADDRESS || '0.0.0.0:8000';
+const BACKEND_ADDRESS = process.env.CLIENT_BACKEND_ADDRESS || '0.0.0.0:9000';
 
 /**
  * Webpack configuration
@@ -69,7 +71,7 @@ module.exports = {
 
     'polyfills': './src/polyfills.ts',
     'vendor': './src/vendor.ts',
-    'main': './src/main.ts'
+    'main': './src/main.browser.ts'
 
   },
 
@@ -81,7 +83,10 @@ module.exports = {
     // An array of extensions that should be used to resolve modules.
     //
     // See: http://webpack.github.io/docs/configuration.html#resolve-extensions
-    extensions: ['', '.ts', '.js']
+    extensions: ['', '.ts', '.js'],
+
+    // Make sure root is src
+    root: helpers.root('src'),
 
   },
 
@@ -134,7 +139,11 @@ module.exports = {
       // Extracts SourceMaps for source files that as added as sourceMappingURL comment.
       //
       // See: https://github.com/webpack/source-map-loader
-      {test: /\.js$/, loader: 'source-map-loader', exclude: [helpers.root('node_modules/rxjs')]}
+      {test: /\.js$/, loader: 'source-map-loader', exclude: [
+        // these packages have problems with their sourcemaps
+        helpers.root('node_modules/rxjs'),
+        helpers.root('node_modules/@angular2-material')
+      ]}
 
     ],
 
@@ -181,7 +190,10 @@ module.exports = {
       //
       // See: https://github.com/webpack/raw-loader
       {test: /\.html$/, loader: 'raw-loader', exclude: [helpers.root('src/index.html')]},
-      // Loaders for Bootstrap
+
+      // Bootstrap
+      { test: /\.scss$/, loaders: ['style', 'css', 'postcss', 'sass'] },
+      // { test: /\.(woff2?|ttf|eot|svg)$/, loader: 'url?limit=10000' },
       { test: /\.(jpg|png)$/,       loader: 'url-loader?name=[path][name].[ext]&limit=100000' },
       { test: /\.woff(\?.*)?$/,     loader: "url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/font-woff" },
       { test: /\.woff2(\?.*)?$/,    loader: "url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=application/font-woff2" },
@@ -208,6 +220,7 @@ module.exports = {
   //
   // See: http://webpack.github.io/docs/configuration.html#plugins
   plugins: [
+
     // Plugin: ForkCheckerPlugin
     // Description: Do type checking in a separate process, so webpack don't need to wait.
     //
@@ -242,7 +255,7 @@ module.exports = {
     //
     // See: https://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin
     // See: https://github.com/webpack/docs/wiki/optimization#multi-page-app
-    new CommonsChunkPlugin({name: ['main', 'vendor', 'polyfills'], minChunks: Infinity}),
+    new CommonsChunkPlugin({name: helpers.reverse(['polyfills', 'vendor', 'main']), minChunks: Infinity}),
 
     // Plugin: CopyWebpackPlugin
     // Description: Copy files and directories in webpack.
@@ -258,7 +271,7 @@ module.exports = {
     // which changes every compilation.
     //
     // See: https://github.com/ampedandwired/html-webpack-plugin
-    new HtmlWebpackPlugin({template: 'src/index.html', chunksSortMode: 'none'}),
+    new HtmlWebpackPlugin({template: 'src/index.html', chunksSortMode: helpers.packageSort(['polyfills', 'vendor', 'main'])}),
 
     // Plugin: DefinePlugin
     // Description: Define free variables.
@@ -270,21 +283,17 @@ module.exports = {
     // NOTE: when adding more properties make sure you include them in custom-typings.d.ts
     new DefinePlugin({
       'ENV': JSON.stringify(METADATA.ENV),
-      'HMR': false,
       'API_ADDRESS': JSON.stringify(API_ADDRESS),
       'BACKEND_ADDRESS': JSON.stringify(BACKEND_ADDRESS)
     }),
+    // Plugin: ProvidePlugin
+    // Description: Provides other libraries
     new ProvidePlugin({
-      // TypeScript helpers
-      '__metadata': 'ts-helper/metadata',
-      '__decorate': 'ts-helper/decorate',
-      '__awaiter': 'ts-helper/awaiter',
-      '__extends': 'ts-helper/extends',
-      '__param': 'ts-helper/param',
       jQuery: 'jquery',
       $: 'jquery',
       jquery: 'jquery'
     }),
+
     // Plugin: UglifyJsPlugin
     // Description: Minimize all JavaScript output of chunks.
     // Loaders are switched into minimizing mode.
@@ -372,11 +381,11 @@ module.exports = {
     // them with Content-Encoding
     //
     // See: https://github.com/webpack/compression-webpack-plugin
-    new CompressionPlugin({
-      algorithm: helpers.gzipMaxLevel,
-      regExp: /\.css$|\.html$|\.js$|\.map$/,
-      threshold: 2 * 1024
-    })
+    // new CompressionPlugin({
+    //   algorithm: helpers.gzipMaxLevel,
+    //   regExp: /\.css$|\.html$|\.js$|\.map$/,
+    //   threshold: 2 * 1024
+    // })
 
   ],
 
