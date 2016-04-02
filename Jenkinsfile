@@ -52,8 +52,11 @@ node {
         cd client
         rake clean
         rake test
+        echo "Compressing node modules"
+        tar cf - node_modules | pv -s $(du -sk node_modules | cut -f 1)k | bzip2 -c > node_modules.tar.bz2
       '''
   }
+  stash includes: 'client/node_modules.tar.bz2', name: 'node_modules'
 }
 
 stage 'API: Build and push production image'
@@ -120,6 +123,7 @@ stage 'Client: Build and push production image'
 node {
   env.CI = "true"
   checkout scm
+  unstash 'node_modules'
   withCredentials([
   [
     $class: 'StringBinding',
@@ -141,6 +145,9 @@ node {
       sh '''
         set +x
         cd client
+        rake clean
+        echo "Extracting node modules"
+        pv node_modules.tar.bz2 | tar xjf -
         rake build_prod && rake push_prod
       '''
   }
