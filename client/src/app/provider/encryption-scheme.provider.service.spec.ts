@@ -13,7 +13,10 @@ describe('EncryptionSchemeProvider', () => {
   let encryptionSchemeStepResolver = new StepResolverService();
   let encryptionSchemeStageResolver = new StageResolverService(encryptionSchemeStepResolver);
   let encryptionSchemeBitLengthResolver = new BitLengthResolverService();
-  let encryptionSchemeResolver = new EncryptionSchemeResolverService(encryptionSchemeBitLengthResolver, encryptionSchemeStageResolver);
+  let encryptionSchemeResolver = new EncryptionSchemeResolverService(
+      encryptionSchemeBitLengthResolver,
+      encryptionSchemeStageResolver
+  );
 
   let encryptionSchemeProvider: EncryptionSchemeProviderService;
 
@@ -34,7 +37,7 @@ describe('EncryptionSchemeProvider', () => {
   it('should throw an error for an unknown encryption encryption-scheme', () => {
 
     expect(() => {
-      encryptionSchemeProvider.getEncryptionSchemeByName('abcd')
+      encryptionSchemeProvider.getEncryptionSchemeByName('abcd');
     }).toThrowError()
     ;
 

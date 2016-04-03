@@ -62,17 +62,22 @@ task :test do
   npm_command = 'npm run postinstall'.split ' '
   container.exec(npm_command, {:user => user}) { |stream, chunk| puts "#{stream}: #{chunk}" }
 
-  puts '# Running tests'
-  node_test = 'npm run test'
-  test_result = container.exec(node_test.split ' ') { |stream, chunk| puts "#{stream}: #{chunk}" }
+  puts '# Linting'
+  lint = 'npm run lint'
+  lint_result = container.exec(lint.split ' ') { |stream, chunk| puts "#{stream}: #{chunk}" }
 
+  if lint_result.last.to_i == 0
+      puts '# Running tests'
+      node_test = 'npm run test'
+      test_result = container.exec(node_test.split ' ') { |stream, chunk| puts "#{stream}: #{chunk}" }
+  end
   # stop and remove container
   puts '# Stopping and Removing Development container'
   container.stop
   container.delete
 
-  fail 'Tests failed' unless test_result
-
+  fail 'Linting failed' unless lint_result.last.to_i == 0
+  fail 'Tests failed' unless test_result.last.to_i == 0
 end
 
 desc 'Publish Coverage'
@@ -203,7 +208,7 @@ task :push_prod do
 end
 
 task :clean do
-  DockerFlow::Utils.clean_dirs ['node_modules', 'doc', 'typings', 'coverage', 'dist']  
+  DockerFlow::Utils.clean_dirs ['node_modules', 'doc', 'typings', 'coverage', 'dist']
 end
 
 desc 'CI'

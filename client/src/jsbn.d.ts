@@ -1,17 +1,19 @@
 // Compiled using typings@0.6.10
-// Source: https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/7a8afe9eccb19ce169bdfddf05666e90e17d1f20/jsbn/jsbn.d.ts
 // Type definitions for jsbn v1.2
 // Project: http://www-cs-students.stanford.edu/%7Etjw/jsbn/
 // Definitions by: Eugene Chernyshov <https://github.com/Evgenus>
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
 
-declare module "jsbn" {
+declare module 'jsbn' {
 
     interface RandomGenerator {
         nextBytes(bytes: number[]): void;
     }
 
     export class BigInteger {
+        static ZERO: BigInteger;
+        static ONE: BigInteger;
+
         constructor(a: number, c: RandomGenerator);
         constructor(a: number, b: number, c: RandomGenerator);
         constructor(a: string, b?: number);
@@ -237,9 +239,6 @@ declare module "jsbn" {
 
         // (protected) true if probably prime (HAC 4.24, Miller-Rabin)
         millerRabin(t: number): boolean;
-
-        static ZERO: BigInteger;
-        static ONE: BigInteger;
     }
 
     interface Reduction {
