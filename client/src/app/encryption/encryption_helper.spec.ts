@@ -53,7 +53,7 @@ describe('EncryptionHelper', () => {
 
   function isPrime(p: number) {
     for (let i = 2; i < p; i++) {
-      if (p % i == 0) {
+      if (p % i === 0) {
         return false;
       }
     }

@@ -52,7 +52,7 @@ describe('Step', () => {
     ;
   });
 
-  it('should set the calculation' ,() => {
+  it('should set the calculation', () => {
     expect(step.setCalculation('calc'))
       .toBe(step)
     ;

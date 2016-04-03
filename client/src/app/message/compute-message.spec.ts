@@ -13,8 +13,8 @@ describe('ComputeMessage', () => {
     step.getCompute.and.returnValue('3 + 4');
 
     let computeMessage = new ComputeMessage(
-      "abcdef",
-      "zxcvb",
+      'abcdef',
+      'zxcvb',
       [step],
       {
         'p': '4'
