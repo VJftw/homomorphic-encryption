@@ -1,6 +1,6 @@
 uniqueName: pailler
 readableName: Pailler
-description: The Pailler additive somewhat homomorphic encryption scheme
+description: An additive homomorphic cryptosystem created by Pascal Pailler in 1999. It is based on the composite residuosity problem, which describes how it is computationally difficult to decide whether a number \(z\) is an \(n\)-residue modulo \(n^2\) given by the existence of a \(y\) in \(z = y^n \bmod n^2\).
 bitLengths:
   - bitLength: 8
     maxInt: 99
@@ -9,7 +9,7 @@ bitLengths:
 stages:
   setup:
     - name: Key Generation
-      preDescription:
+      preDescription: This phase sets up the keys that are used in both encryption and decryption.
       steps:
         - description: A random prime number
           compute: p = generateRandomPrime()
@@ -24,33 +24,39 @@ stages:
           compute: l = (p - 1) * (q - 1)
         - description: \(l^{-1} \bmod n\)
           compute: m = l $ n
-      postDescription: The Public Key consists of \((n)\) and the Private Key consists of \((l, m)\)
+      postDescription: The Public key consists of \((n)\) and the Private key consists of \((l, m)\).
   encryption:
     - name: Encryption
-      preDescription:
+      preDescription: Next, we aim to calculate \(aX\) and \(bX\) as our encrypted values of \(a\) and \(b\). Note that we only use our public key to encrypt the values.
       steps:
         - description: \(n^2\)
           compute: nSq = n * n
           expose: true
-        - description: random number such that
+        - description: A random number such that \(0 < r < n\)
           compute: aR = generateR(n)
         - description: \((g^a \times aR^n) \bmod n^2\)
           compute: aX = ((g & a,nSq) * (aR & n,nSq)) % nSq
           expose: true
-        - description: random number such that
+        - description: A random number such that \(0 < r < n\)
           compute: bR = generateR(n)
         - description: \((g^b \times bR^n) \bmod n^2\)
           compute: bX = ((g & b,nSq) * (bR & n,nSq)) % nSq
           expose: true
-      postDescription:
+      postDescription: \(aX\) and \(bX\) are one way without knowledge \(l\), as per the composite residuosity problem.
   backend:
     +:
-      name: Backend Addition
+      name: Addition
+      preDescription: Any computer in the cloud can calculate the following without being able to learn the values of \(a\) or \(b\).
       steps:
-        - description: \((aX \times bX) \bmod n^2\)
+        - description: \(aX \times bX \bmod n^2\)
           compute: cX = (aX * bX) % nSq
+      postDescription: The homomorphic property of this cryptosystem is \( D(aX \times bX \bmod n^2) = a + b\) where \(D\) is the decryption algorithm.
   decryption:
     - name: Decryption
+      preDescription: We can decrypt the returned \(cX\) because we know the value of \(l\) from our Private key.
       steps:
-        - description: \((\frac{(cX^l\bmod n^2) - 1}{n})\times cX \bmod n \)
-          compute: c = ((((cX & l,nSq) - 1) / n) * m) % n
+        - description: \( (cX^l \bmod n^2) - 1 \)
+          compute: u = (cX & l,nSq) - 1
+        - description: \( \frac{u}{n} \times cX \bmod n \)
+          compute: c = ((u / n) * m) % n
+      postDescription:

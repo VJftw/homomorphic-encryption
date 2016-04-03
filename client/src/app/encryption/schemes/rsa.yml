@@ -1,6 +1,6 @@
 uniqueName: rsa
 readableName: RSA
-description: The RSA multiplicative somewhat homomorphic encryption scheme
+description: A popular cryptosystem that has multiplicative homomorphic properties. It is not semantically secure as it is unpadded, but otherwise relies on the large number factorisation problem to be secure.
 bitLengths:
   - bitLength: 8
     maxInt: 99
