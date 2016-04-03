@@ -42,7 +42,7 @@ stages:
         - description: \((g^b \times bR^n) \bmod n^2\)
           compute: bX = ((g & b,nSq) * (bR & n,nSq)) % nSq
           expose: true
-      postDescription: \(aX\) and \(bX\) are one way without knowledge \(l\), as per the composite residuosity problem.
+      postDescription: \(aX\) and \(bX\) are one way without knowledge of \(l\), as per the composite residuosity problem.
   backend:
     +:
       name: Addition
