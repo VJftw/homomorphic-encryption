@@ -5,12 +5,16 @@ import {StageResolverService} from '../../resolver/encryption-scheme/stage.resol
 import {BitLengthResolverService} from '../../resolver/encryption-scheme/bit-length.resolver.service';
 import {StepResolverService} from '../../resolver/encryption-scheme/step.resolver.service';
 import {EncryptionSchemeResolverService} from '../../resolver/encryption-scheme.resolver.service';
+import {MathJaxDirective} from "../../directive/mathjax";
 
 
 @Component({
-  directives: [RouterLink],
+  directives: [
+    RouterLink,
+    MathJaxDirective
+  ],
   selector: 'computation-index',
-  template: require('./index.html'),
+  template: require('./schemes.html'),
 })
 export class ComputationSchemesComponent implements OnInit {
 

@@ -62,26 +62,6 @@ export class ComputationRunnerService {
     );
   }
 
-  ////private addWorkspace(): void {
-  ////  let stage = this._stageProviderService.create('Workspace');
-  ////  stage.addStep(this._stepProviderService.create(
-  ////    'We aim to calculate \\(a ' + this._computation.getOperation() + ' b = c\\)'
-  ////  ));
-  ////
-  ////  stage.addStep(this._stepProviderService.create(
-  ////    'let \\(a\\)',
-  ////    this._computation.getA()
-  ////  ));
-  ////
-  ////  stage.addStep(this._stepProviderService.create(
-  ////    'let \\(b\\)',
-  ////    this._computation.getB()
-  ////  ));
-  ////
-  ////  this._computation.addStage(stage);
-  ////
-  ////}
-
   private doStage(stage: Stage) {
 
     stage.getSteps().forEach(step => {
