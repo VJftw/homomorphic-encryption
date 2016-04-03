@@ -3,7 +3,7 @@ import {
 } from 'angular2/testing';
 
 import {EncryptionScheme} from './encryption-scheme';
-import {Stage} from "./encryption-scheme/stage";
+import {Stage} from './encryption-scheme/stage';
 
 
 describe('EncryptionScheme', () => {

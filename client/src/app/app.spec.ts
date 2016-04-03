@@ -15,7 +15,7 @@ describe('App', () => {
     App
   ]);
   it('should have a title', inject([ App ], (app) => {
-    
+
     console.log(app.title);
 
     expect(app.title).toEqual('Implementations of Homomorphic Encryption');
