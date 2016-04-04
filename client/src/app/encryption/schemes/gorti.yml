@@ -24,12 +24,12 @@ stages:
       steps:
         - description: A random number
           compute: aR = generateRandomPrime()
-        - description: \(aX = (a + aR \times p^q \bmod m) \bmod m\)
+        - description: \(a + aR \times p^q \bmod m\)
           compute: aX = (a + (aR * (p & q,m))) % m
           expose: true
         - description: A random number
           compute: bR = generateRandomPrime()
-        - description: \(bX = (b + bR \times p^q \bmod m) \bmod m\)
+        - description: \(b + bR \times p^q \bmod m\)
           compute: bX = (b + (bR * (p & q,m))) % m
           expose: true
       postDescription: \(aX\) and \(bX\) are one way as per the large number factorisation problem. In practice we would use much larger key-spaces (1024+ bit) to create a sufficiently hard enough problem.
