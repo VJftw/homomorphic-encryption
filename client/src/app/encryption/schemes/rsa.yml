@@ -1,6 +1,6 @@
 uniqueName: rsa
 readableName: RSA
-description: A popular cryptosystem that has multiplicative homomorphic properties. It is not semantically secure as it is unpadded, but otherwise relies on the large number factorisation problem to be secure.
+description: A popular and simple cryptosystem that has multiplicative homomorphic properties. It is not semantically secure as it is unpadded, but otherwise relies on the large number factorisation problem to be secure.
 bitLengths:
   - bitLength: 8
     maxInt: 99
@@ -9,7 +9,7 @@ bitLengths:
 stages:
   setup:
     - name: Key Generation
-      preDescription:
+      preDescription: This phase sets up the keys that are used in both encryption and decryption.
       steps:
         - description: A random prime number
           compute: p = generateRandomPrime()
@@ -25,10 +25,10 @@ stages:
           expose: true
         - description: \(e^{-1} \bmod l\)
           compute: d = e $ l
-      postDescription:
+      postDescription: The Public key consists of \((n, e)\) and the Private key consists of \((n, d)\). The other variables \((p, q, l)\) can be discarded but not revealed as they are used to calculate \(d\).
   encryption:
     - name: Encryption
-      preDescription:
+      preDescription: Next, we calculate \(aX\) and \(bX\) as our encrypted values of \(a\) and \(b\). Note that we only use our public key to encrypt the values.
       steps:
         - description: \(a^e \bmod n\)
           compute: aX = a & e,n
@@ -39,7 +39,7 @@ stages:
       postDescription:
   backend:
     x:
-      name: Backend multiplication
+      name: Multiplication
       steps:
         - description: \(aX \times bX\)
           compute: cX = aX * bX

@@ -27,7 +27,7 @@ stages:
       postDescription: The Public key consists of \((n)\) and the Private key consists of \((l, m)\).
   encryption:
     - name: Encryption
-      preDescription: Next, we aim to calculate \(aX\) and \(bX\) as our encrypted values of \(a\) and \(b\). Note that we only use our public key to encrypt the values.
+      preDescription: Next, we calculate \(aX\) and \(bX\) as our encrypted values of \(a\) and \(b\). Note that we only use our public key to encrypt the values.
       steps:
         - description: \(n^2\)
           compute: nSq = n * n
@@ -42,7 +42,7 @@ stages:
         - description: \((g^b \times bR^n) \bmod n^2\)
           compute: bX = ((g & b,nSq) * (bR & n,nSq)) % nSq
           expose: true
-      postDescription: \(aX\) and \(bX\) are one way without knowledge \(l\), as per the composite residuosity problem.
+      postDescription: \(aX\) and \(bX\) are one way without knowledge of \(l\), as per the composite residuosity problem.
   backend:
     +:
       name: Addition
@@ -53,10 +53,12 @@ stages:
       postDescription: The homomorphic property of this cryptosystem is \( D(aX \times bX \bmod n^2) = a + b\) where \(D\) is the decryption algorithm.
   decryption:
     - name: Decryption
-      preDescription: We can decrypt the returned \(cX\) because we know the value of \(l\) from our Private key.
+      preDescription: Finally, using the decryption algorithm, we can get our answer for \(c\)
       steps:
-        - description: \( (cX^l \bmod n^2) - 1 \)
-          compute: u = (cX & l,nSq) - 1
-        - description: \( \frac{u}{n} \times cX \bmod n \)
+        - description: \(cX^l \bmod n^2\)
+          compute: u = cX & l,nSq
+        - description: \(\frac{u - 1}{n}\)
+          compute: v = (u - 1) / n
+        - description: \( v \times m \bmod n \)
           compute: c = ((u / n) * m) % n
-      postDescription:
+      postDescription: We are able to decrypt the returned \(cX\) because we know the value of \(l\) from our Private key.
