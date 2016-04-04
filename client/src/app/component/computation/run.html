@@ -8,7 +8,7 @@
             <div class="text-center col-md-12">
                 <div class="col-md-3"></div>
                 <div *ngIf="!computationRunner.getComputation()" class="col-md-6">
-                    <h4>Enter a Sum</h4>
+                    <h4>Enter a sum</h4>
                 </div>
                 <div *ngIf="computationRunner.getComputation()" class="col-md-6">
                     <h4>
@@ -23,17 +23,17 @@
         </div>
 
         <div class="row">
-            <div class="animated fadeIn" *ngIf="!computationRunner.getComputation()">
+            <div class="animated fadeIn panel panel-default" *ngIf="!computationRunner.getComputation()">
                 <div class="panel-body">
 
-                    <div class="row animated fadeIn" *ngIf="encryptionScheme != null">
-                        <div class="col-md-12">
-                            <form
-                                    [ngFormModel]="computationForm"
-                                    (submit)="computationForm.valid"
-                                    class="form-horizontal"
-                                    novalidate
-                            >
+                    <div class="animated fadeIn" *ngIf="encryptionScheme != null">
+                        <form
+                                [ngFormModel]="computationForm"
+                                (submit)="computationForm.valid"
+                                class="form-horizontal"
+                                novalidate
+                        >
+                            <div class="col-xs-12">
                                 <div class="form-group"
                                      [ngClass]="{
                                      'has-success':
@@ -71,33 +71,47 @@
                                                 [disabled]="computationRunner.getComputation()"
                                         >
                                     </div>
-                                    <div class="col-xs-12">
-                                        <div class="col-sm-4">
-                                            <label for="bitLength" class="control-label col-sm-8">Key bit length</label>
-                                            <div class="col-sm-4">
-                                                <select ngControl="bitLengths" class="form-control" id="bitLength" [disabled]="computationRunner.getComputation()" [(ngModel)]="computationModel.keyBitLength">
-                                                    <option *ngFor="#bL of bitLengths" [value]="bL.getBitLength()">
-                                                        {{ bL.getBitLength() }}
-                                                    </option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
+                                </div>
+                            </div>
 
-                                    <div class="col-xs-12" *ngIf="computationForm.dirty && !computationForm.valid">
-                                        <span id="helpBlock2" class="help-block">Both numbers must be > 0 and <= {{ encryptionScheme.getBitLength(computationForm.controls['bitLengths'].value).getMaxInt() }}</span>
+                            <div class="col-xs-6">
+                                <span *ngIf="computationForm.dirty && !computationForm.valid" class="help-block text-danger">Both numbers must be > 0 and <= {{ encryptionScheme.getBitLength(computationForm.controls['bitLengths'].value).getMaxInt() }}</span>
+                                <span *ngIf="computationForm.dirty && computationForm.valid" class="help-block text-success">All good!</span>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label for="bitLength" class="control-label col-sm-8">Key bit length</label>
+                                    <div class="col-sm-4">
+                                        <select ngControl="bitLengths" class="form-control" id="bitLength" [disabled]="computationRunner.getComputation()" [(ngModel)]="computationModel.keyBitLength">
+                                            <option *ngFor="#bL of bitLengths" [value]="bL.getBitLength()">
+                                                {{ bL.getBitLength() }}
+                                            </option>
+                                        </select>
                                     </div>
                                 </div>
-
+                            </div>
+                            <div class="col-xs-12">
                                 <div class="form-group">
                                     <button type="button" class="btn btn-primary pull-right" [disabled]="!computationForm.valid || computationRunner.getComputation()" (click)="submit($event)">
                                         <span>Execute</span>
                                     </button>
                                 </div>
+                            </div>
                             </form>
 
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="col-xs-12">
+                <div class="col-xs-6">
+                    <div class="well text-center"><i class="fa fa-desktop"></i> - Executed locally on your computer</div>
+                </div>
+                <div class="col-xs-6">
+                    <div class="well text-center"><i class="fa fa-cloud"></i> - Executed on a server in the cloud</div>
                 </div>
             </div>
         </div>
@@ -164,4 +178,3 @@
 
 
 
-</div>
