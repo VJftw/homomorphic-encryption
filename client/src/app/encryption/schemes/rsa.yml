@@ -1,6 +1,6 @@
 uniqueName: rsa
 readableName: RSA
-description: A popular and simple cryptosystem that has multiplicative homomorphic properties. It is not semantically secure as it is unpadded, but otherwise relies on the large number factorisation problem to be secure.
+description: A popular and simple cryptosystem created by Ron Rivest, Adi Smahir and Leonard Adleman that unintentionally has multiplicative homomorphic properties. It is not semantically secure as it is unpadded, but otherwise relies on the large number factorisation problem to be secure.
 bitLengths:
   - bitLength: 8
     maxInt: 99
