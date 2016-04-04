@@ -53,10 +53,10 @@ stages:
       postDescription: The homomorphic property of this cryptosystem is \( D(aX \times bX \bmod n^2) = a + b\) where \(D\) is the decryption algorithm.
   decryption:
     - name: Decryption
-      preDescription: We can decrypt the returned \(cX\) because we know the value of \(l\) from our Private key.
+      preDescription: Finally, using the decryption algorithm, we can get our answer to \(a + b\), \(c\)
       steps:
         - description: \( (cX^l \bmod n^2) - 1 \)
           compute: u = (cX & l,nSq) - 1
         - description: \( \frac{u}{n} \times cX \bmod n \)
           compute: c = ((u / n) * m) % n
-      postDescription:
+      postDescription: We are able to decrypt the returned \(cX\) because we know the value of \(l\) from our Private key.
