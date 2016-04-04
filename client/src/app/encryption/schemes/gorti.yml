@@ -17,18 +17,20 @@ stages:
           compute: q = generateRandomPrime()
         - description: \(p \times q\)
           compute: m = p * q
-        - description: A random number
-          compute: r = generateRandomPrime()
-      postDescription: The original paper uses \(p\) as a shared key among clients in a MANET. In this client-server model, we only have one client and so we only have a Secret key consisting of \((p, q, m, r)\).
+      postDescription: The original paper uses \(p\) as a shared key among clients in a MANET. In this client-server model, we only have one client and so we only have a Secret key consisting of \((p, q, m)\).
   encryption:
     - name: Encryption
       preDescription: Next, we calculate \(aX\) and \(bX\) as our encrypted values of \(a\) and \(b\).
       steps:
-        - description: \(aX = (a + r \times p^q \bmod m) \bmod m\)
-          compute: aX = (a + (r * (p & q,m))) % m
+        - description: A random number
+          compute: aR = generateRandomPrime()
+        - description: \(aX = (a + aR \times p^q \bmod m) \bmod m\)
+          compute: aX = (a + (aR * (p & q,m))) % m
           expose: true
-        - description: \(bX = (b + r \times p^q \bmod m) \bmod m\)
-          compute: bX = (b + (r * (p & q,m))) % m
+        - description: A random number
+          compute: bR = generateRandomPrime()
+        - description: \(bX = (b + bR \times p^q \bmod m) \bmod m\)
+          compute: bX = (b + (bR * (p & q,m))) % m
           expose: true
       postDescription: \(aX\) and \(bX\) are one way as per the large number factorisation problem. In practice we would use much larger key-spaces (1024+ bit) to create a sufficiently hard enough problem.
   backend:
