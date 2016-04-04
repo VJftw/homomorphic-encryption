@@ -1,6 +1,6 @@
 uniqueName: rsa
 readableName: RSA
-description: A popular and simple cryptosystem that has multiplicative homomorphic properties. It is not semantically secure as it is unpadded, but otherwise relies on the large number factorisation problem to be secure.
+description: A popular and simple cryptosystem created by Ron Rivest, Adi Smahir and Leonard Adleman that unintentionally has multiplicative homomorphic properties. It is not semantically secure as it is unpadded, but otherwise relies on the large number factorisation problem to be secure.
 bitLengths:
   - bitLength: 8
     maxInt: 99
@@ -36,15 +36,19 @@ stages:
         - description: \(b^e \bmod n\)
           compute: bX = b & e,n
           expose: true
-      postDescription:
+      postDescription: \(aX\) and \(bX\) are one way as per the large number factorisation problem. In practice we would use much larger key-spaces (1024+ bit) to create a sufficiently hard enough problem.
   backend:
     x:
       name: Multiplication
+      preDescription: Any computer in the cloud can calculate the following without being able to learn the values of \(a\) or \(b\).
       steps:
         - description: \(aX \times bX\)
           compute: cX = aX * bX
+      postDescription: The homomorphic property of this cryptosystem is \(D(aX \times bX) = a \times b\) where \(D\) is the decryption algorithm.
   decryption:
     - name: Decryption
+      preDescription: Finally, using the decryption algoritm, we can get our answer for \(c\).
       steps:
         - description: \(c = cX^d \bmod n\)
           compute: c = cX & d,n
+      postDescription: We are able to decrypt the returned \(cX\) becase we know the value of \(d\) from our Private key.
