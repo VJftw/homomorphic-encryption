@@ -52,6 +52,6 @@ stages:
     - name: Decryption
       preDescription: Finally, using the decryption algoritm, we can get our answer for \(c\).
       steps:
-        - description: \(c = cX \bmod p\)
+        - description: \(cX \bmod p\)
           compute: c = cX % p
       postDescription: We are able to decrypt the returned \(cX\) becase we know the value of \(p\) from our Secret key (which would have been shared in a MANET).

@@ -47,6 +47,6 @@ stages:
     - name: Decryption
       preDescription: Finally, using the decryption algoritm, we can get our answer for \(c\).
       steps:
-        - description: \(c = cX^d \bmod n\)
+        - description: \(cX^d \bmod n\)
           compute: c = cX & d,n
       postDescription: We are able to decrypt the returned \(cX\) becase we know the value of \(d\) from our Private key.
