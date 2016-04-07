@@ -50,7 +50,7 @@ stages:
       postDescription: The homomorphic property of this cryptosystem is \(D(aX + bX) = a + b\) where \(D\) is the decryption algorithm.
   decryption:
     - name: Decryption
-      preDescription: Finally, using the decryption algoritm, we can get our answer for \(c\).
+      preDescription: Finally, using the decryption algorithm, we can get our answer for \(c\).
       steps:
         - description: \(cX \bmod p\)
           compute: c = cX % p
