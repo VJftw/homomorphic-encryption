@@ -90,14 +90,14 @@ export class ComputationRunComponent implements OnInit {
 
 
       if (aCtrl.dirty) {
-        if (aCtrl.value < 0 || aCtrl.value > currentBitLength.getMaxInt()) {
-          return {invalidSku: true};
+        if (aCtrl.value < 0 || aCtrl.value > currentBitLength.getMaxInt() || isNaN(aCtrl.value)) {
+          return {invalidA: true};
         }
       }
 
       if (bCtrl.dirty) {
-        if (bCtrl.value < 0 || bCtrl.value > currentBitLength.getMaxInt()) {
-          return {invalidSku: true};
+        if (bCtrl.value < 0 || bCtrl.value > currentBitLength.getMaxInt() || isNaN(bCtrl.value)) {
+          return {invalidB: true};
         }
       }
 
