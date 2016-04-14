@@ -40,9 +40,9 @@ def get_branch():
         # Jenkins 2
         branch = os.getenv('BRANCH_NAME')
     else:
-        branch = check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"]).strip()
+        branch = check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"]).decode('utf-8').strip()
 
-    return branch.decode('utf-8').replace("/", "_")
+    return branch.replace("/", "_")
 
 def get_version():
     try:
