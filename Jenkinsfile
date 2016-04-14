@@ -9,11 +9,13 @@ stage 'API: Unit tests'
     variable: 'GITHUB_AUTH_TOKEN'
   ]
   ]) {
+    wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm', 'defaultFg': 1, 'defaultBg': 2]) {
       sh '''
         set +x
         cd api
-        rake test
+        invoke test
       '''
+    }
   }
 }
 
@@ -28,11 +30,13 @@ node {
     variable: 'GITHUB_AUTH_TOKEN'
   ]
   ]) {
+    wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm', 'defaultFg': 1, 'defaultBg': 2]) {
       sh '''
         set +x
         cd backend
-        rake test
+        invoke test
       '''
+    }
   }
 }
 
@@ -47,14 +51,16 @@ node {
     variable: 'GITHUB_AUTH_TOKEN'
   ]
   ]) {
+    wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm', 'defaultFg': 1, 'defaultBg': 2]) {
       sh '''
         set +x
         cd client
-        rake clean
-        rake test
+        invoke pre_clean
+        invoke test
         echo "Compressing node modules"
         tar cf - node_modules | pv -s $(du -sk node_modules | cut -f 1)k | bzip2 -c > node_modules.tar.bz2
       '''
+    }
   }
   stash includes: 'client/node_modules.tar.bz2', name: 'node_modules'
 }
@@ -81,11 +87,14 @@ node {
     usernameVariable: 'DOCKER_USERNAME'
   ]
   ]) {
+    wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm', 'defaultFg': 1, 'defaultBg': 2]) {
       sh '''
         set +x
         cd api
-        rake build_prod && rake push_prod
+        invoke build_prod
+        invoke push_prod
       '''
+    }
   }
 }
 
@@ -111,11 +120,14 @@ node {
     usernameVariable: 'DOCKER_USERNAME'
   ]
   ]) {
+    wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm', 'defaultFg': 1, 'defaultBg': 2]) {
       sh '''
         set +x
         cd backend
-        rake build_prod && rake push_prod
+        invoke build_prod
+        invoke push_prod
       '''
+    }
   }
 }
 
@@ -142,13 +154,16 @@ node {
     usernameVariable: 'DOCKER_USERNAME'
   ]
   ]) {
+    wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm', 'defaultFg': 1, 'defaultBg': 2]) {
       sh '''
         set +x
         cd client
-        rake clean
+        invoke pre_clean
         echo "Extracting node modules"
         pv node_modules.tar.bz2 | tar xjf -
-        rake build_prod && rake push_prod
+        invoke build_prod
+        invoke push_prod
       '''
+    }
   }
 }
