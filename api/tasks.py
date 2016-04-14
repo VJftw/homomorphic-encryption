@@ -75,7 +75,7 @@ def execute(container_id, cmd, force_root=False):
 def clean(objs):
     cli.pull("alpine:latest")
     container = cli.create_container(
-        image=dev_container_name,
+        image='alpine:latest',
         volumes=[
             '{0}:/app'.format(os.getcwd())
         ],
