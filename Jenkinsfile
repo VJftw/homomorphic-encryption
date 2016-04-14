@@ -12,7 +12,7 @@ stage 'API: Unit tests'
       sh '''
         set +x
         cd api
-        rake test
+        invoke test
       '''
   }
 }
@@ -31,7 +31,7 @@ node {
       sh '''
         set +x
         cd backend
-        rake test
+        invoke test
       '''
   }
 }
@@ -50,8 +50,8 @@ node {
       sh '''
         set +x
         cd client
-        rake clean
-        rake test
+        invoke clean
+        invoke test
         echo "Compressing node modules"
         tar cf - node_modules | pv -s $(du -sk node_modules | cut -f 1)k | bzip2 -c > node_modules.tar.bz2
       '''
@@ -84,7 +84,8 @@ node {
       sh '''
         set +x
         cd api
-        rake build_prod && rake push_prod
+        invoke build_prod
+        invoke push_prod
       '''
   }
 }
@@ -114,7 +115,8 @@ node {
       sh '''
         set +x
         cd backend
-        rake build_prod && rake push_prod
+        invoke build_prod
+        invoke push_prod
       '''
   }
 }
@@ -148,7 +150,8 @@ node {
         rake clean
         echo "Extracting node modules"
         pv node_modules.tar.bz2 | tar xjf -
-        rake build_prod && rake push_prod
+        invoke build_prod
+        invoke push_prod
       '''
   }
 }
