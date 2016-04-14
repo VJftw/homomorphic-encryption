@@ -186,7 +186,7 @@ def build_prod():
     clean(['dist'])
 
 @task
-def clean():
+def pre_clean():
     clean(['node_modules', 'doc', 'typings', 'coverage', 'dist'])
 
 @task

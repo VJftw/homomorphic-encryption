@@ -50,7 +50,7 @@ node {
       sh '''
         set +x
         cd client
-        invoke clean
+        invoke pre_clean
         invoke test
         echo "Compressing node modules"
         tar cf - node_modules | pv -s $(du -sk node_modules | cut -f 1)k | bzip2 -c > node_modules.tar.bz2
