@@ -147,7 +147,7 @@ node {
       sh '''
         set +x
         cd client
-        rake clean
+        invoke clean
         echo "Extracting node modules"
         pv node_modules.tar.bz2 | tar xjf -
         invoke build_prod
