@@ -158,7 +158,7 @@ node {
       sh '''
         set +x
         cd client
-        invoke clean
+        invoke pre_clean
         echo "Extracting node modules"
         pv node_modules.tar.bz2 | tar xjf -
         invoke build_prod
