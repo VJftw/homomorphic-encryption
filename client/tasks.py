@@ -62,8 +62,12 @@ def execute(container_id, cmd):
         exec_id=execute.get('Id'),
         stream=True
     ):
-        line = line.decode('utf-8')
-        print(line, end="", flush=True)
+        try:
+            line = line.decode('utf-8')
+            print(line, end="", flush=True)
+        except:
+            print("could not decode line")
+            pass
 
     inspect = cli.exec_inspect(execute.get('Id'))
     exit_code = inspect.get('ExitCode')
