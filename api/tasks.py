@@ -9,7 +9,7 @@ cli = Client(base_url='unix://var/run/docker.sock', timeout=600)
 
 def print_line(line):
     if "stream" in line:
-        print(line["stream"])
+        print(line["stream"], end="", flush=True)
     elif "status" in line:
         o = line["status"]
         if "progress" in line:
@@ -63,7 +63,7 @@ def execute(container_id, cmd, force_root=False):
         stream=True
     ):
         line = line.decode('utf-8')
-        print(line)
+        print(line, end="", flush=True)
 
     inspect = cli.exec_inspect(execute.get('Id'))
     exit_code = inspect.get('ExitCode')

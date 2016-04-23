@@ -88,7 +88,6 @@ export class ComputationRunComponent implements OnInit {
 
       let currentBitLength = this.encryptionScheme.getBitLength(bitLengthCtrl.value);
 
-
       if (aCtrl.dirty) {
         if (aCtrl.value < 0 || aCtrl.value > currentBitLength.getMaxInt() || isNaN(aCtrl.value)) {
           return {invalidA: true};
