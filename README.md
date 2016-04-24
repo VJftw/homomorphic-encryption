@@ -40,4 +40,9 @@ docker-compose -f development.compose.yml up
 ```
 This may take some time the first it is run as it will install all of the dependencies it needs into the containers.
 
-4. Once it has finished starting up, the application will be available at http://localhost:3000
+4. Once it has finished starting up, the application will be available at http://localhost:3000.
+To stop the application, use `ctrl + c` followed by
+```
+docker-compose -f development.compose.yml stop
+docker-compose -f development.compose.yml rm
+```
