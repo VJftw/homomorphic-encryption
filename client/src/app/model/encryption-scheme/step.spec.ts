@@ -1,64 +1,64 @@
 import {
-  it
+    it
 } from 'angular2/testing';
 
 import {Step} from './step';
 
 
-describe('Step', () => {
+describe('step-encryption-scheme-model', () => {
 
-  it('should default to the private scope', () => {
+    it('should default to the private scope', () => {
 
-    let step = new Step(
-      'desc',
-      'compute'
-    );
+        let step = new Step(
+            'desc',
+            'compute'
+        );
 
-    expect(step.isPublicScope())
-      .toEqual(false)
-    ;
+        expect(step.isPublicScope())
+            .toEqual(false)
+            ;
 
-  });
+    });
 
-  it('should set the public scope when given', () => {
+    it('should set the public scope when given', () => {
 
-    let step = new Step(
-      'desc',
-      'compute',
-      true
-    );
+        let step = new Step(
+            'desc',
+            'compute',
+            true
+        );
 
-    expect(step.isPublicScope())
-      .toEqual(true)
-    ;
+        expect(step.isPublicScope())
+            .toEqual(true)
+            ;
 
-  });
+    });
 
-  it('should return the description', () => {
-    let step = new Step('desc', 'compute');
+    it('should return the description', () => {
+        let step = new Step('desc', 'compute');
 
-    expect(step.getDescription())
-      .toEqual('desc')
-    ;
-  });
+        expect(step.getDescription())
+            .toEqual('desc')
+            ;
+    });
 
-  it('should return the compute', () => {
-    let step = new Step('desc', 'compute');
+    it('should return the compute', () => {
+        let step = new Step('desc', 'compute');
 
-    expect(step.getCompute())
-      .toEqual('compute')
-    ;
-  });
+        expect(step.getCompute())
+            .toEqual('compute')
+            ;
+    });
 
-  it('should serialize to JSON', () => {
-    let step = new Step('desc', 'compute');
+    it('should serialize to JSON', () => {
+        let step = new Step('desc', 'compute');
 
-    expect(step.toJson())
-      .toEqual({
-        'description': 'desc',
-        'compute': 'compute'
-      });
+        expect(step.toJson())
+            .toEqual({
+                'description': 'desc',
+                'compute': 'compute'
+            });
 
-  });
+    });
 
 });

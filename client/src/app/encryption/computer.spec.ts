@@ -1,10 +1,10 @@
 import {
-  it
+    it
 } from 'angular2/testing';
 import {Computer} from './computer';
 import {BigInteger} from 'jsbn';
 
-describe('Computer', () => {
+describe('encryption-computer', () => {
 
     let encryptionHelper = jasmine.createSpyObj('encryptionHelper', ['generatePrime']);
     encryptionHelper.generatePrime.and.returnValue(new BigInteger('11'));
@@ -23,7 +23,7 @@ describe('Computer', () => {
 
         expect(result.intValue())
             .toBe(11)
-        ;
+            ;
     });
 
     it('should compute \'1 + 1\'', () => {
@@ -33,8 +33,8 @@ describe('Computer', () => {
         let result = computer.calculateStepCompute(step, {});
 
         expect(result.intValue())
-          .toBe(2)
-        ;
+            .toBe(2)
+            ;
     });
 
     it('should compute \'1 - 1\'', () => {
@@ -44,8 +44,8 @@ describe('Computer', () => {
         let result = computer.calculateStepCompute(step, {});
 
         expect(result.intValue())
-          .toBe(0)
-        ;
+            .toBe(0)
+            ;
     });
 
     it('should compute \'4 * 3\'', () => {
@@ -55,8 +55,8 @@ describe('Computer', () => {
         let result = computer.calculateStepCompute(step, {});
 
         expect(result.intValue())
-          .toBe(12)
-        ;
+            .toBe(12)
+            ;
     });
 
     it('should compute \'6 / 3\'', () => {
@@ -66,8 +66,8 @@ describe('Computer', () => {
         let result = computer.calculateStepCompute(step, {});
 
         expect(result.intValue())
-          .toBe(2)
-        ;
+            .toBe(2)
+            ;
     });
 
     it('should compute \'(1 + 1) * (3 + 2)\'', () => {
@@ -77,8 +77,8 @@ describe('Computer', () => {
         let result = computer.calculateStepCompute(step, {});
 
         expect(result.intValue())
-          .toBe(10)
-        ;
+            .toBe(10)
+            ;
     });
 
     it('should compute \'(1 + (5 * 2)) + (3 + 2)\'', () => {
@@ -88,8 +88,8 @@ describe('Computer', () => {
         let result = computer.calculateStepCompute(step, {});
 
         expect(result.intValue())
-          .toBe(16)
-        ;
+            .toBe(16)
+            ;
     });
 
     it('should compute \'((1 + 3) + (5 * 2)) + (3 + 2)\'', () => {
@@ -99,8 +99,8 @@ describe('Computer', () => {
         let result = computer.calculateStepCompute(step, {});
 
         expect(result.intValue())
-          .toBe(19)
-        ;
+            .toBe(19)
+            ;
     });
 
     it('should compute \'p * q\'', () => {
@@ -113,8 +113,8 @@ describe('Computer', () => {
         });
 
         expect(result.intValue())
-          .toBe(48)
-        ;
+            .toBe(48)
+            ;
     });
 
     it('should compute \'13 % 4\'', () => {
@@ -124,8 +124,8 @@ describe('Computer', () => {
         let result = computer.calculateStepCompute(step, {});
 
         expect(result.intValue())
-          .toBe(1)
-        ;
+            .toBe(1)
+            ;
     });
 
     it('should compute \'13 & 4,3\'', () => {
@@ -135,8 +135,8 @@ describe('Computer', () => {
         let result = computer.calculateStepCompute(step, {});
 
         expect(result.intValue())
-          .toBe(1)
-        ;
+            .toBe(1)
+            ;
     });
 
     it('should compute \'13 $ 4\'', () => {
@@ -146,8 +146,8 @@ describe('Computer', () => {
         let result = computer.calculateStepCompute(step, {});
 
         expect(result.intValue())
-          .toBe(1)
-        ;
+            .toBe(1)
+            ;
     });
 
     it('should compute \'(p - 1) * (q - 1)\'', () => {
@@ -160,8 +160,8 @@ describe('Computer', () => {
         });
 
         expect(result.intValue())
-          .toBe(30)
-        ;
+            .toBe(30)
+            ;
     });
 
     //it('should encrypt with Pailler', () => {

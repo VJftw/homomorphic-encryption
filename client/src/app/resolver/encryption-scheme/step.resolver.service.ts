@@ -6,12 +6,12 @@ import {IStepJson} from '../../model/encryption-scheme/step';
 @Injectable()
 export class StepResolverService {
 
-  public fromJson(stepJson: IStepJson): Step {
-    return new Step(
-      stepJson.description,
-      stepJson.compute,
-      !!stepJson.expose
-    );
-  }
+    public fromJson(stepJson: IStepJson): Step {
+        return new Step(
+            stepJson.description,
+            stepJson.compute,
+            !!stepJson.expose
+        );
+    }
 
 }

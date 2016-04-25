@@ -4,20 +4,20 @@ import {EncryptionScheme} from '../model/encryption-scheme';
 
 export class RegisterMessage implements MessageInterface {
 
-  constructor(
-    private encryptionScheme: EncryptionScheme
-  ) {
-  }
+    constructor(
+        private encryptionScheme: EncryptionScheme
+    ) {
+    }
 
-  public toJson(): {} {
-    return {
-      'encryptionScheme': this.encryptionScheme.getUniqueName(),
-    };
-  }
+    public toJson(): {} {
+        return {
+            'encryptionScheme': this.encryptionScheme.getUniqueName(),
+        };
+    }
 
 }
 
 export interface IRegisterMessageResponseJson {
-  hashId: string;
-  authToken: string;
+    hashId: string;
+    authToken: string;
 }

@@ -1,31 +1,34 @@
-//import {
-//  it
-//} from 'angular2/testing';
-//
-//import {BigInteger} from 'jsbn';
-//import {StepProviderService} from './step.provider.service';
-//
-//describe('StepProviderService', () => {
-//
-//  let stepProvider: StepProviderService;
-//
-//  beforeEach(() => {
-//    stepProvider = new StepProviderService();
-//  });
-//
-//  it('should return a step with the given parameters', () => {
-//    let step = stepProvider.create('aaaa', new BigInteger('3'));
-//
-//    expect(step.getAction())
-//      .toEqual('aaaa')
-//    ;
-//
-//    expect(step.getResult().toString())
-//      .toEqual('3')
-//    ;
-//
-//    expect(step.getTimestamp())
-//      .toBeDefined()
-//    ;
-//  });
-//});
+import {
+    it
+} from 'angular2/testing';
+
+import {BigInteger} from 'jsbn';
+import {StepProviderService} from './step.provider.service';
+
+describe('step-provider', () => {
+
+    let stepProviderService: StepProviderService;
+
+    beforeEach(() => {
+        stepProviderService = new StepProviderService();
+    });
+
+    it('should return a step from the given scheme step', () => {
+        let schemeStep = jasmine.createSpyObj('schemeStep', ['getCompute']);
+        schemeStep.getCompute.and.returnValue('a = 5 + 3');
+
+        let step = stepProviderService.create(schemeStep);
+
+        expect(step.getEncryptionStep())
+            .toBe(schemeStep)
+        ;
+
+        expect(step.getVariable())
+            .toEqual('a')
+        ;
+
+        expect(step.getCalculation())
+            .toEqual('5 + 3')
+        ;
+    });
+});

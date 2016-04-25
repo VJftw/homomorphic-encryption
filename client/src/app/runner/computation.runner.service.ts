@@ -15,140 +15,140 @@ import {Headers} from 'angular2/http';
 @Injectable()
 export class ComputationRunnerService {
 
-  private _computation: Computation;
-  private _socket: WebSocket;
+    private _computation: Computation;
+    private _socket: WebSocket;
 
-  constructor(
-    private _computer: Computer,
-    private _messageProviderService: MessageProviderService,
-    private _messageResolverService: MessageResolverService,
-    private _http: Http
-  ) {
-  }
+    constructor(
+        private _computer: Computer,
+        private _messageProviderService: MessageProviderService,
+        private _messageResolverService: MessageResolverService,
+        private _http: Http
+    ) {
+    }
 
-  public setComputation(computation: Computation) {
-    this._computation = computation;
+    public setComputation(computation: Computation) {
+        this._computation = computation;
 
-    return this;
-  }
+        return this;
+    }
 
-  public getComputation(): Computation {
-    return this._computation;
-  }
+    public getComputation(): Computation {
+        return this._computation;
+    }
 
-  public runComputation(): void {
-    // set up a and b
-    this._computation.addToScope('a', new BigInteger('' + this._computation.getA()), false);
-    this._computation.addToScope('b', new BigInteger('' + this._computation.getB()), false);
+    public runComputation(): void {
+        // set up a and b
+        this._computation.addToScope('a', new BigInteger('' + this._computation.getA()), false);
+        this._computation.addToScope('b', new BigInteger('' + this._computation.getB()), false);
 
-    // set bit length
-    this._computer.setBitLength(this._computation.getBitLength());
-    console.log('Bit Length: ' + this._computation.getBitLength());
+        // set bit length
+        this._computer.setBitLength(this._computation.getBitLength());
+        console.log('Bit Length: ' + this._computation.getBitLength());
 
-    //this.addWorkspace();
+        //this.addWorkspace();
 
-    this._computation.getSetupStages().forEach(stage => {
-      this.doStage(stage);
-    });
+        this._computation.getSetupStages().forEach(stage => {
+            this.doStage(stage);
+        });
 
-    this._computation.getEncryptionStages().forEach(stage => {
-      this.doStage(stage);
-    });
+        this._computation.getEncryptionStages().forEach(stage => {
+            this.doStage(stage);
+        });
 
-    this._computation.setState(Computation.STATE_BACKEND_CONNECT);
+        this._computation.setState(Computation.STATE_BACKEND_CONNECT);
 
-    setTimeout(() => this.registerComputation(),
-      2000
-    );
-  }
+        setTimeout(() => this.registerComputation(),
+            2000
+        );
+    }
 
-  private doStage(stage: Stage) {
+    private doStage(stage: Stage) {
 
-    stage.getSteps().forEach(step => {
-      let r = this.computeStep(step);
+        stage.getSteps().forEach(step => {
+            let r = this.computeStep(step);
 
-      step.setResult(r);
-    });
-  }
+            step.setResult(r);
+        });
+    }
 
-  private computeStep(step: Step) {
-    // 1) get variable name from compute step
-    let varName = step.getEncryptionStep().getCompute().split(' = ')[0];
-    // 2) compute based on the command
-    let command = step.getEncryptionStep().getCompute().split(' = ')[1];
+    private computeStep(step: Step) {
+        // 1) get variable name from compute step
+        let varName = step.getEncryptionStep().getCompute().split(' = ')[0];
+        // 2) compute based on the command
+        let command = step.getEncryptionStep().getCompute().split(' = ')[1];
 
-    let r = this._computer.calculateStepCompute(command, this._computation.getFullScope());
+        let r = this._computer.calculateStepCompute(command, this._computation.getFullScope());
 
-    this._computation.addToScope(varName, r, step.getEncryptionStep().isPublicScope());
+        this._computation.addToScope(varName, r, step.getEncryptionStep().isPublicScope());
 
-    console.log('Completed: ' + step.getEncryptionStep().getCompute());
+        console.log('Completed: ' + step.getEncryptionStep().getCompute());
 
-    return r;
-  }
+        return r;
+    }
 
-  private decrypt() {
+    private decrypt() {
 
-    this._computation.getDecryptionStages().forEach(stage => {
-      this.doStage(stage);
-    });
+        this._computation.getDecryptionStages().forEach(stage => {
+            this.doStage(stage);
+        });
 
-    this._computation.setC(this._computation.getFromScope('c'));
-  }
+        this._computation.setC(this._computation.getFromScope('c'));
+    }
 
-  private registerComputation(): void {
-    console.log('API Address: ' +  API_ADDRESS);
+    private registerComputation(): void {
+        console.log('API Address: ' + API_ADDRESS);
 
-    const JSON_HEADERS = new Headers();
+        const JSON_HEADERS = new Headers();
 
-    JSON_HEADERS.append('Accept', 'application/json');
-    JSON_HEADERS.append('Content-Type', 'application/json');
-    let message = this._messageProviderService.createRegisterMessage(this._computation);
-    this._http.post(
-      'http://' + API_ADDRESS + '/api/computations',
-      JSON.stringify(message.toJson()),
-      { headers: JSON_HEADERS}
-    ).subscribe(
-        data => this.registerSuccess(data),
-        err => console.log(err)
-      )
-    ;
-  }
+        JSON_HEADERS.append('Accept', 'application/json');
+        JSON_HEADERS.append('Content-Type', 'application/json');
+        let message = this._messageProviderService.createRegisterMessage(this._computation);
+        this._http.post(
+            'http://' + API_ADDRESS + '/api/computations',
+            JSON.stringify(message.toJson()),
+            { headers: JSON_HEADERS }
+        ).subscribe(
+            data => this.registerSuccess(data),
+            err => console.log(err)
+            )
+            ;
+    }
 
-  private registerSuccess(data) {
-    this._computation = this._messageResolverService.resolveRegisterMessage(
-      data.json(),
-      this._computation
-    );
+    private registerSuccess(data) {
+        this._computation = this._messageResolverService.resolveRegisterMessage(
+            data.json(),
+            this._computation
+        );
 
-    this.connectToWebSocket();
-  }
+        this.connectToWebSocket();
+    }
 
-  private connectToWebSocket(): void {
-    console.log('Backend Address: ' +  BACKEND_ADDRESS);
+    private connectToWebSocket(): void {
+        console.log('Backend Address: ' + BACKEND_ADDRESS);
 
-    this._socket = new WebSocket('ws://' + BACKEND_ADDRESS);
+        this._socket = new WebSocket('ws://' + BACKEND_ADDRESS);
 
-    this._socket.addEventListener('open', (ev: Event) => {
-      let message = this._messageProviderService.createComputeMessage(this._computation);
-      this._socket.send(JSON.stringify(message.toJson()));
+        this._socket.addEventListener('open', (ev: Event) => {
+            let message = this._messageProviderService.createComputeMessage(this._computation);
+            this._socket.send(JSON.stringify(message.toJson()));
 
-      this._computation.setState(Computation.STATE_STARTED);
-    });
+            this._computation.setState(Computation.STATE_STARTED);
+        });
 
-    this._socket.addEventListener('message', (ev: MessageEvent) => {
-      this._computation.setState(Computation.STATE_BACKEND_CONNECTED);
+        this._socket.addEventListener('message', (ev: MessageEvent) => {
+            this._computation.setState(Computation.STATE_BACKEND_CONNECTED);
 
-      this._computation = this._messageResolverService.resolveComputeMessage(
-        JSON.parse(ev.data),
-        this._computation
-      );
+            this._computation = this._messageResolverService.resolveComputeMessage(
+                JSON.parse(ev.data),
+                this._computation
+            );
 
-      if (this._computation.isComplete()) {
-        this._socket.close();
+            if (this._computation.isComplete()) {
+                this._socket.close();
 
-        this.decrypt();
-      }
-    });
-  }
+                this.decrypt();
+            }
+        });
+    }
 
 }

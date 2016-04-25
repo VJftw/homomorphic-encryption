@@ -5,7 +5,7 @@ import {
 import {Computation} from './computation';
 import {BigInteger} from 'jsbn';
 
-describe('Computation', () => {
+describe('computation-model', () => {
 
     let computation: Computation;
 
@@ -15,198 +15,198 @@ describe('Computation', () => {
 
     it('should return the hashId', () => {
         expect(computation.getHashId())
-        .toBeUndefined()
-        ;
+            .toBeUndefined()
+            ;
     });
 
     it('should set the hashId', () => {
         expect(computation.setHashId('ax54dc'))
-        .toBe(computation)
-        ;
+            .toBe(computation)
+            ;
 
         expect(computation.getHashId())
-        .toEqual('ax54dc')
-        ;
+            .toEqual('ax54dc')
+            ;
     });
 
     it('should return A', () => {
         expect(computation.getA())
-        .toBeUndefined()
-        ;
+            .toBeUndefined()
+            ;
     });
 
     it('should return B', () => {
         expect(computation.getB())
-        .toBeUndefined()
-        ;
+            .toBeUndefined()
+            ;
     });
 
     it('should return C', () => {
         expect(computation.getC())
-        .toBeUndefined()
-        ;
+            .toBeUndefined()
+            ;
     });
 
     it('should set C', () => {
         let c = jasmine.createSpyObj('c', ['']);
         expect(computation.setC(c))
-        .toBe(computation)
-        ;
+            .toBe(computation)
+            ;
 
         expect(computation.getC())
-        .toBe(c)
-        ;
+            .toBe(c)
+            ;
     });
 
     it('should return the timestamp', () => {
         expect(computation.getTimestamp())
-        .toBeUndefined()
-        ;
+            .toBeUndefined()
+            ;
     });
 
     it('should set the timestamp', () => {
         let timestamp = new Date();
         expect(computation.setTimestamp(timestamp))
-        .toBe(computation)
-        ;
+            .toBe(computation)
+            ;
 
         expect(computation.getTimestamp())
-        .toBe(timestamp)
-        ;
+            .toBe(timestamp)
+            ;
     });
 
     it('should return the bit length', () => {
         expect(computation.getBitLength())
-        .toBeUndefined()
-        ;
+            .toBeUndefined()
+            ;
     });
 
     it('should set the bit length', () => {
         expect(computation.setBitLength(16))
-        .toEqual(computation)
-        ;
+            .toEqual(computation)
+            ;
 
         expect(computation.getBitLength())
-        .toEqual(16)
-        ;
+            .toEqual(16)
+            ;
     });
 
     it('should return the operation', () => {
         expect(computation.getOperation())
-        .toBeUndefined()
-        ;
+            .toBeUndefined()
+            ;
     });
 
     it('should set the operation', () => {
         expect(computation.setOperation('+'))
-        .toBe(computation)
-        ;
+            .toBe(computation)
+            ;
 
         expect(computation.getOperation())
-        .toEqual('+')
-        ;
+            .toEqual('+')
+            ;
     });
 
     it('should return the auth token', () => {
         expect(computation.getAuthToken())
-        .toBeUndefined()
-        ;
+            .toBeUndefined()
+            ;
     });
 
     it('should set the auth token', () => {
         expect(computation.setAuthToken('abcdef'))
-        .toBe(computation)
-        ;
+            .toBe(computation)
+            ;
 
         expect(computation.getAuthToken())
-        .toEqual('abcdef')
-        ;
+            .toEqual('abcdef')
+            ;
     });
 
     it('should return the encryption scheme', () => {
         expect(computation.getEncryptionScheme())
-        .toBeUndefined()
-        ;
+            .toBeUndefined()
+            ;
     });
 
     it('should set the encryption scheme', () => {
         let encryptionScheme = jasmine.createSpyObj('encryptionScheme', ['']);
 
         expect(computation.setEncryptionScheme(encryptionScheme))
-        .toEqual(computation)
-        ;
+            .toEqual(computation)
+            ;
 
         expect(computation.getEncryptionScheme())
-        .toEqual(encryptionScheme)
-        ;
+            .toEqual(encryptionScheme)
+            ;
     });
 
     it('should return the initial state', () => {
         expect(computation.getState())
-        .toEqual(Computation.STATE_NEW)
-        ;
+            .toEqual(Computation.STATE_NEW)
+            ;
     });
 
     it('should set the state', () => {
         expect(computation.setState(Computation.STATE_STARTED))
-        .toBe(computation)
-        ;
+            .toBe(computation)
+            ;
 
         expect(computation.getState())
-        .toEqual(Computation.STATE_STARTED)
-        ;
+            .toEqual(Computation.STATE_STARTED)
+            ;
     });
 
     it('should return whether or not it is in the NEW state', () => {
         expect(computation.isNew())
-        .toEqual(true)
-        ;
+            .toEqual(true)
+            ;
 
         expect(computation.isStarted())
-        .toEqual(false)
-        ;
+            .toEqual(false)
+            ;
 
         expect(computation.isComplete())
-        .toEqual(false)
-        ;
+            .toEqual(false)
+            ;
     });
 
     it('should return whether or not it is in the STARTED state', () => {
         computation.setState(Computation.STATE_STARTED);
 
         expect(computation.isNew())
-        .toEqual(false)
-        ;
+            .toEqual(false)
+            ;
 
         expect(computation.isStarted())
-        .toEqual(true)
-        ;
+            .toEqual(true)
+            ;
 
         expect(computation.isComplete())
-        .toEqual(false)
-        ;
+            .toEqual(false)
+            ;
     });
 
     it('should return whether or not it is in the COMPLETE state', () => {
         computation.setState(Computation.STATE_COMPLETE);
 
         expect(computation.isNew())
-        .toEqual(false)
-        ;
+            .toEqual(false)
+            ;
 
         expect(computation.isStarted())
-        .toEqual(false)
-        ;
+            .toEqual(false)
+            ;
 
         expect(computation.isComplete())
-        .toEqual(true)
-        ;
+            .toEqual(true)
+            ;
     });
 
     it('should return the stages', () => {
         expect(computation.getStages())
-        .toEqual([])
-        ;
+            .toEqual([])
+            ;
 
         let setupStage = jasmine.createSpyObj('setupStage', ['']);
         computation.addSetupStage(setupStage);
@@ -219,93 +219,93 @@ describe('Computation', () => {
         computation.addDecryptionStage(decryptionStage);
 
         expect(computation.getStages())
-        .toEqual([
-            setupStage,
-            encryptionStage,
-            backendStage,
-            decryptionStage
-        ])
-        ;
+            .toEqual([
+                setupStage,
+                encryptionStage,
+                backendStage,
+                decryptionStage
+            ])
+            ;
     });
 
     it('should return the setup stages', () => {
         expect(computation.getSetupStages())
-        .toEqual([])
-        ;
+            .toEqual([])
+            ;
     });
 
     it('should add a setup stage', () => {
         let stage = jasmine.createSpyObj('setupStage', ['']);
 
         expect(computation.addSetupStage(stage))
-        .toEqual(computation)
-        ;
+            .toEqual(computation)
+            ;
 
         expect(computation.getSetupStages())
-        .toEqual([stage])
-        ;
+            .toEqual([stage])
+            ;
     });
 
     it('should return the encryption stages', () => {
         expect(computation.getEncryptionStages())
-        .toEqual([])
-        ;
+            .toEqual([])
+            ;
     });
 
     it('should add a encryption stage', () => {
         let stage = jasmine.createSpyObj('encryptionStage', ['']);
 
         expect(computation.addEncryptionStage(stage))
-        .toEqual(computation)
-        ;
+            .toEqual(computation)
+            ;
 
         expect(computation.getEncryptionStages())
-        .toEqual([stage])
-        ;
+            .toEqual([stage])
+            ;
     });
 
     it('should return the backend stage', () => {
         expect(computation.getBackendStage())
-        .toBeUndefined()
-        ;
+            .toBeUndefined()
+            ;
     });
 
     it('should add a backend stage', () => {
         let stage = jasmine.createSpyObj('backendAdditionStage', ['']);
 
         expect(computation.addBackendStage('+', stage))
-        .toEqual(computation)
-        ;
+            .toEqual(computation)
+            ;
 
         computation.setOperation('+');
 
         expect(computation.getBackendStage())
-        .toEqual(stage)
-        ;
+            .toEqual(stage)
+            ;
     });
 
     it('should return the decryption stages', () => {
         expect(computation.getDecryptionStages())
-        .toEqual([])
-        ;
+            .toEqual([])
+            ;
     });
 
     it('should add a decryption stage', () => {
         let stage = jasmine.createSpyObj('decryptionStage', ['']);
 
         expect(computation.addDecryptionStage(stage))
-        .toEqual(computation)
-        ;
+            .toEqual(computation)
+            ;
 
         expect(computation.getDecryptionStages())
-        .toEqual([stage])
-        ;
+            .toEqual([stage])
+            ;
     });
 
     it('should return the public scope', () => {
         expect(computation.getPublicScope())
-        .toEqual({})
-        ;
+            .toEqual({})
+            ;
     });
 
     it('should return the full scope', () => {
@@ -315,10 +315,10 @@ describe('Computation', () => {
         computation.addToScope('aX', publicBigInt, true);
 
         expect(computation.getFullScope())
-        .toEqual({
-            'a': privateBigInt,
-            'aX': publicBigInt
-        });
+            .toEqual({
+                'a': privateBigInt,
+                'aX': publicBigInt
+            });
 
     });
 
@@ -329,19 +329,19 @@ describe('Computation', () => {
         computation.addToScope('aX', publicBigInt, true);
 
         expect(computation.getFromScope('a'))
-        .toEqual(privateBigInt)
-        ;
+            .toEqual(privateBigInt)
+            ;
 
         expect(computation.getFromScope('aX'))
-        .toEqual(publicBigInt)
-        ;
+            .toEqual(publicBigInt)
+            ;
     });
 
     it('should throw an exception if not in scope', () => {
         expect(() => {
             computation.getFromScope('d');
         }).toThrowError()
-        ;
+            ;
     });
 
 });

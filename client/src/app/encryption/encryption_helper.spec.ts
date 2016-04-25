@@ -1,75 +1,74 @@
 import {
-  it
+    it
 } from 'angular2/testing';
 
 import {EncryptionHelper} from './encryption_helper';
 import {BigInteger} from 'jsbn';
 
 
-describe('EncryptionHelper', () => {
+describe('encryption-helper', () => {
 
-  let encryptionHelper: EncryptionHelper;
+    let encryptionHelper: EncryptionHelper;
 
-  beforeEach(() => {
-    encryptionHelper = new EncryptionHelper();
-  });
+    beforeEach(() => {
+        encryptionHelper = new EncryptionHelper();
+    });
 
-  it('should return a random arbitrary number', () => {
+    it('should return a random arbitrary number', () => {
 
-    let r = encryptionHelper.getRandomArbitrary(3, 5);
-    expect(r.intValue() >= 3).toBe(true);
-    expect(r.intValue() <= 5).toBe(true);
+        let r = encryptionHelper.getRandomArbitrary(3, 5);
+        expect(r.intValue() >= 3).toBe(true);
+        expect(r.intValue() <= 5).toBe(true);
 
-    r = encryptionHelper.getRandomArbitrary(3, 3);
-    expect(r.intValue() >= 3).toBe(true);
-    expect(r.intValue() <= 3).toBe(true);
+        r = encryptionHelper.getRandomArbitrary(3, 3);
+        expect(r.intValue() >= 3).toBe(true);
+        expect(r.intValue() <= 3).toBe(true);
 
-    r = encryptionHelper.getRandomArbitrary(-1, 30);
-    expect(r.intValue() >= -1).toBe(true);
-    expect(r.intValue() <= 30).toBe(true);
+        r = encryptionHelper.getRandomArbitrary(-1, 30);
+        expect(r.intValue() >= -1).toBe(true);
+        expect(r.intValue() <= 30).toBe(true);
 
-  });
+    });
 
-  it('should generate a 8-bit Prime number', () => {
+    it('should generate a 8-bit Prime number', () => {
 
-    let bits = 8;
-    let p;
+        let bits = 8;
+        let p;
 
-    for (let i = 0; i < 100; i++) {
-      p = encryptionHelper.generatePrime(bits);
-      expect(isPrime(p.intValue())).toBe(true);
+        for (let i = 0; i < 100; i++) {
+            p = encryptionHelper.generatePrime(bits);
+            expect(isPrime(p.intValue())).toBe(true);
+        }
+    });
+
+    it('should generate a 16-bit Prime number', () => {
+        let bits = 16;
+        let p;
+
+        for (let i = 0; i < 100; i++) {
+            p = encryptionHelper.generatePrime(bits);
+            expect(isPrime(p.intValue())).toBe(true);
+        }
+    });
+
+    function isPrime(p: number) {
+        for (let i = 2; i < p; i++) {
+            if (p % i === 0) {
+                return false;
+            }
+        }
+        return true;
     }
-  });
 
-  it('should generate a 16-bit Prime number', () => {
-    let bits = 16;
-    let p;
+    it('should return a primitive root of a prime number', () => {
 
-    for (let i = 0; i < 100; i++) {
-      p = encryptionHelper.generatePrime(bits);
-      expect(isPrime(p.intValue())).toBe(true);
-    }
-  });
+        let root = encryptionHelper.findPrimitiveRootOfPrime(new BigInteger('2'));
+        expect(root.intValue()).toBe(1);
 
-  function isPrime(p: number) {
-    for (let i = 2; i < p; i++) {
-      if (p % i === 0) {
-        return false;
-      }
-    }
-    return true;
-  }
+        root = encryptionHelper.findPrimitiveRootOfPrime(new BigInteger('43'));
+        let roots = [3, 5, 12, 18, 19, 20, 26, 28, 29, 30, 33, 34];
+        let index = roots.indexOf(root.intValue());
 
-  it('should return a primitive root of a prime number', () => {
-
-    let root = encryptionHelper.findPrimitiveRootOfPrime(new BigInteger('2'));
-    expect(root.intValue()).toBe(1);
-
-    root = encryptionHelper.findPrimitiveRootOfPrime(new BigInteger('43'));
-    let roots = [3, 5, 12, 18, 19, 20, 26, 28, 29, 30, 33, 34];
-    let index = roots.indexOf(root.intValue());
-    console.log(index);
-
-  });
+    });
 
 });

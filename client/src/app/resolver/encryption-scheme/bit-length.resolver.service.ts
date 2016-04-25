@@ -4,16 +4,16 @@ import {BitLength, IBitLengthJson} from '../../model/encryption-scheme/bit-lengt
 @Injectable()
 export class BitLengthResolverService {
 
-  /**
-   *
-   * @param bitLengthJson
-   * @returns {EncryptionSchemeBitLength}
-   */
-  public fromJson(bitLengthJson: IBitLengthJson): BitLength {
-    return new BitLength(
-      bitLengthJson.bitLength,
-      bitLengthJson.maxInt
-    );
-  }
+    /**
+     *
+     * @param bitLengthJson
+     * @returns {EncryptionSchemeBitLength}
+     */
+    public fromJson(bitLengthJson: IBitLengthJson): BitLength {
+        return new BitLength(
+            bitLengthJson.bitLength,
+            bitLengthJson.maxInt
+        );
+    }
 
 }
