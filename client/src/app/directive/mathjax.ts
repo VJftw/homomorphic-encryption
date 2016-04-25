@@ -1,11 +1,11 @@
 import {Directive, ElementRef} from 'angular2/core';
 
-@Directive({selector: '[mathjax]' })
+@Directive({ selector: '[mathjax]' })
 export class MathJaxDirective {
 
-  constructor(
-  ) {
-    MathJax.Hub.Queue(['Typeset', MathJax.Hub]);
-  }
+    constructor(
+    ) {
+        MathJax.Hub.Queue(['Typeset', MathJax.Hub]);
+    }
 
 }

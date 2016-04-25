@@ -65,3 +65,25 @@ class ComputationResolverTests(unittest.TestCase):
             computation.get_public_scope(),
             d['publicScope']
         )
+
+    def test_should_through_exception_for_invalid_token(self):
+        """
+        ComputationResolver.from_dict - it should throw an exception when the auth token is invalid
+        :return:
+        """
+        d = {
+            'hashId': "abcdefg",
+            'authToken': "aaaaaa",
+            'computeSteps': [
+                "cX = aX + bX"
+            ],
+            'publicScope': {
+                "aX": "12324",
+                "bX": "13422"
+            }
+        }
+
+        self.redis_service.get = mock.Mock(return_value=None)
+
+        with self.assertRaises(Exception):
+            self.computation_resolver.from_dict(d)

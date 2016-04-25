@@ -25,4 +25,4 @@ bin/doctrine.php
 bin/phpspec
 bin/security-checker
 bin/symfony_requirements
-
+bin/php-cs-fixer

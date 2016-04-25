@@ -2,17 +2,14 @@
 
 namespace AppBundle\Resolver;
 
-
 use AppBundle\Entity\Computation;
 use AppBundle\Provider\ComputationProvider;
 
 /**
- * Class ComputationResolver
- * @package AppBundle\Resolver
+ * Class ComputationResolver.
  */
 class ComputationResolver
 {
-
     /**
      * @var ComputationProvider
      */

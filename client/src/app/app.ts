@@ -9,15 +9,14 @@ import {ComputationComponent} from './component/computation/computation.componen
  * Top Level Component
  */
 @Component({
-  directives: [ ROUTER_DIRECTIVES ],
-  selector: 'app', // <app></app>
-  template: require('./app.html')
+    directives: [ROUTER_DIRECTIVES],
+    selector: 'app', // <app></app>
+    template: require('./app.html')
 })
 @RouteConfig([
-  { as: 'Home', component: Index, path: '/' },
-  { as: 'Computation', component: ComputationComponent, path: '/computation/...', useAsDefault: true },
+    { as: 'Home', component: Index, path: '/' },
+    { as: 'Computation', component: ComputationComponent, path: '/computation/...', useAsDefault: true },
 ])
 export class App {
-  title: string = 'Implementations of Homomorphic Encryption';
-
+    title: string = 'Implementations of Homomorphic Encryption';
 }

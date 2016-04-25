@@ -220,3 +220,24 @@ def push_prod():
         line = line.decode('utf-8')
         line = json.loads(line)
         print_line(line)
+
+@task
+def command(cmd):
+    build("Dockerfile.dev", dev_container_name)
+
+    print("Starting Development container")
+    container = cli.create_container(
+        image=dev_container_name,
+        volumes=[
+            '{0}/:/app'.format(os.getcwd())
+        ],
+        host_config=cli.create_host_config(binds=[
+            '{0}/:/app'.format(os.getcwd())
+        ])
+    )
+    response = cli.start(container=container.get('Id'))
+
+    execute(container.get('Id'), cmd)
+
+    cli.stop(container.get('Id'))
+    cli.remove_container(container.get('Id'))

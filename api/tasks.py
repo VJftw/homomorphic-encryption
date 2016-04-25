@@ -93,7 +93,7 @@ def clean(objs):
 
 CI = True if os.getenv('CI') else False
 repository = 'vjftw/homomorphic-encryption'
-prefix = 'client'
+prefix = 'api'
 branch = get_branch()
 version = get_version()
 dev_container_name = "{0}:{1}-{2}-dev".format(repository, prefix, branch)
@@ -141,6 +141,7 @@ def test():
     execute(container.get('Id'), "composer config --global github-oauth.github.com {0}".format(github_token), True)
     execute(container.get('Id'), "composer --ansi --no-interaction -v install")
 
+    execute(container.get('Id'), "bin/php-cs-fixer fix src/ --dry-run -v --diff --ansi")
     execute(container.get('Id'), "php -dzend_extension=xdebug.so bin/phpspec run --ansi -v -f pretty")
 
     cli.stop(container.get('Id'))
@@ -247,3 +248,24 @@ def push_prod():
         line = line.decode('utf-8')
         line = json.loads(line)
         print_line(line)
+
+@task
+def command(cmd):
+    build("Dockerfile.dev", dev_container_name)
+
+    print("Starting Development container")
+    container = cli.create_container(
+        image=dev_container_name,
+        volumes=[
+            '{0}/symfony/:/app'.format(os.getcwd())
+        ],
+        host_config=cli.create_host_config(binds=[
+            '{0}/symfony/:/app'.format(os.getcwd())
+        ])
+    )
+    response = cli.start(container=container.get('Id'))
+
+    execute(container.get('Id'), cmd)
+
+    cli.stop(container.get('Id'))
+    cli.remove_container(container.get('Id'))

@@ -7,27 +7,27 @@ import {StepProviderService} from './step.provider.service';
 @Injectable()
 export class StageProviderService {
 
-  constructor(
-    private _stepProviderService: StepProviderService
-  ) {}
+    constructor(
+        private _stepProviderService: StepProviderService
+    ) { }
 
-  /**
-   *
-   * @param encryptionStage
-   * @returns {Stage}
-   */
-  public createFromEncryptionStage(encryptionStage: EncryptionStage.Stage): Stage {
-    let stage = new Stage();
+    /**
+     *
+     * @param encryptionStage
+     * @returns {Stage}
+     */
+    public createFromEncryptionStage(encryptionStage: EncryptionStage.Stage): Stage {
+        let stage = new Stage();
 
-    stage
-      .setEncryptionStage(encryptionStage)
-    ;
+        stage
+            .setEncryptionStage(encryptionStage)
+        ;
 
-    for (let encryptionStep of encryptionStage.getSteps()) {
-      let step = this._stepProviderService.create(encryptionStep);
-      stage.addStep(step);
+        for (let encryptionStep of encryptionStage.getSteps()) {
+            let step = this._stepProviderService.create(encryptionStep);
+            stage.addStep(step);
+        }
+
+        return stage;
     }
-
-    return stage;
-  }
 }

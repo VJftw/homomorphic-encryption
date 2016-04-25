@@ -1,16 +1,16 @@
 import {Pipe, PipeTransform} from 'angular2/core';
 
-@Pipe({name: 'mathjax'})
+@Pipe({ name: 'mathjax' })
 export class MathjaxPipe implements PipeTransform {
 
-  transform(value: string, args: string[]): any {
+    transform(value: string, args: string[]): any {
 
-    switch (value) {
-      case 'x':
-        return '\\times';
-      default:
-        return value;
+        switch (value) {
+            case 'x':
+                return '\\times';
+            default:
+                return value;
+        }
     }
-  }
 
 }

@@ -96,4 +96,22 @@ class ComputationSpec extends ObjectBehavior
             ->shouldReturn("127.0.0.1")
         ;
     }
+
+    function it_should_return_the_auth_token()
+    {
+        $this->getAuthToken()
+            ->shouldReturn(null)
+        ;
+    }
+
+    function it_should_set_the_auth_token()
+    {
+        $this->setAuthToken("abcdef")
+            ->shouldReturn($this)
+        ;
+
+        $this->getAuthToken()
+            ->shouldReturn("abcdef")
+        ;
+    }
 }

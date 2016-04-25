@@ -1,15 +1,15 @@
 import {
-  it
+    it
 } from 'angular2/testing';
 
 import 'mathjax';
 import {MathJaxDirective} from './mathjax';
 
 
-describe('MathJaxDirective', () => {
+describe('mathjax-directive', () => {
 
-  it('should construct', () => {
-    let mathjax = new MathJaxDirective();
-  });
+    it('should construct', () => {
+        let mathjax = new MathJaxDirective();
+    });
 
 });

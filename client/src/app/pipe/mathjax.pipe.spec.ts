@@ -1,30 +1,30 @@
 import {
-  it
+    it
 } from 'angular2/testing';
 
 import {MathjaxPipe} from './mathjax.pipe';
 
 
-describe('MathjaxPip', () => {
+describe('mathjax-pipe', () => {
 
-  it('should transform the x operator to \\times', () => {
-    let pipe = new MathjaxPipe();
+    it('should transform the x operator to \\times', () => {
+        let pipe = new MathjaxPipe();
 
-    expect(pipe.transform('x', []))
-      .toEqual('\\times')
-    ;
+        expect(pipe.transform('x', []))
+            .toEqual('\\times')
+            ;
 
-    expect(pipe.transform('+', []))
-      .toEqual('+')
-    ;
-  });
+        expect(pipe.transform('+', []))
+            .toEqual('+')
+            ;
+    });
 
-  it('should leave valid operators intact', () => {
-    let pipe = new MathjaxPipe();
+    it('should leave valid operators intact', () => {
+        let pipe = new MathjaxPipe();
 
-    expect(pipe.transform('+', []))
-      .toEqual('+')
-    ;
-  });
+        expect(pipe.transform('+', []))
+            .toEqual('+')
+            ;
+    });
 
 });

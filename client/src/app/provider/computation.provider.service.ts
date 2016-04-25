@@ -9,40 +9,40 @@ import {StageProviderService} from './stage.provider.service';
 @Injectable()
 export class ComputationProviderService {
 
-  constructor(
-    private _stageProviderService: StageProviderService
-  ) {}
+    constructor(
+        private _stageProviderService: StageProviderService
+    ) { }
 
-  public create(scheme: EncryptionScheme): Computation {
-    let c = new Computation();
+    public create(scheme: EncryptionScheme): Computation {
+        let c = new Computation();
 
-    c
-      .setEncryptionScheme(scheme)
-      .setOperation(scheme.getCapabilities()[0])
-      .setBitLength(scheme.getBitLengths()[0].getBitLength())
-    ;
+        c
+            .setEncryptionScheme(scheme)
+            .setOperation(scheme.getCapabilities()[0])
+            .setBitLength(scheme.getBitLengths()[0].getBitLength())
+        ;
 
-    for (let encryptionStage of scheme.getSetupStages()) {
-      let stage = this._stageProviderService.createFromEncryptionStage(encryptionStage);
-      c.addSetupStage(stage);
+        for (let encryptionStage of scheme.getSetupStages()) {
+            let stage = this._stageProviderService.createFromEncryptionStage(encryptionStage);
+            c.addSetupStage(stage);
+        }
+
+        for (let encryptionStage of scheme.getEncryptionStages()) {
+            let stage = this._stageProviderService.createFromEncryptionStage(encryptionStage);
+            c.addEncryptionStage(stage);
+        }
+
+        scheme.getBackendStages().forEach((value, key) => {
+            let stage = this._stageProviderService.createFromEncryptionStage(value);
+            c.addBackendStage(key, stage);
+        });
+
+        for (let encryptionStage of scheme.getDecryptionStages()) {
+            let stage = this._stageProviderService.createFromEncryptionStage(encryptionStage);
+            c.addDecryptionStage(stage);
+        }
+
+        return c;
     }
-
-    for (let encryptionStage of scheme.getEncryptionStages()) {
-      let stage = this._stageProviderService.createFromEncryptionStage(encryptionStage);
-      c.addEncryptionStage(stage);
-    }
-
-    scheme.getBackendStages().forEach((value, key) => {
-      let stage = this._stageProviderService.createFromEncryptionStage(value);
-      c.addBackendStage(key, stage);
-    });
-
-    for (let encryptionStage of scheme.getDecryptionStages()) {
-      let stage = this._stageProviderService.createFromEncryptionStage(encryptionStage);
-      c.addDecryptionStage(stage);
-    }
-
-    return c;
-  }
 
 }

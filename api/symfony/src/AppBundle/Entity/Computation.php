@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Computation
+ * Computation.
  *
  * @ORM\Table(
  *      indexes={
@@ -16,9 +16,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Computation
 {
-
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -48,21 +47,21 @@ class Computation
     private $timestamp;
 
     /**
-     * @var String
+     * @var string
      *
      * @ORM\Column(name="ip_address", type="string", length=15)
      */
     private $ipAddress;
 
     /**
-     * @var String
+     * @var string
      */
     private $authToken;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -110,7 +109,7 @@ class Computation
     }
 
     /**
-     * Set timestamp
+     * Set timestamp.
      *
      * @param \DateTime $timestamp
      *
@@ -124,7 +123,7 @@ class Computation
     }
 
     /**
-     * Get timestamp
+     * Get timestamp.
      *
      * @return \DateTime
      */
@@ -146,7 +145,7 @@ class Computation
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getIpAddress()
     {
@@ -166,11 +165,10 @@ class Computation
     }
 
     /**
-     * @return String
+     * @return string
      */
     public function getAuthToken()
     {
         return $this->authToken;
     }
 }
-

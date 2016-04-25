@@ -1,3 +1,3 @@
 export interface MessageInterface {
-  toJson(): {};
+    toJson(): {};
 }
