@@ -5,18 +5,13 @@ namespace AppBundle\Provider;
 use AppBundle\Entity\Computation;
 use AppBundle\Repository\ComputationRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Hashids\HashGenerator;
-use Ratchet\ConnectionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Util\SecureRandom;
 
 /**
- * Class ComputationProvider
- * @package AppBundle\Provider
+ * Class ComputationProvider.
  */
 class ComputationProvider
 {
-
     /**
      * @var ComputationRepository
      */
@@ -48,12 +43,13 @@ class ComputationProvider
 
     /**
      * @param $hashId
+     *
      * @return null|Computation
      */
     public function findComputationByHashId($hashId)
     {
         $computation = $this->computationRepository->findOneBy([
-            "hashId" => $hashId
+            'hashId' => $hashId,
         ]);
 
         if (!$computation) {

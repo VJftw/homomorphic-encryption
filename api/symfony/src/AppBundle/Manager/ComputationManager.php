@@ -1,19 +1,16 @@
 <?php
 
 namespace AppBundle\Manager;
+
 use AppBundle\Entity\Computation;
 use AppBundle\Service\RedisService;
 use Doctrine\ORM\EntityManagerInterface;
-use Snc\RedisBundle\Client\Phpredis\Client;
-
 
 /**
- * Class ComputationManager
- * @package AppBundle\Manager
+ * Class ComputationManager.
  */
 class ComputationManager
 {
-
     /**
      * @var EntityManagerInterface
      */
@@ -26,7 +23,7 @@ class ComputationManager
 
     /**
      * @param EntityManagerInterface $entityManager
-     * @param RedisService $redisService
+     * @param RedisService           $redisService
      */
     public function __construct(EntityManagerInterface $entityManager, RedisService $redisService)
     {

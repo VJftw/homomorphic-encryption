@@ -4,16 +4,12 @@ namespace AppBundle\Finisher;
 
 use AppBundle\Entity\Computation;
 use Hashids\HashGenerator;
-use Hashids\Hashids;
-
 
 /**
- * Class ComputationFinisher
- * @package AppBundle\Finisher
+ * Class ComputationFinisher.
  */
 class ComputationFinisher
 {
-
     /**
      * @var HashGenerator
      */

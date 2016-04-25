@@ -14,12 +14,10 @@ use FOS\RestBundle\Request\ParamFetcher;
 use AppBundle\Entity\Computation;
 
 /**
- * Class ComputationsController
- * @package AppBundle\Controller
+ * Class ComputationsController.
  */
 class ComputationsController
 {
-
     /**
      * @var ValidatorInterface
      */
@@ -46,11 +44,11 @@ class ComputationsController
     private $requestStack;
 
     /**
-     * @param ValidatorInterface $validator
+     * @param ValidatorInterface  $validator
      * @param ComputationResolver $computationResolver
      * @param ComputationFinisher $computationFinisher
-     * @param ComputationManager $computationManager
-     * @param RequestStack $requestStack
+     * @param ComputationManager  $computationManager
+     * @param RequestStack        $requestStack
      */
     public function __construct(
         ValidatorInterface $validator,
@@ -58,8 +56,7 @@ class ComputationsController
         ComputationFinisher $computationFinisher,
         ComputationManager $computationManager,
         RequestStack $requestStack
-    )
-    {
+    ) {
         $this->validator = $validator;
         $this->computationResolver = $computationResolver;
         $this->computationFinisher = $computationFinisher;
@@ -68,7 +65,6 @@ class ComputationsController
     }
 
     /**
-     *
      * @Nelmio\ApiDoc(
      *     description="Create new Computation"
      * )
@@ -102,5 +98,4 @@ class ComputationsController
 
         return $computation;
     }
-
 }
