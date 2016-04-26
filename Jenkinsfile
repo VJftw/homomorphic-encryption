@@ -16,7 +16,7 @@ stage 'API: Unit tests'
         invoke test
       '''
     }
-    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'api/symfony/coverage', reportFiles: 'index.html', reportName: 'API Test Coverage Report'])
+    publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'api/symfony/coverage', reportFiles: 'index.html', reportName: 'API Test Coverage Report'])
   }
 }
 
@@ -38,7 +38,7 @@ node {
         invoke test
       '''
     }
-    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'backend/coverage', reportFiles: 'index.html', reportName: 'Backend Test Coverage Report'])
+    publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'backend/coverage', reportFiles: 'index.html', reportName: 'Backend Test Coverage Report'])
   }
 }
 
@@ -63,7 +63,7 @@ node {
         tar cf - node_modules | pv -s $(du -sk node_modules | cut -f 1)k | bzip2 -c > node_modules.tar.bz2
       '''
     }
-    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'client/coverage/PhantomJS 2.1.1 (Linux 0.0.0)', reportFiles: 'index.html', reportName: 'Client Test Coverage Report'])
+    publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'client/coverage/PhantomJS 2.1.1 (Linux 0.0.0)', reportFiles: 'index.html', reportName: 'Client Test Coverage Report'])
   }
   stash includes: 'client/node_modules.tar.bz2', name: 'node_modules'
 }
