@@ -10,6 +10,7 @@ import {BigInteger} from 'jsbn';
 import {Stage} from '../model/computation/stage';
 import {Step} from '../model/computation/step';
 import {Headers} from 'angular2/http';
+import {NgZone} from 'angular2/core';
 
 
 @Injectable()
@@ -22,7 +23,8 @@ export class ComputationRunnerService {
         private _computer: Computer,
         private _messageProviderService: MessageProviderService,
         private _messageResolverService: MessageResolverService,
-        private _http: Http
+        private _http: Http,
+        private _zone: NgZone
     ) {
     }
 
@@ -128,27 +130,32 @@ export class ComputationRunnerService {
 
         this._socket = new WebSocket('ws://' + BACKEND_ADDRESS);
 
-        this._socket.addEventListener('open', (ev: Event) => {
-            let message = this._messageProviderService.createComputeMessage(this._computation);
-            this._socket.send(JSON.stringify(message.toJson()));
+        this._socket.onopen = (ev: Event) => {
+            this._zone.run(() => {
+                let message = this._messageProviderService.createComputeMessage(this._computation);
+                this._socket.send(JSON.stringify(message.toJson()));
 
-            this._computation.setState(Computation.STATE_STARTED);
-        });
+                this._computation.setState(Computation.STATE_STARTED);
+            });
+        };
 
-        this._socket.addEventListener('message', (ev: MessageEvent) => {
-            this._computation.setState(Computation.STATE_BACKEND_CONNECTED);
+        this._socket.onmessage = (ev: MessageEvent) => {
+            this._zone.run(() => {
+                this._computation.setState(Computation.STATE_BACKEND_CONNECTED);
 
-            this._computation = this._messageResolverService.resolveComputeMessage(
-                JSON.parse(ev.data),
-                this._computation
-            );
+                this._computation = this._messageResolverService.resolveComputeMessage(
+                    JSON.parse(ev.data),
+                    this._computation
+                );
 
-            if (this._computation.isComplete()) {
-                this._socket.close();
+                if (this._computation.isComplete()) {
+                    this._socket.close();
 
-                this.decrypt();
-            }
-        });
+                    this.decrypt();
+                }
+            });
+        };
+
     }
 
 }

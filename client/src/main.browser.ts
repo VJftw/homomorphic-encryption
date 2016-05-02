@@ -1,48 +1,45 @@
 /*
  * Providers provided by Angular
  */
-import * as ngCore from 'angular2/core';
-import * as browser from 'angular2/platform/browser';
-import {ROUTER_PROVIDERS, LocationStrategy, HashLocationStrategy} from 'angular2/router';
-import {HTTP_PROVIDERS} from 'angular2/http';
+import {bootstrap} from 'angular2/platform/browser';
+/*
+* Platform and Environment
+* our providers/directives/pipes
+*/
+import {DIRECTIVES, PIPES, PROVIDERS} from './platform/browser';
+import {ENV_PROVIDERS} from './platform/environment';
 
 /*
- * App Environment Providers
- * providers that only live in certain environment
- */
-const ENV_PROVIDERS = [];
-
-if ('production' === ENV) {
-  ngCore.enableProdMode();
-  ENV_PROVIDERS.push(browser.ELEMENT_PROBE_PROVIDERS_PROD_MODE);
-} else {
-  ENV_PROVIDERS.push(browser.ELEMENT_PROBE_PROVIDERS);
-}
-
-/*
- * App Component
- * our top level component that holds all of our components
- */
-import {App} from './app/app';
+* App Component
+* our top level component that holds all of our components
+*/
+import {App, APP_PROVIDERS} from './app';
 
 /*
  * Bootstrap our Angular app with a top level component `App` and inject
  * our Services and Providers into Angular's dependency injection
  */
-export function main() {
-  return browser.bootstrap(App, [
+export function main(initialHmrState?: any): Promise<any> {
+
+  return bootstrap(App, [
+    ...PROVIDERS,
     ...ENV_PROVIDERS,
-    ...HTTP_PROVIDERS,
-    ...ROUTER_PROVIDERS,
-    ngCore.provide(LocationStrategy, { useClass: HashLocationStrategy })
+    ...DIRECTIVES,
+    ...PIPES,
+    ...APP_PROVIDERS
   ])
   .catch(err => console.error(err));
+
 }
+
+
+
 
 
 /*
  * Vendors
  * For vendors for example jQuery, Lodash, angular2-jwt just import them anywhere in your app
+ * You can also import them in vendors to ensure that they are bundled in one file
  * Also see custom-typings.d.ts as you also need to do `typings install x` where `x` is your module
  */
 
@@ -51,24 +48,11 @@ export function main() {
  * Hot Module Reload
  * experimental version by @gdi2290
  */
-
-function bootstrapDomReady() {
-  // bootstrap after document is ready
-  return document.addEventListener('DOMContentLoaded', main);
-}
-
-if ('development' === ENV) {
+if ('development' === ENV && HMR === true) {
   // activate hot module reload
-  if (process.env.HMR) {
-    if (document.readyState === 'complete') {
-      main();
-    } else {
-      bootstrapDomReady();
-    }
-    module.hot.accept();
-  } else {
-    bootstrapDomReady();
-  }
+  let ngHmr = require('angular2-hmr');
+  ngHmr.hotModuleReplacement(main, module);
 } else {
-  bootstrapDomReady();
+  // bootstrap when documetn is ready
+  document.addEventListener('DOMContentLoaded', () => main());
 }
