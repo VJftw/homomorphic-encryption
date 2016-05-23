@@ -1,3 +1,0 @@
-computations:
-    type: rest
-    resource: app_computations.controller
