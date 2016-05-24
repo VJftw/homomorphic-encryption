@@ -128,7 +128,7 @@ export class ComputationRunnerService {
     private connectToWebSocket(): void {
         console.log('Backend Address: ' + BACKEND_ADDRESS);
 
-        this._socket = new WebSocket('http://' + BACKEND_ADDRESS + '/ws/v1/compute');
+        this._socket = new WebSocket('ws://' + BACKEND_ADDRESS + '/ws/v1/compute');
 
         this._socket.onopen = (ev: Event) => {
             this._zone.run(() => {

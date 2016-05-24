@@ -10,4 +10,5 @@ type WSComputeMessageData struct {
 	ComputeSteps []string          `json:"computeSteps"`
 	HashID       string            `json:"hashId"`
 	PublicScope  map[string]string `json:"publicScope"`
+	Results      []string          `json:"results"`
 }
