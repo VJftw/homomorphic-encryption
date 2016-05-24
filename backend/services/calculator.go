@@ -70,7 +70,7 @@ func (calc *Calculator) resolveToInt(variable string, scope map[string]string) i
 	value, err := strconv.Atoi(variable)
 
 	if err != nil {
-
+		value, _ = strconv.Atoi(scope[variable])
 	}
 
 	return value
