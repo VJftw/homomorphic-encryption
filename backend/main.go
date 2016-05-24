@@ -1,11 +1,8 @@
 package main
 
-import (
-	"log"
-	"net/http"
-)
+import "net/http"
 
-func main() {
+func Main() {
 	router := NewRouter()
-	log.Fatal(http.ListenAndServe(":8080", router))
+	http.Handle("/", router)
 }
