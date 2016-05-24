@@ -38,4 +38,19 @@ func TestCompute(t *testing.T) {
 		)
 	})
 
+	Convey("It should resolve variables from the scope", t, func() {
+		So(calculator.Compute("a + b", map[string]string{"a": "12", "b": "3"}),
+			ShouldEqual,
+			15,
+		)
+		So(calculator.Compute("(a + b) * 4", map[string]string{"a": "12", "b": "3"}),
+			ShouldEqual,
+			60,
+		)
+		So(calculator.Compute("(a + b) - c", map[string]string{"a": "12", "b": "3", "c": "5"}),
+			ShouldEqual,
+			10,
+		)
+	})
+
 }
