@@ -106,7 +106,7 @@ export class ComputationRunnerService {
         JSON_HEADERS.append('Content-Type', 'application/json');
         let message = this._messageProviderService.createRegisterMessage(this._computation);
         this._http.post(
-            'http://' + API_ADDRESS + '/api/computations',
+            'http://' + API_ADDRESS + '/api/v1/computations',
             JSON.stringify(message.toJson()),
             { headers: JSON_HEADERS }
         ).subscribe(
@@ -128,7 +128,7 @@ export class ComputationRunnerService {
     private connectToWebSocket(): void {
         console.log('Backend Address: ' + BACKEND_ADDRESS);
 
-        this._socket = new WebSocket('ws://' + BACKEND_ADDRESS);
+        this._socket = new WebSocket('http://' + BACKEND_ADDRESS + '/ws/v1/compute');
 
         this._socket.onopen = (ev: Event) => {
             this._zone.run(() => {

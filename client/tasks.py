@@ -146,8 +146,8 @@ def build_prod():
     build("Dockerfile.dev", dev_container_name)
 
     print("Starting Development container")
-    prod_api_url = 'api.homomorphic-encryption.vjpatel.me'
-    prod_backend_url = 'backend.homomorphic-encryption.vjpatel.me'
+    prod_api_url = 'homomorphic-encryption.appspot.com'
+    prod_backend_url = 'homomorphic-encryption.appspot.com'
 
     container = cli.create_container(
         image=dev_container_name,
@@ -187,7 +187,7 @@ def build_prod():
         tag=branch_container_tag
     )
 
-    clean(['dist'])
+    # clean(['dist'])
 
 @task
 def pre_clean():
