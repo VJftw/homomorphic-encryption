@@ -1,8 +1,24 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/facebookgo/inject"
+)
+
+type HomomorphicEncryptionBackendApp struct {
+	Router *Router `inject:""`
+}
+
+func (app *HomomorphicEncryptionBackendApp) init() {
+	app.Router.init()
+}
 
 func Main() {
-	router := NewRouter()
-	http.Handle("/", router)
+	var app HomomorphicEncryptionBackendApp
+
+	inject.Populate(&app)
+	app.init()
+
+	http.Handle("/", app.Router.GetRouter())
 }

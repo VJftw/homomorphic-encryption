@@ -12,17 +12,28 @@ import (
 	"github.com/vjftw/homomorphic-encryption/backend/controllers"
 )
 
-func NewRouter() http.Handler {
+type Router struct {
+	ComputationController *controllers.ComputationController `inject:""`
+	WSComputeController   *controllers.WSComputeController   `inject:""`
+	router                http.Handler
+}
+
+func (r *Router) init() {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/", handler)
-	controllers.AddComputationRoutes(router)
+	r.ComputationController.AddRoutes(router)
+	r.WSComputeController.AddRoutes(router)
 
 	corsHandler := cors.Default()
 	xffmw, _ := xff.Default()
 	chain := alice.New(corsHandler.Handler, xffmw.Handler, formjson.Handler)
 
-	return chain.Then(router)
+	r.router = chain.Then(router)
+}
+
+func (r *Router) GetRouter() http.Handler {
+	return r.router
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
