@@ -3,7 +3,7 @@ FROM vjftw/ubuntu:latest
 # Add Home directory for User
 RUN mkhomedir_helper app && chown -R app:app /home/app
 
-RUN curl -sL https://deb.nodesource.com/setup_5.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
 
 # For PhantomJS installation
 RUN apt-get update && apt-get install -y \
