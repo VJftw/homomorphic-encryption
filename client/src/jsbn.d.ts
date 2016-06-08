@@ -13,13 +13,7 @@ declare module 'jsbn' {
     export class BigInteger {
         static ZERO: BigInteger;
         static ONE: BigInteger;
-
-        constructor(a: number, c: RandomGenerator);
-        constructor(a: number, b: number, c: RandomGenerator);
-        constructor(a: string, b?: number);
-        constructor(a: number[], b?: number);
-        constructor(a: BigInteger);
-
+        
         s: number;
         t: number;
         data: number[]; // forge specific
@@ -31,6 +25,12 @@ declare module 'jsbn' {
         FV: number;
         F1: number;
         F2: number;
+
+        constructor(a: number, c: RandomGenerator);
+        constructor(a: number, b: number, c: RandomGenerator);
+        constructor(a: string, b?: number);
+        constructor(a: number[], b?: number);
+        constructor(a: BigInteger);
 
         // am: Compute w_j += (x*this_i), propagate carries,
         am(i: number, x: number, w: BigInteger, j: number, c: number, n: number): number;
