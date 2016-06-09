@@ -13,7 +13,7 @@ declare module 'jsbn' {
     export class BigInteger {
         static ZERO: BigInteger;
         static ONE: BigInteger;
-        
+
         s: number;
         t: number;
         data: number[]; // forge specific
