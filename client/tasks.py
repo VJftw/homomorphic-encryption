@@ -158,7 +158,6 @@ def build_prod():
             '{0}:/app'.format(os.getcwd())
         ]),
         environment={
-            'NODE_ENV': 'production',
             'CLIENT_API_ADDRESS': prod_api_url,
             'CLIENT_BACKEND_ADDRESS': prod_backend_url
         }
