@@ -1,5 +1,5 @@
-hash: b837988246fee7acfc5f4397460337424017c18073d320ec172a36f726ae63f8
-updated: 2016-07-13T15:59:03.684200722+01:00
+hash: 86bfdd03b7c8ecf900f6e57fbb7b39032b4eeeda50a677843be1a368e8e3ac38
+updated: 2016-07-13T18:41:28.259492519+01:00
 imports:
 - name: github.com/facebookgo/inject
   version: 643b7206b487b04fbea325cf6e8d06a66f8db772
@@ -27,16 +27,6 @@ imports:
   version: 38289458361633f7e6eeca8b360224436a6b8bf3
 - name: github.com/speps/go-hashids
   version: d1d57a886aa7e3ef6092b70ceab077e35ee8e0ce
-- name: github.com/vjftw/homomorphic-encryption
-  version: 159a030308e076bb335796c49895ba74c4f14bdd
-  subpackages:
-  - backend
-  - backend/controllers
-  - backend/errors
-  - backend/messages
-  - backend/models
-  - backend/providers
-  - backend/services
 - name: golang.org/x/net
   version: f841c39de738b1d0df95b5a7187744f0e03d8112
   subpackages:
