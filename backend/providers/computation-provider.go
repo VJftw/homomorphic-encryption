@@ -1,6 +1,7 @@
 package providers
 
 import (
+	"encoding/json"
 	"net/http"
 	"strings"
 	"time"
@@ -16,7 +17,7 @@ type ComputationProvider struct {
 func (cP *ComputationProvider) NewFromRequest(r *http.Request) (models.Computation, error) {
 	var c models.Computation
 
-	c.EncryptionScheme = r.FormValue("encryptionScheme")
+	json.NewDecoder(r.Body).Decode(&c)
 
 	if c.EncryptionScheme == "" {
 		return c, new(errors.MissingEncryptionScheme)
