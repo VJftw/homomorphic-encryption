@@ -106,7 +106,7 @@ export class ComputationRunnerService {
         JSON_HEADERS.append('Content-Type', 'application/json');
         let message = this._messageProviderService.createRegisterMessage(this._computation);
         this._http.post(
-            'http://' + API_ADDRESS + '/api/v1/computations',
+            '//' + API_ADDRESS + '/api/v1/computations',
             JSON.stringify(message.toJson()),
             { headers: JSON_HEADERS }
         ).subscribe(
