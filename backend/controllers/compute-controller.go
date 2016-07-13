@@ -25,23 +25,24 @@ func (cC ComputeController) AddRoutes(r *mux.Router) {
 func (cC ComputeController) postHandler(w http.ResponseWriter, r *http.Request) {
 	// ctx := appengine.NewContxt(r)
 
-	w.Header.Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "application/json")
 
 	var m messages.WSComputeMessage
-	err := json.Unmarshal(&m, r.Body)
-
+	err := json.NewDecoder(r.Body).Decode(&m)
 	if err != nil {
-
+		// 400 on Error
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
-	fmt.Println(computeMessage)
+	fmt.Println(m)
 
 	for _, step := range m.Data.ComputeSteps {
 		varName := strings.Split(step, " = ")[0]
 		compute := strings.Split(step, " = ")[1]
-		result := cC.Calculator.Compute(compute, m.PublicScope)
-		m.PublicScope[varName] = strconv.Itoa(result)
-		m.Results = append(m.Results, strconv.Itoa(result))
+		result := cC.Calculator.Compute(compute, m.Data.PublicScope)
+		m.Data.PublicScope[varName] = strconv.Itoa(result)
+		m.Data.Results = append(m.Data.Results, strconv.Itoa(result))
 	}
 
 	j, _ := json.Marshal(m)
