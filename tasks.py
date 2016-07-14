@@ -11,13 +11,13 @@ def appengine_deploy(ctx):
     """
     appcfg.py
     """
-    # Docker.clean(cli, ["appengine/client-dist"])
-    # print("\nBuilding Client\n")
-    # os.chdir("client")
-    # ctx.run("invoke build_prod")
-    #
-    # print("\nCopying built Client\n")
-    # shutil.copytree("dist", "../appengine/client-dist")
+    Docker.clean(cli, ["appengine/client-dist"])
+    print("\nBuilding Client\n")
+    os.chdir("client")
+    ctx.run("invoke build_prod")
+
+    print("\nCopying built Client\n")
+    shutil.copytree("dist", "../appengine/client-dist")
 
     print("\nUploading to Google AppEngine\n")
     # os.chdir("../appengine")
