@@ -20,7 +20,7 @@ def appengine_deploy(ctx):
     shutil.copytree("dist", "../appengine/client-dist")
 
     print("\nUploading to Google AppEngine\n")
-    # os.chdir("../appengine")
+    os.chdir("../appengine")
     ctx.run("appcfg.py -A homomorphic-encryption -V v1 update ./")
     pass
 
