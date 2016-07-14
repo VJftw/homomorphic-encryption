@@ -26,8 +26,8 @@ const METADATA = webpackMerge(commonConfig.metadata, {
 /**
 * Homomorphic Encryption Constants
 */
-const API_ADDRESS = process.env.CLIENT_API_ADDRESS || '0.0.0.0:8080';
-const BACKEND_ADDRESS = process.env.CLIENT_BACKEND_ADDRESS || '0.0.0.0:8080';
+const API_ADDRESS = process.env.CLIENT_API_ADDRESS || 'localhost:8080';
+const BACKEND_ADDRESS = process.env.CLIENT_BACKEND_ADDRESS || 'localhost:8080';
 
 /**
 * Webpack configuration

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 	"strings"
 
 	"github.com/gorilla/mux"
@@ -41,11 +40,11 @@ func (cC ComputeController) postHandler(w http.ResponseWriter, r *http.Request) 
 		varName := strings.Split(step, " = ")[0]
 		compute := strings.Split(step, " = ")[1]
 		result := cC.Calculator.Compute(compute, m.Data.PublicScope)
-		m.Data.PublicScope[varName] = strconv.Itoa(result)
-		m.Data.Results = append(m.Data.Results, strconv.Itoa(result))
+		m.Data.PublicScope[varName] = result
+		m.Data.Results = append(m.Data.Results, result)
 	}
 
-	j, _ := json.Marshal(m)
+	j, _ := json.Marshal(m.Data)
 	w.WriteHeader(http.StatusCreated)
 	w.Write(j)
 }

@@ -3,7 +3,7 @@ import {Computation} from '../model/computation';
 import {Computer} from '../encryption/computer';
 import {StageProviderService} from '../provider/stage.provider.service';
 import {MessageResolverService} from '../resolver/message.resolver.service';
-import {Http} from 'angular2/http';
+import {Http, Response} from 'angular2/http';
 import {StepProviderService} from '../provider/step.provider.service';
 import {MessageProviderService} from '../provider/message.provider.service';
 import {BigInteger} from 'jsbn';
@@ -95,6 +95,7 @@ export class ComputationRunnerService {
         });
 
         this._computation.setC(this._computation.getFromScope('c'));
+        this._computation.setState(Computation.STATE_COMPLETE);
     }
 
     private registerComputation(): void {
@@ -144,11 +145,12 @@ export class ComputationRunnerService {
         );
     }
 
-    private completeCompute(data) {
+    private completeCompute(data: Response) {
         this._computation.setState(Computation.STATE_BACKEND_CONNECTED);
+        console.log(data.json());
 
         this._computation = this._messageResolverService.resolveComputeMessage(
-            JSON.parse(data),
+            data.json(),
             this._computation
         );
 

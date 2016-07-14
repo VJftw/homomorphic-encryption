@@ -3,7 +3,6 @@ package controllers
 import (
 	"log"
 	"net/http"
-	"strconv"
 	"strings"
 
 	"github.com/gorilla/mux"
@@ -51,8 +50,8 @@ func (wscC *WSComputeController) handleComputation(c messages.WSComputeMessageDa
 		varName := strings.Split(step, " = ")[0]
 		compute := strings.Split(step, " = ")[1]
 		result := wscC.Calculator.Compute(compute, c.PublicScope)
-		c.PublicScope[varName] = strconv.Itoa(result)
-		c.Results = append(c.Results, strconv.Itoa(result))
+		c.PublicScope[varName] = result
+		c.Results = append(c.Results, result)
 
 		ws.WriteJSON(c)
 	}
