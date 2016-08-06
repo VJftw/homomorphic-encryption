@@ -1,0 +1,15 @@
+application: homomorphic-encryption
+runtime: go
+api_version: go1
+auto_id_policy: default
+handlers:
+- url: /(.*\.(html|css|js))$
+  static_files: client-dist/\1
+  upload: client-dist/.*\.(html|css|js)$
+
+- url: /?
+  static_files: client-dist/index.html
+  upload: client-dist/index.html
+
+- url: /api/(.*)?
+  script: _go_app

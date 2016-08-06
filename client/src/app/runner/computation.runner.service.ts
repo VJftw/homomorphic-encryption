@@ -3,7 +3,7 @@ import {Computation} from '../model/computation';
 import {Computer} from '../encryption/computer';
 import {StageProviderService} from '../provider/stage.provider.service';
 import {MessageResolverService} from '../resolver/message.resolver.service';
-import {Http} from 'angular2/http';
+import {Http, Response} from 'angular2/http';
 import {StepProviderService} from '../provider/step.provider.service';
 import {MessageProviderService} from '../provider/message.provider.service';
 import {BigInteger} from 'jsbn';
@@ -17,7 +17,7 @@ import {NgZone} from 'angular2/core';
 export class ComputationRunnerService {
 
     private _computation: Computation;
-    private _socket: WebSocket;
+    // private _socket: WebSocket;
 
     constructor(
         private _computer: Computer,
@@ -95,6 +95,7 @@ export class ComputationRunnerService {
         });
 
         this._computation.setC(this._computation.getFromScope('c'));
+        this._computation.setState(Computation.STATE_COMPLETE);
     }
 
     private registerComputation(): void {
@@ -106,14 +107,13 @@ export class ComputationRunnerService {
         JSON_HEADERS.append('Content-Type', 'application/json');
         let message = this._messageProviderService.createRegisterMessage(this._computation);
         this._http.post(
-            'http://' + API_ADDRESS + '/api/computations',
+            '//' + API_ADDRESS + '/api/v1/computations',
             JSON.stringify(message.toJson()),
             { headers: JSON_HEADERS }
         ).subscribe(
             data => this.registerSuccess(data),
             err => console.log(err)
-            )
-            ;
+        );
     }
 
     private registerSuccess(data) {
@@ -122,40 +122,72 @@ export class ComputationRunnerService {
             this._computation
         );
 
-        this.connectToWebSocket();
+        // this.connectToWebSocket();
+        this.doCompute();
     }
 
-    private connectToWebSocket(): void {
+    private doCompute() {
         console.log('Backend Address: ' + BACKEND_ADDRESS);
 
-        this._socket = new WebSocket('ws://' + BACKEND_ADDRESS);
+        const JSON_HEADERS = new Headers();
+        JSON_HEADERS.append('Accept', 'application/json');
+        JSON_HEADERS.append('Content-Type', 'application/json');
 
-        this._socket.onopen = (ev: Event) => {
-            this._zone.run(() => {
-                let message = this._messageProviderService.createComputeMessage(this._computation);
-                this._socket.send(JSON.stringify(message.toJson()));
-
-                this._computation.setState(Computation.STATE_STARTED);
-            });
-        };
-
-        this._socket.onmessage = (ev: MessageEvent) => {
-            this._zone.run(() => {
-                this._computation.setState(Computation.STATE_BACKEND_CONNECTED);
-
-                this._computation = this._messageResolverService.resolveComputeMessage(
-                    JSON.parse(ev.data),
-                    this._computation
-                );
-
-                if (this._computation.isComplete()) {
-                    this._socket.close();
-
-                    this.decrypt();
-                }
-            });
-        };
-
+        let message = this._messageProviderService.createComputeMessage(this._computation);
+        this._computation.setState(Computation.STATE_STARTED);
+        this._http.post(
+            '//' + API_ADDRESS + '/api/v1/compute',
+            JSON.stringify(message.toJson()),
+            { headers: JSON_HEADERS }
+        ).subscribe(
+            data => this.completeCompute(data),
+            err => console.log(err)
+        );
     }
+
+    private completeCompute(data: Response) {
+        this._computation.setState(Computation.STATE_BACKEND_CONNECTED);
+        console.log(data.json());
+
+        this._computation = this._messageResolverService.resolveComputeMessage(
+            data.json(),
+            this._computation
+        );
+
+        this.decrypt();
+    }
+
+    // private connectToWebSocket(): void {
+    //     console.log('Backend Address: ' + BACKEND_ADDRESS);
+    //
+    //     this._socket = new WebSocket('ws://' + BACKEND_ADDRESS + '/ws/v1/compute');
+    //
+    //     this._socket.onopen = (ev: Event) => {
+    //         this._zone.run(() => {
+    //             let message = this._messageProviderService.createComputeMessage(this._computation);
+    //             this._socket.send(JSON.stringify(message.toJson()));
+    //
+    //             this._computation.setState(Computation.STATE_STARTED);
+    //         });
+    //     };
+    //
+    //     this._socket.onmessage = (ev: MessageEvent) => {
+    //         this._zone.run(() => {
+    //             this._computation.setState(Computation.STATE_BACKEND_CONNECTED);
+    //
+    //             this._computation = this._messageResolverService.resolveComputeMessage(
+    //                 JSON.parse(ev.data),
+    //                 this._computation
+    //             );
+    //
+    //             if (this._computation.isComplete()) {
+    //                 this._socket.close();
+    //
+    //                 this.decrypt();
+    //             }
+    //         });
+    //     };
+    //
+    // }
 
 }

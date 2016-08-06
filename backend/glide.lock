@@ -1,0 +1,62 @@
+hash: 86bfdd03b7c8ecf900f6e57fbb7b39032b4eeeda50a677843be1a368e8e3ac38
+updated: 2016-07-13T18:41:28.259492519+01:00
+imports:
+- name: github.com/facebookgo/inject
+  version: 643b7206b487b04fbea325cf6e8d06a66f8db772
+- name: github.com/facebookgo/structtag
+  version: 217e25fb96916cc60332e399c9aa63f5c422ceed
+- name: github.com/golang/protobuf
+  version: 874264fbbb43f4d91e999fecb4b40143ed611400
+  subpackages:
+  - proto
+- name: github.com/gorilla/context
+  version: aed02d124ae4a0e94fea4541c8effd05bf0c8296
+- name: github.com/gorilla/mux
+  version: 0eeaf8392f5b04950925b8a69fe70f110fa7cbfc
+- name: github.com/gorilla/websocket
+  version: 1f512fc3f05332ba7117626cdfb4e07474e58e60
+- name: github.com/justinas/alice
+  version: 052b8b6c18edb9db317af86806d8e00ebaa94160
+- name: github.com/rs/cors
+  version: a62a804a8a009876ca59105f7899938a1349f4b3
+- name: github.com/rs/formjson
+  version: 2efca5adca48617e701c80789a6fee68fdbb87a0
+- name: github.com/rs/xhandler
+  version: ed27b6fd65218132ee50cd95f38474a3d8a2cd12
+- name: github.com/sebest/xff
+  version: 38289458361633f7e6eeca8b360224436a6b8bf3
+- name: github.com/speps/go-hashids
+  version: d1d57a886aa7e3ef6092b70ceab077e35ee8e0ce
+- name: golang.org/x/net
+  version: f841c39de738b1d0df95b5a7187744f0e03d8112
+  subpackages:
+  - context
+- name: google.golang.org/appengine
+  version: 267c27e7492265b84fc6719503b14a1e17975d79
+  subpackages:
+  - datastore
+  - internal
+  - internal/app_identity
+  - internal/modules
+  - internal/datastore
+  - internal/base
+  - internal/log
+  - internal/remote_api
+testImports:
+- name: github.com/gopherjs/gopherjs
+  version: 090403452ab6979e3b7c054ceb7ee23da91b2ae4
+  subpackages:
+  - js
+- name: github.com/jtolds/gls
+  version: 8ddce2a84170772b95dd5d576c48d517b22cac63
+- name: github.com/smartystreets/assertions
+  version: 2063fd1cc7c975db70502811a34b06ad034ccdf2
+  subpackages:
+  - internal/go-render/render
+  - internal/oglematchers
+- name: github.com/smartystreets/goconvey
+  version: d4c757aa9afd1e2fc1832aaab209b5794eb336e1
+  subpackages:
+  - convey
+  - convey/reporting
+  - convey/gotest

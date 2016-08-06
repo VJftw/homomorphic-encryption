@@ -1,4 +1,0 @@
-injector
-autobahn[asyncio]
-redis
-python-dateutil

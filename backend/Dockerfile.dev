@@ -1,18 +1,5 @@
-FROM vjftw/ubuntu
+FROM golang:alpine
 
-# Install pip
-RUN curl -O https://bootstrap.pypa.io/get-pip.py
-RUN python3 get-pip.py
+RUN apk --update add curl git
 
-# Install app deps
-COPY requirements.txt /tmp/requirements.txt
-RUN pip3 install -r /tmp/requirements.txt
-
-# Install dev deps
-COPY tests/requirements.txt /tmp/requirements.txt
-RUN pip3 install -r /tmp/requirements.txt
-
-RUN rm /tmp/requirements.txt
-
-VOLUME /app
-EXPOSE 9000
+RUN curl https://glide.sh/get | sh
