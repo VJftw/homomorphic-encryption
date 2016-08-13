@@ -2,7 +2,7 @@ node {
 stage 'Unit Tests'
     env.CI = "true"
     checkout scm
-    parallel (
+    parallel ([
         backend: {
             withCredentials([
             [
@@ -36,8 +36,6 @@ stage 'Unit Tests'
                   invoke test
                 '''
               }
-              publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'client/coverage/PhantomJS 2.1.1 (Linux 0.0.0)', reportFiles: 'index.html', reportName: 'Client Test Coverage Report'])
-        },
-        failFase: false
-    )
+        }
+    ])
 }
