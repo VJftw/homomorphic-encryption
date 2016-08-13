@@ -28,14 +28,15 @@ stage 'Unit Tests'
               variable: 'GITHUB_AUTH_TOKEN'
             ]
             ]) {
-              wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm', 'defaultFg': 1, 'defaultBg': 2]) {
+                wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'XTerm', 'defaultFg': 1, 'defaultBg': 2]) {
                 sh '''
-                  set +x
-                  cd client
-                  invoke pre_clean
-                  invoke test
+                    set +x
+                    cd client
+                    invoke pre_clean
+                    invoke test
                 '''
-              }
+                }
+            }
         }
     ])
 }
