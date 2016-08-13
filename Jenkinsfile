@@ -37,6 +37,7 @@ stage 'Unit Tests'
                 '''
                 }
             }
+            publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'client/coverage/PhantomJS 2.1.1 (Linux 0.0.0)', reportFiles: 'index.html', reportName: 'Client Test Coverage Report'])
         }
     ])
 }
