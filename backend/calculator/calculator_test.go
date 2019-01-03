@@ -1,13 +1,13 @@
-package services
+package calculator_test
 
 import (
 	"testing"
 
+	"github.com/VJftw/homomorphic-encryption/backend/calculator"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestCompute(t *testing.T) {
-	calculator := Calculator{}
 	Convey("Should perform basic mathematical operations", t, func() {
 		So(calculator.Compute("3 + 5", make(map[string]string)),
 			ShouldEqual,

@@ -1,4 +1,4 @@
-package services
+package calculator
 
 import (
 	"log"
@@ -7,10 +7,7 @@ import (
 	"strings"
 )
 
-type Calculator struct {
-}
-
-func (calc *Calculator) Compute(calculation string, scope map[string]string) string {
+func Compute(calculation string, scope map[string]string) string {
 
 	calculation = strings.Replace(calculation, " ", "", -1)
 
@@ -20,7 +17,7 @@ func (calc *Calculator) Compute(calculation string, scope map[string]string) str
 
 		for _, bracketMatch := range bracketMatches {
 			bracketCalculation := bracketMatch[1 : len(bracketMatch)-1]
-			bracketResult := calc.singleCalculation(bracketCalculation, scope)
+			bracketResult := singleCalculation(bracketCalculation, scope)
 
 			calculation = strings.Replace(calculation, bracketMatch, bracketResult.String(), 1)
 		}
@@ -28,10 +25,10 @@ func (calc *Calculator) Compute(calculation string, scope map[string]string) str
 		bracketMatches = regex.FindAllString(calculation, -1)
 	}
 
-	return calc.singleCalculation(calculation, scope).String()
+	return singleCalculation(calculation, scope).String()
 }
 
-func (calc *Calculator) singleCalculation(calculation string, scope map[string]string) *big.Int {
+func singleCalculation(calculation string, scope map[string]string) *big.Int {
 	regex := regexp.MustCompile(`[\*\+\-\%\/\$\&]`)
 
 	foundOperators := regex.FindAllString(calculation, -1)
@@ -43,18 +40,18 @@ func (calc *Calculator) singleCalculation(calculation string, scope map[string]s
 
 	parts := regex.Split(calculation, -1)
 	if operator == "+" || operator == "-" || operator == "*" || operator == "%" || operator == "/" || operator == "$" {
-		return calc.twoValueCalculation(
-			calc.resolveToInt(parts[0], scope),
-			calc.resolveToInt(parts[1], scope),
+		return twoValueCalculation(
+			resolveToInt(parts[0], scope),
+			resolveToInt(parts[1], scope),
 			operator,
 		)
 	} else if operator == "&" {
 		regex = regexp.MustCompile(",")
 		g := regex.Split(parts[1], -1)
-		return calc.threeValueCalculation(
-			calc.resolveToInt(parts[0], scope),
-			calc.resolveToInt(g[0], scope),
-			calc.resolveToInt(g[1], scope),
+		return threeValueCalculation(
+			resolveToInt(parts[0], scope),
+			resolveToInt(g[0], scope),
+			resolveToInt(g[1], scope),
 			operator,
 		)
 	}
@@ -62,7 +59,7 @@ func (calc *Calculator) singleCalculation(calculation string, scope map[string]s
 	return nil
 }
 
-func (calc *Calculator) twoValueCalculation(a, b *big.Int, operator string) *big.Int {
+func twoValueCalculation(a, b *big.Int, operator string) *big.Int {
 	switch operator {
 	case "+":
 		return a.Add(a, b)
@@ -81,7 +78,7 @@ func (calc *Calculator) twoValueCalculation(a, b *big.Int, operator string) *big
 	return nil
 }
 
-func (calc Calculator) threeValueCalculation(a, b, c *big.Int, operator string) *big.Int {
+func threeValueCalculation(a, b, c *big.Int, operator string) *big.Int {
 	switch operator {
 	case "&":
 		return a.Exp(a, b, c)
@@ -89,7 +86,7 @@ func (calc Calculator) threeValueCalculation(a, b, c *big.Int, operator string) 
 	return nil
 }
 
-func (calc *Calculator) resolveToInt(variable string, scope map[string]string) *big.Int {
+func resolveToInt(variable string, scope map[string]string) *big.Int {
 	value := new(big.Int)
 	_, success := value.SetString(variable, 10)
 

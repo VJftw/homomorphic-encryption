@@ -1,16 +1,16 @@
-import {Injectable} from 'angular2/core';
-import {Computation} from '../model/computation';
-import {Computer} from '../encryption/computer';
-import {StageProviderService} from '../provider/stage.provider.service';
-import {MessageResolverService} from '../resolver/message.resolver.service';
-import {Http, Response} from 'angular2/http';
-import {StepProviderService} from '../provider/step.provider.service';
-import {MessageProviderService} from '../provider/message.provider.service';
-import {BigInteger} from 'jsbn';
-import {Stage} from '../model/computation/stage';
-import {Step} from '../model/computation/step';
-import {Headers} from 'angular2/http';
-import {NgZone} from 'angular2/core';
+import { Injectable } from 'angular2/core';
+import { Computation } from '../model/computation';
+import { Computer } from '../encryption/computer';
+import { StageProviderService } from '../provider/stage.provider.service';
+import { MessageResolverService } from '../resolver/message.resolver.service';
+import { Http, Response } from 'angular2/http';
+import { StepProviderService } from '../provider/step.provider.service';
+import { MessageProviderService } from '../provider/message.provider.service';
+import { BigInteger } from 'jsbn';
+import { Stage } from '../model/computation/stage';
+import { Step } from '../model/computation/step';
+import { Headers } from 'angular2/http';
+import { NgZone } from 'angular2/core';
 
 
 @Injectable()
@@ -107,7 +107,7 @@ export class ComputationRunnerService {
         JSON_HEADERS.append('Content-Type', 'application/json');
         let message = this._messageProviderService.createRegisterMessage(this._computation);
         this._http.post(
-            '//' + API_ADDRESS + '/api/v1/computations',
+            '//' + API_ADDRESS + '/v1/compute',
             JSON.stringify(message.toJson()),
             { headers: JSON_HEADERS }
         ).subscribe(
@@ -136,7 +136,7 @@ export class ComputationRunnerService {
         let message = this._messageProviderService.createComputeMessage(this._computation);
         this._computation.setState(Computation.STATE_STARTED);
         this._http.post(
-            '//' + API_ADDRESS + '/api/v1/compute',
+            '//' + API_ADDRESS + '/v1/compute',
             JSON.stringify(message.toJson()),
             { headers: JSON_HEADERS }
         ).subscribe(

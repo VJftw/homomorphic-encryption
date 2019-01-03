@@ -2,34 +2,31 @@ package main
 
 import (
 	"log"
-	"net/http"
 
-	"github.com/facebookgo/inject"
+	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-lambda-go/lambda"
+	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 )
 
-type HomomorphicEncryptionBackendApp struct {
-	Router *Router `inject:""`
+var ginLambda *ginadapter.GinLambda
+
+func init() {
+	log.Printf("Gin cold start")
+	r := gin.Default()
+
+	r.Use(cors.Default())
+	r.POST("/v1/compute", postCompute)
+
+	ginLambda = ginadapter.New(r)
 }
 
-func initApp() HomomorphicEncryptionBackendApp {
-
-	var app HomomorphicEncryptionBackendApp
-
-	inject.Populate(&app)
-
-	app.Router.init()
-
-	return app
-}
-
-// AppEngine - For use in Google AppEngine
-func AppEngine() {
-	app := initApp()
-
-	http.Handle("/", app.Router.GetRouter())
+func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	// If no name is provided in the HTTP request body, throw an error
+	return ginLambda.Proxy(req)
 }
 
 func main() {
-	app := initApp()
-	log.Fatal(http.ListenAndServe(":8080", app.Router.GetRouter()))
+	lambda.Start(Handler)
 }

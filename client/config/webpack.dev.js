@@ -18,7 +18,7 @@ const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
 const HMR = helpers.hasProcessFlag('hot');
 const METADATA = webpackMerge(commonConfig.metadata, {
     host: process.env.HOST || 'localhost',
-    port: process.env.PORT || 3000,
+    port: process.env.PORT || 4200,
     ENV: ENV,
     HMR: HMR
 });
@@ -26,8 +26,8 @@ const METADATA = webpackMerge(commonConfig.metadata, {
 /**
 * Homomorphic Encryption Constants
 */
-const API_ADDRESS = process.env.CLIENT_API_ADDRESS || 'localhost:8080';
-const BACKEND_ADDRESS = process.env.CLIENT_BACKEND_ADDRESS || 'localhost:8080';
+const API_ADDRESS = process.env.CLIENT_API_ADDRESS || 'localhost:3000';
+const BACKEND_ADDRESS = process.env.CLIENT_BACKEND_ADDRESS || 'localhost:3000';
 
 /**
 * Webpack configuration
