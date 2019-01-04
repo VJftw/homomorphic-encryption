@@ -26,8 +26,11 @@ const METADATA = webpackMerge(commonConfig.metadata, {
 /**
 * Homomorphic Encryption Constants
 */
-const API_ADDRESS = process.env.CLIENT_API_ADDRESS || 'localhost:3000';
-const BACKEND_ADDRESS = process.env.CLIENT_BACKEND_ADDRESS || 'localhost:3000';
+// const API_ADDRESS = process.env.CLIENT_API_ADDRESS || 'localhost:3000';
+// const BACKEND_ADDRESS = process.env.CLIENT_BACKEND_ADDRESS || 'localhost:3000';
+
+const API_ADDRESS = process.env.CLIENT_API_ADDRESS || 'll3fllyt5c.execute-api.us-east-1.amazonaws.com/test';
+const BACKEND_ADDRESS = process.env.CLIENT_BACKEND_ADDRESS || 'll3fllyt5c.execute-api.us-east-1.amazonaws.com/test';
 
 /**
 * Webpack configuration
