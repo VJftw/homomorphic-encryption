@@ -69,8 +69,9 @@ output "base_url" {
 }
 
 resource "aws_api_gateway_base_path_mapping" "base_path_mapping" {
-  api_id      = "${aws_api_gateway_rest_api.backend.id}"
-  
+  api_id     = "${aws_api_gateway_rest_api.backend.id}"
+  stage_name = "production"
+
   domain_name = "${aws_api_gateway_domain_name.backend.domain_name}"
 }
 

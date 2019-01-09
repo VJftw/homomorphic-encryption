@@ -10,3 +10,5 @@ terraform {
     region  = "eu-west-1"
   }
 }
+
+variable "version" {}

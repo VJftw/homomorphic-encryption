@@ -19,10 +19,10 @@ EOF
 }
 
 resource "aws_lambda_function" "backend" {
-  filename         = "../backend/bin/compute.zip"
-  function_name    = "api_homomorphic_encryption"
-  role             = "${aws_iam_role.lambda.arn}"
-  handler          = "main"
-  source_code_hash = "${base64sha256(file("../backend/bin/compute.zip"))}"
-  runtime          = "go1.x"
+  function_name = "api_homomorphic_encryption"
+  role          = "${aws_iam_role.lambda.arn}"
+  handler       = "main"
+  s3_bucket     = "${aws_s3_bucket.api.bucket}"
+  s3_key        = "${var.version}.zip"
+  runtime       = "go1.x"
 }
