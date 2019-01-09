@@ -17,6 +17,9 @@ func init() {
 	r := gin.Default()
 
 	r.Use(cors.Default())
+	r.GET("/v1/health", func(c *gin.Context) {
+		c.JSON(200, "OK")
+	})
 	r.POST("/v1/compute", postCompute)
 
 	ginLambda = ginadapter.New(r)
