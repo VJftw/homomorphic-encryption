@@ -1,0 +1,25 @@
+[package]
+name = "frontend"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+api = { path = "../api" }
+calculator = { path = "../calculator" }
+
+yew = { version = "0.21", features = ["csr"] }
+chrono = "0.4"
+futures = "0.3"
+gloo-net = "0.5"
+yew-router = "0.18"
+wasm-bindgen-futures = "0.4"
+serde = { version = "1.0", features = ["derive"] }
+wasm-bindgen = "0.2.89"
+gloo-timers = "0.3.0"
+gloo-events = "0.2.0"
+web-sys = { version = "0.3.66", features = ["Node", "Element", "HtmlCollection"] }
+js-sys = "0.3.66"
+serde-wasm-bindgen = "0.6.3"
+serde_json = "1.0.108"

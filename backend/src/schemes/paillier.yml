@@ -1,0 +1,82 @@
+id: paillier
+name: Paillier
+description: >-
+  An additive homomorphic cryptosystem created by Pascal Paillier in 1999. It is
+  based on the composite residuosity problem, which describes how it is 
+  computationally difficult to decide whether a number \(z\) is an 
+  \(n\)-residue modulo \(n^2\) given by the existence of a \(y\) in 
+  \(z = y^n \bmod n^2\).
+bitLengths:
+  - bitLength: 8
+    maxInt: 99
+  - bitLength: 16
+    maxInt: 9999
+stages:
+  - name: Key Generation
+    pre_description: >-
+      This phase sets up the keys that are used in both encryption and 
+      decryption.
+    steps:
+      - description: A random prime number
+        compute: p = generateRandomPrime()
+      - description: A random prime number
+        compute: q = generateRandomPrime()
+      - description: \(p \times q\)
+        compute: n = p * q
+      - description: \(n + 1\)
+        compute: g = n + 1
+      - description: \(\phi(p \times q)\)
+        compute: l = (p - 1) * (q - 1)
+      - description: \(l^{-1} \bmod n\)
+        compute: m = l $ n
+    post_description: >-
+      The Public key consists of \((n)\) and the Private key consists of 
+      \((l, m)\).
+
+  - name: Encryption
+    pre_description: >- 
+      Next, we calculate \(aX\) and \(bX\) as our encrypted values of \(a\) and 
+      \(b\). Note that we only use our public key to encrypt the values.
+    steps:
+      - description: \(n^2\)
+        compute: nSq = n * n
+        expose: true
+      - description: A random number such that \(0 < r < n\) and \(gcd(r, n) = 1\)
+        compute: aR = randomRBetween0AndNWithGCD1(n)
+      - description: \((g^a \times aR^n) \bmod n^2\)
+        compute: aX = ((g & a,nSq) * (aR & n,nSq)) % nSq
+        expose: true
+      - description: A random number such that \(0 < r < n\) and \(gcd(r, n) = 1\)
+        compute: bR = randomRBetween0AndNWithGCD1(n)
+      - description: \((g^b \times bR^n) \bmod n^2\)
+        compute: bX = ((g & b,nSq) * (bR & n,nSq)) % nSq
+        expose: true
+    post_description: >-
+      \(aX\) and \(bX\) are one way without knowledge of \(l\), as per the 
+      composite residuosity problem.
+
+  - name: "Backend: Addition"
+    pre_description: >-
+      Any computer in the cloud can calculate the following without being able 
+      to learn the values of \(a\) or \(b\).
+    steps:
+      - description: \(aX \times bX \bmod n^2\)
+        compute: cX = (aX * bX) % nSq
+    post_description: >-
+      The homomorphic property of this cryptosystem is 
+      \( D(aX \times bX \bmod n^2) = a + b\) where \(D\) is the decryption 
+      algorithm.
+
+  - name: Decryption
+    pre_description: >-
+      Finally, using the decryption algorithm, we can get our answer for \(c\).
+    steps:
+      - description: \(cX^l \bmod n^2\)
+        compute: u = cX & l,nSq
+      - description: \(\frac{u - 1}{n}\)
+        compute: v = (u - 1) / n
+      - description: \( v \times m \bmod n \)
+        compute: c = ((u / n) * m) % n
+    post_description: >-
+      We are able to decrypt the returned \(cX\) because we know the value of 
+      \(l\) from our Private key.

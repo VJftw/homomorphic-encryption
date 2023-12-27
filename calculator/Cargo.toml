@@ -1,0 +1,13 @@
+[package]
+name = "calculator"
+description = "Calculator implementation used by frontend and backend"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+crypto-bigint = "0.5.5"
+num-bigint = "0.4.4"
+num-integer = "0.1.45"
+rand = "0.8.5"
+regex = "1.10.2"

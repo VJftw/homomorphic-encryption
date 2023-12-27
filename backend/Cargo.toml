@@ -1,0 +1,23 @@
+[package]
+name = "backend"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+api = { path = "../api" }
+calculator = { path = "../calculator" }
+
+axum = "0.7.2"
+http = "1.0.0"
+prost = "0.12.3"
+serde = { version = "1.0", features = ["derive"] }
+serde_yaml = "0.9.29"
+tokio = { version = "1.35.1", features = ["full"] }
+tonic = "0.10.2"
+tower = "0.4.13"
+tower-http = { version = "0.5.0", features = ["cors"] }
+
+[build-dependencies]
+tonic-build = "0.10.2"
