@@ -1,0 +1,5 @@
+filegroup(
+    name = "write_go_generated_src_files",
+    srcs = ["write_go_generated_src_files.bzl"],
+    visibility = ["//visibility:public"],
+)

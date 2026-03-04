@@ -1,0 +1,7 @@
+load("@gazelle//:def.bzl", "gazelle")
+
+exports_files(
+    srcs = ["go.mod"],
+)
+
+gazelle(name = "gazelle")

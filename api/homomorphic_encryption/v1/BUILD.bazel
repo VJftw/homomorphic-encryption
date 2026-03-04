@@ -1,0 +1,32 @@
+load("@protobuf//bazel:proto_library.bzl", "proto_library")
+load("@rules_go//go:def.bzl", "go_library")
+load("@rules_go//proto:def.bzl", "go_proto_library")
+load("@rules_proto_grpc_go//:defs.bzl", "go_grpc_compile", "go_grpc_library")
+load("//macros:write_go_generated_src_files.bzl", "write_go_generated_source_files")
+
+proto_library(
+    name = "v1_proto",
+    srcs = ["homomorphic_encryption.proto"],
+    visibility = ["//visibility:public"],
+    deps = ["@protobuf//:any_proto"],
+)
+
+go_proto_library(
+    name = "v1",
+    importpath = "github.com/vjftw/homomorphic-encryption/api/homomorphic-encryption/v1",
+    proto = ":v1_proto",
+    visibility = ["//visibility:public"],
+)
+
+go_library(
+    name = "api",
+    embed = [":v1"],
+    importpath = "github.com/vjftw/homomorphic-encryption/api/homomorphic-encryption/v1",
+    visibility = ["//visibility:public"],
+)
+
+write_go_generated_source_files(
+    name = "gen_srcs",
+    output_files = ["homomorphic_encryption.pb.go"],
+    target = ":v1",
+)

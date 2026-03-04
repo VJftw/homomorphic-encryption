@@ -1,0 +1,13 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "providers",
+    srcs = ["computation-provider.go"],
+    importpath = "github.com/vjftw/homomorphic-encryption/backend/providers",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//backend/errors",
+        "//backend/models",
+        "@com_github_speps_go_hashids//:go_default_library",
+    ],
+)

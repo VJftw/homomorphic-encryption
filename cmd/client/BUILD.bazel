@@ -1,0 +1,43 @@
+load("@bazel_skylib//rules:run_binary.bzl", "run_binary")
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_binary(
+    name = "client",
+    embed = [":client_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_binary(
+    name = "client_wasm",
+    embed = [":client_lib"],
+    goarch = "wasm",
+    goos = "js",
+    visibility = ["//visibility:public"],
+)
+
+go_library(
+    name = "client_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/vjftw/homomorphic-encryption/cmd/client",
+    visibility = ["//visibility:private"],
+    deps = ["@com_github_maxence_charriere_go_app_v10//pkg/app:go_default_library"],
+)
+
+run_binary(
+    name = "site",
+    srcs = [":client_wasm"],
+    outs = [
+        "app.js",
+        "app-worker.js",
+        "index.html",
+        "manifest.webmanifest",
+        "wasm_exec.js",
+        "web/app.wasm",
+    ],
+    args = [
+        "$(execpath index.html)",
+        "$(location :client_wasm)",
+    ],
+    tool = ":client",
+    visibility = ["//visibility:public"],
+)
