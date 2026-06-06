@@ -1,0 +1,15 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "static",
+    srcs = ["static.go"],
+    embedsrcs = [":frontend"],
+    importpath = "github.com/vjftw/homomorphic-encryption/pkg/frontend/static",
+    visibility = ["//visibility:private"],
+    deps = [],
+)
+
+filegroup(
+    name = "frontend",
+    srcs = ["//pkg/frontend/static/build:site"],
+)

@@ -1,3 +1,6 @@
+# stop replacing rules-proto-grpc rules (https://github.com/rules-proto-grpc/rules_proto_grpc/issues/220)
+# gazelle:proto disable_global
+
 load("@gazelle//:def.bzl", "gazelle")
 
 exports_files(

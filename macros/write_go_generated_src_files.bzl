@@ -13,7 +13,6 @@ def write_go_generated_source_files(name, target, output_files):
     native.filegroup(
         name = files_target,
         srcs = [target],
-        output_group = "go_generated_srcs",
     )
 
     copy_to_directory(

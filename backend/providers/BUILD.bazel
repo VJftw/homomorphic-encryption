@@ -8,6 +8,6 @@ go_library(
     deps = [
         "//backend/errors",
         "//backend/models",
-        "@com_github_speps_go_hashids//:go_default_library",
+        "@com_github_speps_go_hashids//:go-hashids",
     ],
 )

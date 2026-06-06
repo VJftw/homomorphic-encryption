@@ -1,0 +1,15 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_binary(
+    name = "serve",
+    data = ["//cmd/client:site"],
+    embed = [":serve_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_library(
+    name = "serve_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/vjftw/homomorphic-encryption/cmd/frontend/serve",
+    visibility = ["//visibility:private"],
+)

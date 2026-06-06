@@ -11,5 +11,5 @@ go_test(
     name = "services_test",
     srcs = ["calculator_test.go"],
     embed = [":services"],
-    deps = ["@com_github_smartystreets_goconvey//convey:go_default_library"],
+    deps = ["@com_github_smartystreets_goconvey//convey"],
 )

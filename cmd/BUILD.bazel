@@ -1,0 +1,39 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_binary(
+    name = "server",
+    embed = [":cmd_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_library(
+    name = "server_lib",
+    srcs = ["main.go"],
+    embedsrcs = [":frontend"],
+    importpath = "github.com/vjftw/homomorphic-encryption/cmd/server",
+    visibility = ["//visibility:private"],
+    deps = [
+        "@//api/homomorphic_encryption/v1:v1_go",
+        # "@com_github_grpc_ecosystem_grpc_gateway_v2//runtime",
+        "@org_golang_google_grpc//:grpc",
+        "@org_golang_google_grpc//credentials/insecure",
+    ],
+)
+
+filegroup(
+    name = "frontend",
+    srcs = ["//cmd/frontend:site"],
+)
+
+go_library(
+    name = "cmd_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/vjftw/homomorphic-encryption/cmd",
+    visibility = ["//visibility:private"],
+    deps = [
+        "@//api/homomorphic_encryption/v1:v1_go",
+        "@@grpc_ecosystem_grpc_gateway+//runtime",
+        "@org_golang_google_grpc//:grpc",
+        "@org_golang_google_grpc//credentials/insecure",
+    ],
+)

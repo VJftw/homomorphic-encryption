@@ -10,11 +10,11 @@ go_library(
     visibility = ["//visibility:private"],
     deps = [
         "//backend/controllers",
-        "@com_github_facebookgo_inject//:go_default_library",
-        "@com_github_gorilla_mux//:go_default_library",
-        "@com_github_justinas_alice//:go_default_library",
-        "@com_github_rs_cors//:go_default_library",
-        "@com_github_sebest_xff//:go_default_library",
+        "@com_github_facebookgo_inject//:inject",
+        "@com_github_gorilla_mux//:mux",
+        "@com_github_justinas_alice//:alice",
+        "@com_github_rs_cors//:cors",
+        "@com_github_sebest_xff//:xff",
     ],
 )
 

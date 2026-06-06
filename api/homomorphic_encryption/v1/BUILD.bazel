@@ -1,32 +1,41 @@
+# Tell Gazelle to stop replacing rules-proto-grpc rules.
+# (https://github.com/rules-proto-grpc/rules_proto_grpc/issues/220)
+# gazelle:ignore
 load("@protobuf//bazel:proto_library.bzl", "proto_library")
-load("@rules_go//go:def.bzl", "go_library")
-load("@rules_go//proto:def.bzl", "go_proto_library")
-load("@rules_proto_grpc_go//:defs.bzl", "go_grpc_compile", "go_grpc_library")
+load("@rules_proto_grpc_grpc_gateway//:defs.bzl", "gateway_grpc_library", "gateway_openapiv2_combined_compile")
 load("//macros:write_go_generated_src_files.bzl", "write_go_generated_source_files")
 
 proto_library(
-    name = "v1_proto",
+    name = "v1",
     srcs = ["homomorphic_encryption.proto"],
     visibility = ["//visibility:public"],
-    deps = ["@protobuf//:any_proto"],
+    deps = [
+        "@googleapis//google/api:annotations_proto",
+        "@protobuf//:any_proto",
+    ],
 )
 
-go_proto_library(
-    name = "v1",
-    importpath = "github.com/vjftw/homomorphic-encryption/api/homomorphic-encryption/v1",
-    proto = ":v1_proto",
+gateway_grpc_library(
+    name = "v1_go",
+    importpath = "github.com/vjftw/homomorphic-encryption/api/homomorphic_encryption/v1",
+    protos = [":v1"],
     visibility = ["//visibility:public"],
+    deps = [
+        "@org_golang_google_genproto_googleapis_api//annotations",
+    ],
 )
 
-go_library(
-    name = "api",
-    embed = [":v1"],
-    importpath = "github.com/vjftw/homomorphic-encryption/api/homomorphic-encryption/v1",
-    visibility = ["//visibility:public"],
+gateway_openapiv2_combined_compile(
+    name = "v1_openapiv2",
+    protos = [":v1"],
 )
 
 write_go_generated_source_files(
     name = "gen_srcs",
-    output_files = ["homomorphic_encryption.pb.go"],
-    target = ":v1",
+    output_files = [
+        "homomorphic_encryption.pb.go",
+        "homomorphic_encryption.pb.gw.go",
+        "homomorphic_encryption_grpc.pb.go",
+    ],
+    target = ":v1_go_pb",
 )
