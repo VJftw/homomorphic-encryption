@@ -7,35 +7,42 @@ load("//macros:write_go_generated_src_files.bzl", "write_go_generated_source_fil
 
 proto_library(
     name = "v1",
-    srcs = ["homomorphic_encryption.proto"],
+    srcs = [
+        "compute_service.proto",
+        "v1.proto",
+    ],
     visibility = ["//visibility:public"],
     deps = [
+        "@@grpc_ecosystem_grpc_gateway+//protoc-gen-openapiv2/options:options_proto",
         "@googleapis//google/api:annotations_proto",
         "@protobuf//:any_proto",
     ],
 )
 
+gateway_openapiv2_combined_compile(
+    name = "openapiv2_json",
+    protos = [":v1"],
+    visibility = ["//visibility:public"],
+)
+
 gateway_grpc_library(
-    name = "v1_go",
-    importpath = "github.com/vjftw/homomorphic-encryption/api/homomorphic_encryption/v1",
+    name = "go",
+    importpath = "github.com/vjftw/homomorphic-encryption/api/v1",
     protos = [":v1"],
     visibility = ["//visibility:public"],
     deps = [
+        "@@grpc_ecosystem_grpc_gateway+//protoc-gen-openapiv2/options",
         "@org_golang_google_genproto_googleapis_api//annotations",
     ],
-)
-
-gateway_openapiv2_combined_compile(
-    name = "v1_openapiv2",
-    protos = [":v1"],
 )
 
 write_go_generated_source_files(
     name = "gen_srcs",
     output_files = [
-        "homomorphic_encryption.pb.go",
-        "homomorphic_encryption.pb.gw.go",
-        "homomorphic_encryption_grpc.pb.go",
+        "v1.pb.go",
+        "compute_service.pb.gw.go",
+        "compute_service_grpc.pb.go",
+        "compute_service.pb.go",
     ],
-    target = ":v1_go_pb",
+    target = ":go_pb",
 )

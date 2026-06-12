@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v6.33.4
-// source: api/homomorphic_encryption/v1/homomorphic_encryption.proto
+// source: api/v1/compute_service.proto
 
 package v1
 
@@ -117,5 +117,5 @@ var ComputeService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/homomorphic_encryption/v1/homomorphic_encryption.proto",
+	Metadata: "api/v1/compute_service.proto",
 }

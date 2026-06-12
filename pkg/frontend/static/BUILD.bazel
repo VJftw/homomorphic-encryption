@@ -5,8 +5,7 @@ go_library(
     srcs = ["static.go"],
     embedsrcs = [":frontend"],
     importpath = "github.com/vjftw/homomorphic-encryption/pkg/frontend/static",
-    visibility = ["//visibility:private"],
-    deps = [],
+    visibility = ["//cmd:__subpackages__"],
 )
 
 filegroup(

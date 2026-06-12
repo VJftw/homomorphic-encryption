@@ -1,0 +1,26 @@
+load("@bazel_skylib//rules:copy_directory.bzl", "copy_directory")
+load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "docs",
+    srcs = ["docs.go"],
+    embedsrcs = [
+        ":swagger_ui",
+        ":v1_openapiv2_json",
+    ],
+    importpath = "github.com/vjftw/homomorphic-encryption/pkg/docs",
+    visibility = ["//cmd:__subpackages__"],
+)
+
+copy_directory(
+    name = "swagger_ui",
+    src = "@@+http_archive+swagger_ui//:swagger_ui",
+    out = "swagger_ui",
+)
+
+copy_file(
+    name = "v1_openapiv2_json",
+    src = "//api/v1:openapiv2_json",
+    out = "v1.openapiv2.json",
+)

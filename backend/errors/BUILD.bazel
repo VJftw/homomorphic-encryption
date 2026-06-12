@@ -1,8 +1,0 @@
-load("@rules_go//go:def.bzl", "go_library")
-
-go_library(
-    name = "errors",
-    srcs = ["MissingEncryptionScheme.go"],
-    importpath = "github.com/vjftw/homomorphic-encryption/backend/errors",
-    visibility = ["//visibility:public"],
-)

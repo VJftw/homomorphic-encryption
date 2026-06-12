@@ -11,43 +11,85 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"golang.org/x/sync/errgroup"
 
-	v1 "github.com/vjftw/homomorphic-encryption/api/homomorphic_encryption/v1"
+	v1 "github.com/vjftw/homomorphic-encryption/api/v1"
+	"github.com/vjftw/homomorphic-encryption/pkg/compute"
+	"github.com/vjftw/homomorphic-encryption/pkg/docs"
+	"github.com/vjftw/homomorphic-encryption/pkg/frontend/static"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-//go:embed cmd/frontend/index.html
-var frontend []byte
-
 func main() {
-	log.Printf("Hello World!")
 
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	g, gCtx := errgroup.WithContext(ctx)
+
+	g.Go(func() error {
+		return httpServer(gCtx)
+	})
+
+	g.Go(func() error {
+		return grpcServer(gCtx)
+	})
+
+	if err := g.Wait(); err != nil {
+		log.Fatalf("%v", err)
+	}
+}
+
+func httpServer(ctx context.Context) error {
+	mux := http.NewServeMux()
+
+	mux.Handle("/", static.FileServer())
+
+	grpcMux := runtime.NewServeMux()
+	mux.Handle("/api/v1/", http.StripPrefix("/api/v1", grpcMux))
+	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
+	err := v1.RegisterComputeServiceHandlerFromEndpoint(ctx, grpcMux, "localhost:3001", opts)
+	if err != nil {
+		return err
+	}
+
+	mux.Handle("/docs/", http.StripPrefix("/docs", docs.FileServer()))
+
+	server := &http.Server{
+		Addr:    ":3000",
+		Handler: mux,
+	}
+
+	go func() {
+		<-ctx.Done()
+		shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+		server.Shutdown(shutdownCtx)
+	}()
+
+	return server.ListenAndServe()
+}
+
+func grpcServer(ctx context.Context) error {
 	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", 3001))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	var opts []grpc.ServerOption
 	grpcServer := grpc.NewServer(opts...)
-	v1.RegisterComputeServiceServer(grpcServer, v1.UnimplementedComputeServiceServer{})
-	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
-	}
-}
+	v1.RegisterComputeServiceServer(grpcServer, compute.NewV1ServiceServer())
 
-func gw(ctx context.Context) error {
-	// Register gRPC server endpoint
-	grpcServerEndpoint := "localhost:3000"
-	// Note: Make sure the gRPC server is running properly and accessible
-	mux := runtime.NewServeMux()
-	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
-	err := v1.RegisterComputeServiceHandlerFromEndpoint(ctx, mux, grpcServerEndpoint, opts)
-	if err != nil {
-		return err
-	}
+	go func() {
+		<-ctx.Done()
+		grpcServer.GracefulStop()
+	}()
 
-	// Start HTTP server (and proxy calls to gRPC server endpoint)
-	return http.ListenAndServe(":8081", mux)
+	return grpcServer.Serve(lis)
 }

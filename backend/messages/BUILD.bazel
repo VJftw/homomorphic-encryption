@@ -1,8 +1,0 @@
-load("@rules_go//go:def.bzl", "go_library")
-
-go_library(
-    name = "messages",
-    srcs = ["ws-compute.go"],
-    importpath = "github.com/vjftw/homomorphic-encryption/backend/messages",
-    visibility = ["//visibility:public"],
-)

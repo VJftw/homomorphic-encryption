@@ -2,31 +2,35 @@ load("@bazel_skylib//rules:run_binary.bzl", "run_binary")
 load("@rules_go//go:def.bzl", "go_binary", "go_library")
 
 go_binary(
-    name = "client",
-    embed = [":client_lib"],
+    name = "build",
+    embed = [":build_lib"],
     visibility = ["//visibility:public"],
 )
 
 go_binary(
-    name = "client_wasm",
-    embed = [":client_lib"],
+    name = "wasm",
+    embed = [":build_lib"],
     goarch = "wasm",
     goos = "js",
     visibility = ["//visibility:public"],
 )
 
 go_library(
-    name = "client_lib",
+    name = "build_lib",
     srcs = ["main.go"],
-    importpath = "github.com/vjftw/homomorphic-encryption/cmd/client",
+    importpath = "github.com/vjftw/homomorphic-encryption/pkg/frontend/static/build",
     visibility = ["//visibility:private"],
-    deps = ["@com_github_maxence_charriere_go_app_v10//pkg/app"],
+    deps = [
+        "//pkg/frontend",
+        "@com_github_maxence_charriere_go_app_v10//pkg/app",
+    ],
 )
 
 run_binary(
     name = "site",
-    srcs = [":client_wasm"],
+    srcs = [":wasm"],
     outs = [
+        "app.css",
         "app.js",
         "app-worker.js",
         "index.html",
@@ -36,16 +40,8 @@ run_binary(
     ],
     args = [
         "$(execpath index.html)",
-        "$(location :client_wasm)",
+        "$(location :wasm)",
     ],
-    tool = ":client",
+    tool = ":build",
     visibility = ["//visibility:public"],
-)
-
-go_library(
-    name = "frontend_lib",
-    srcs = ["main.go"],
-    importpath = "github.com/vjftw/homomorphic-encryption/cmd/frontend",
-    visibility = ["//visibility:private"],
-    deps = ["@com_github_maxence_charriere_go_app_v10//pkg/app"],
 )

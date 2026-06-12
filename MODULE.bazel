@@ -21,18 +21,29 @@ go_deps.from_file(go_mod = "//:go.mod")
 # All *direct* Go dependencies of the module have to be listed explicitly.
 use_repo(
     go_deps,
-    "com_github_facebookgo_inject",
-    "com_github_gorilla_mux",
-    "com_github_gorilla_websocket",
-    "com_github_justinas_alice",
     "com_github_maxence_charriere_go_app_v10",
-    "com_github_rs_cors",
-    "com_github_sebest_xff",
-    "com_github_smartystreets_goconvey",
-    "com_github_speps_go_hashids",
-    "org_golang_google_appengine",
+    "com_github_stretchr_testify",
     "org_golang_google_genproto_googleapis_api",
     "org_golang_google_grpc",
     "org_golang_google_protobuf",
-    "org_golang_x_net",
+    "org_golang_x_sync",
+)
+
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
+    name = "swagger_ui",
+    build_file_content = """
+load("@bazel_skylib//rules/directory:directory.bzl", "directory")
+directory(
+    name = "swagger_ui",
+    srcs = ["dist"],
+    visibility = ["//visibility:public"],
+)
+    """,
+    strip_prefix = "swagger-ui-5.32.6",
+    urls = [
+        "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v5.32.6.tar.gz",
+        "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v5.32.6.zip",
+    ],
 )

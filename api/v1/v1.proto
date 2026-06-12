@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package api.homomorphic_encryption.v1;
+
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/vjftw/homomorphic-encryption/api/homomorphic_encryption/v1";
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Homomorphic Encryption"
+    version: "1.0"
+    contact: {
+      name: "github.com/VJftw/homomorphic-encryption"
+      url: "https://github.com/VJftw/homomorphic-encryption"
+    }
+    license: {
+      name: "MIT License"
+      url: "https://github.com/VJftw/homomorphic-encryption/blob/main/LICENSE"
+    }
+  }
+
+  base_path: "/api/v1"
+  consumes: "application/json"
+  produces: "application/json"
+};
+
+// message Foo {
+// //   bar.Bar x = 1;
+//   google.protobuf.Any y = 2;
+// };

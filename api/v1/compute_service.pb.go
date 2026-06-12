@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v6.33.4
-// source: api/homomorphic_encryption/v1/homomorphic_encryption.proto
+// source: api/v1/compute_service.proto
 
 package v1
 
@@ -10,7 +10,6 @@ import (
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	_ "google.golang.org/protobuf/types/known/anypb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -33,7 +32,7 @@ type ComputeRequest struct {
 
 func (x *ComputeRequest) Reset() {
 	*x = ComputeRequest{}
-	mi := &file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_msgTypes[0]
+	mi := &file_api_v1_compute_service_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -45,7 +44,7 @@ func (x *ComputeRequest) String() string {
 func (*ComputeRequest) ProtoMessage() {}
 
 func (x *ComputeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_msgTypes[0]
+	mi := &file_api_v1_compute_service_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -58,7 +57,7 @@ func (x *ComputeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ComputeRequest.ProtoReflect.Descriptor instead.
 func (*ComputeRequest) Descriptor() ([]byte, []int) {
-	return file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_rawDescGZIP(), []int{0}
+	return file_api_v1_compute_service_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *ComputeRequest) GetPublicScope() map[string]string {
@@ -85,7 +84,7 @@ type ComputeResponse struct {
 
 func (x *ComputeResponse) Reset() {
 	*x = ComputeResponse{}
-	mi := &file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_msgTypes[1]
+	mi := &file_api_v1_compute_service_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -97,7 +96,7 @@ func (x *ComputeResponse) String() string {
 func (*ComputeResponse) ProtoMessage() {}
 
 func (x *ComputeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_msgTypes[1]
+	mi := &file_api_v1_compute_service_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -110,7 +109,7 @@ func (x *ComputeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ComputeResponse.ProtoReflect.Descriptor instead.
 func (*ComputeResponse) Descriptor() ([]byte, []int) {
-	return file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_rawDescGZIP(), []int{1}
+	return file_api_v1_compute_service_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *ComputeResponse) GetComputeRequest() *ComputeRequest {
@@ -127,11 +126,11 @@ func (x *ComputeResponse) GetPublicScope() map[string]string {
 	return nil
 }
 
-var File_api_homomorphic_encryption_v1_homomorphic_encryption_proto protoreflect.FileDescriptor
+var File_api_v1_compute_service_proto protoreflect.FileDescriptor
 
-const file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_rawDesc = "" +
+const file_api_v1_compute_service_proto_rawDesc = "" +
 	"\n" +
-	":api/homomorphic_encryption/v1/homomorphic_encryption.proto\x12\x1dapi.homomorphic_encryption.v1\x1a\x1cgoogle/api/annotations.proto\x1a\x19google/protobuf/any.proto\"\xc9\x01\n" +
+	"\x1capi/v1/compute_service.proto\x12\x1dapi.homomorphic_encryption.v1\x1a\x1cgoogle/api/annotations.proto\"\xc9\x01\n" +
 	"\x0eComputeRequest\x12a\n" +
 	"\fpublic_scope\x18\x01 \x03(\v2>.api.homomorphic_encryption.v1.ComputeRequest.PublicScopeEntryR\vpublicScope\x12\x14\n" +
 	"\x05steps\x18\x02 \x03(\tR\x05steps\x1a>\n" +
@@ -143,30 +142,30 @@ const file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_rawDesc = 
 	"\fpublic_scope\x18\x02 \x03(\v2?.api.homomorphic_encryption.v1.ComputeResponse.PublicScopeEntryR\vpublicScope\x1a>\n" +
 	"\x10PublicScopeEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x012\x98\x01\n" +
-	"\x0eComputeService\x12\x85\x01\n" +
-	"\aCompute\x12-.api.homomorphic_encryption.v1.ComputeRequest\x1a..api.homomorphic_encryption.v1.ComputeResponse\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/example/echoBGZEgithub.com/vjftw/homomorphic-encryption/api/homomorphic_encryption/v1b\x06proto3"
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x012\x8f\x01\n" +
+	"\x0eComputeService\x12}\n" +
+	"\aCompute\x12-.api.homomorphic_encryption.v1.ComputeRequest\x1a..api.homomorphic_encryption.v1.ComputeResponse\"\x13\x82\xd3\xe4\x93\x02\r:\x01*\"\b/computeBGZEgithub.com/vjftw/homomorphic-encryption/api/homomorphic_encryption/v1b\x06proto3"
 
 var (
-	file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_rawDescOnce sync.Once
-	file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_rawDescData []byte
+	file_api_v1_compute_service_proto_rawDescOnce sync.Once
+	file_api_v1_compute_service_proto_rawDescData []byte
 )
 
-func file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_rawDescGZIP() []byte {
-	file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_rawDescOnce.Do(func() {
-		file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_rawDesc), len(file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_rawDesc)))
+func file_api_v1_compute_service_proto_rawDescGZIP() []byte {
+	file_api_v1_compute_service_proto_rawDescOnce.Do(func() {
+		file_api_v1_compute_service_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_api_v1_compute_service_proto_rawDesc), len(file_api_v1_compute_service_proto_rawDesc)))
 	})
-	return file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_rawDescData
+	return file_api_v1_compute_service_proto_rawDescData
 }
 
-var file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
-var file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_goTypes = []any{
+var file_api_v1_compute_service_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_api_v1_compute_service_proto_goTypes = []any{
 	(*ComputeRequest)(nil),  // 0: api.homomorphic_encryption.v1.ComputeRequest
 	(*ComputeResponse)(nil), // 1: api.homomorphic_encryption.v1.ComputeResponse
 	nil,                     // 2: api.homomorphic_encryption.v1.ComputeRequest.PublicScopeEntry
 	nil,                     // 3: api.homomorphic_encryption.v1.ComputeResponse.PublicScopeEntry
 }
-var file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_depIdxs = []int32{
+var file_api_v1_compute_service_proto_depIdxs = []int32{
 	2, // 0: api.homomorphic_encryption.v1.ComputeRequest.public_scope:type_name -> api.homomorphic_encryption.v1.ComputeRequest.PublicScopeEntry
 	0, // 1: api.homomorphic_encryption.v1.ComputeResponse.compute_request:type_name -> api.homomorphic_encryption.v1.ComputeRequest
 	3, // 2: api.homomorphic_encryption.v1.ComputeResponse.public_scope:type_name -> api.homomorphic_encryption.v1.ComputeResponse.PublicScopeEntry
@@ -179,26 +178,26 @@ var file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_depIdxs = []
 	0, // [0:3] is the sub-list for field type_name
 }
 
-func init() { file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_init() }
-func file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_init() {
-	if File_api_homomorphic_encryption_v1_homomorphic_encryption_proto != nil {
+func init() { file_api_v1_compute_service_proto_init() }
+func file_api_v1_compute_service_proto_init() {
+	if File_api_v1_compute_service_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_rawDesc), len(file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_v1_compute_service_proto_rawDesc), len(file_api_v1_compute_service_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_goTypes,
-		DependencyIndexes: file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_depIdxs,
-		MessageInfos:      file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_msgTypes,
+		GoTypes:           file_api_v1_compute_service_proto_goTypes,
+		DependencyIndexes: file_api_v1_compute_service_proto_depIdxs,
+		MessageInfos:      file_api_v1_compute_service_proto_msgTypes,
 	}.Build()
-	File_api_homomorphic_encryption_v1_homomorphic_encryption_proto = out.File
-	file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_goTypes = nil
-	file_api_homomorphic_encryption_v1_homomorphic_encryption_proto_depIdxs = nil
+	File_api_v1_compute_service_proto = out.File
+	file_api_v1_compute_service_proto_goTypes = nil
+	file_api_v1_compute_service_proto_depIdxs = nil
 }
