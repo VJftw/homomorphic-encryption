@@ -3,8 +3,11 @@ load("@rules_go//go:def.bzl", "go_library")
 go_library(
     name = "frontend",
     srcs = [
+        "baseof.go",
         "frontend.go",
+        "index.go",
         "routes.go",
+        "schemes.go",
     ],
     importpath = "github.com/vjftw/homomorphic-encryption/pkg/frontend",
     visibility = ["//pkg/frontend:__subpackages__"],

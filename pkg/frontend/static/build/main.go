@@ -31,6 +31,9 @@ func main() {
 	if err := app.GenerateStaticWebsite(filepath.Dir(os.Args[1]), &app.Handler{
 		Name:        "Hello",
 		Description: "An Hello World! example",
+		Styles: []string{
+			"https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css",
+		},
 	}); err != nil {
 		log.Fatal(err)
 	}
