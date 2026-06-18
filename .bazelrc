@@ -1,0 +1,2 @@
+# Use prebuilt protoc if available instead of compiling from source.
+common --@protobuf//bazel/toolchains:prefer_prebuilt_protoc=true
