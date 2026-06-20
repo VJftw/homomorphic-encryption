@@ -15,6 +15,18 @@ go_binary(
     visibility = ["//visibility:public"],
 )
 
+run_binary(
+    name = "wasm_brotli",
+    srcs = [":wasm"],
+    outs = ["wasm.br"],
+    args = [
+        "$(location :wasm)",
+        "-o",
+        "$(execpath wasm.br)",
+    ],
+    tool = "@brotli",
+)
+
 go_library(
     name = "build_lib",
     srcs = ["main.go"],

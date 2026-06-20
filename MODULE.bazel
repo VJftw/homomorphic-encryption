@@ -8,6 +8,16 @@ bazel_dep(name = "googleapis", version = "0.0.0-20260525-ef19b7b7")
 bazel_dep(name = "gazelle", version = "0.51.0")
 bazel_dep(name = "bazel_skylib", version = "1.9.0")
 bazel_dep(name = "bazel_lib", version = "3.3.1")
+bazel_dep(name = "brotli", version = "1.2.0.bcr.1")
+bazel_dep(name = "hermetic_cc_toolchain", version = "4.1.0")
+
+toolchains = use_extension("@hermetic_cc_toolchain//toolchain:ext.bzl", "toolchains")
+use_repo(toolchains, "zig_sdk")
+
+register_toolchains(
+    "@zig_sdk//toolchain/...",
+    "@zig_sdk//libc_aware/toolchain/...",
+)
 
 go_sdk = use_extension("@rules_go//go:extensions.bzl", "go_sdk")
 
