@@ -1,3 +1,4 @@
+load("@bazel_skylib//rules:copy_directory.bzl", "copy_directory")
 load("@rules_go//go:def.bzl", "go_library")
 
 go_library(
@@ -9,9 +10,17 @@ go_library(
         "routes.go",
         "schemes.go",
     ],
+    embedsrcs = [":schemes"],
     importpath = "github.com/vjftw/homomorphic-encryption/pkg/frontend",
     visibility = ["//pkg/frontend:__subpackages__"],
     deps = [
         "@com_github_maxence_charriere_go_app_v10//pkg/app",
+        "@in_gopkg_yaml_v3//:yaml_v3",
     ],
+)
+
+copy_directory(
+    name = "schemes",
+    src = "//schemes",
+    out = "schemes",
 )

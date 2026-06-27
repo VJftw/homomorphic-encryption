@@ -1,6 +1,6 @@
 ---
-uniqueName: pailler
-readableName: Pailler
+id: pailler
+name: Pailler
 description: An additive homomorphic cryptosystem created by Pascal Pailler in 1999. It is based on the composite residuosity problem, which describes how it is computationally difficult to decide whether a number \(z\) is an \(n\)-residue modulo \(n^2\) given by the existence of a \(y\) in \(z = y^n \bmod n^2\).
 bitLengths:
   - bitLength: 8

@@ -7,6 +7,7 @@ require (
 	github.com/stretchr/testify v1.6.1
 	golang.org/x/sync v0.20.0
 	google.golang.org/protobuf v1.36.11
+	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
 )
 
 require (
@@ -15,7 +16,6 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.15.0 // indirect
 	golang.org/x/net v0.51.0 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c // indirect
 )
 
 require (

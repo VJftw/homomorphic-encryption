@@ -1,6 +1,6 @@
 ---
-uniqueName: gorti
-readableName: Gorti
+id: gorti
+name: Gorti
 description: An enhanced homomorphic cryptosystem originally designed by Gorti VNKV Subba Rao and Dr. Garimella Uma for secure transmissions in MANETs (Mobile Ad-hoc Networks). It relies on the large number factorisation problem to be secure.
 bitLengths:
   - bitLength: 16

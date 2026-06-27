@@ -1,6 +1,8 @@
 package frontend
 
-import "github.com/maxence-charriere/go-app/v10/pkg/app"
+import (
+	"github.com/maxence-charriere/go-app/v10/pkg/app"
+)
 
 type Index struct {
 	app.Compo
