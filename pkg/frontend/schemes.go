@@ -2,7 +2,6 @@ package frontend
 
 import (
 	"embed"
-	"encoding/json"
 	"fmt"
 	"log/slog"
 	"path/filepath"
@@ -45,12 +44,18 @@ func (c *Schemes) OnNav(ctx app.Context) {
 }
 
 func (c *Schemes) List() app.UI {
-	schemesJSON, err := json.MarshalIndent(c.schemesByID, "  ", "  ")
-	if err != nil {
-		panic(err)
-	}
+	// schemesJSON, err := json.MarshalIndent(c.schemesByID, "  ", "  ")
+	// if err != nil {
+	// 	panic(err)
+	// }
 
-	return app.Div().Text(string(schemesJSON))
+	return app.Div().Body(
+		app.Range(c.schemesByID).Map(func(k string) app.UI {
+			return app.Div().Text(c.schemesByID[k].Name)
+		}),
+	)
+
+	// return app.Div().Text(string(schemesJSON))
 }
 
 func (c *Schemes) Single(scheme Scheme) app.UI {
