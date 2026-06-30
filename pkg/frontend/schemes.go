@@ -51,11 +51,19 @@ func (c *Schemes) List() app.UI {
 
 	return app.Div().Body(
 		app.Range(c.schemesByID).Map(func(k string) app.UI {
-			return app.Div().Text(c.schemesByID[k].Name)
+			return app.Div().Body(
+				app.Button().Class("button is-primary").Value(c.schemesByID[k].ID).
+					OnClick(c.selectSchemeClickEvent).Text(c.schemesByID[k].Name),
+			)
 		}),
 	)
 
 	// return app.Div().Text(string(schemesJSON))
+}
+
+func (c *Schemes) selectSchemeClickEvent(ctx app.Context, e app.Event) {
+	v := ctx.JSSrc().Get("value")
+	ctx.Navigate("/schemes/" + v.String())
 }
 
 func (c *Schemes) Single(scheme Scheme) app.UI {
