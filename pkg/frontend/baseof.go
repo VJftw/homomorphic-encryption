@@ -9,12 +9,18 @@ type BaseOf struct {
 }
 
 func (c *BaseOf) Render() app.UI {
-	return app.Div().Class("container is-max-tablet").Body(
-		app.Section().Class("hero").Body(
-			app.Div().Class("hero-body is-centered").Body(
-				app.P().Class("title has-text-centered").Text("Homomorpic Encryption"),
-				app.P().Class("subtitle has-text-right").Body(
-					app.Text("by "), app.A().Text("VJ Patel").Href("https://vjpatel.me").Attr("target", "_blank"),
+	defer func() {
+		mathjax := app.Window().Get("MathJax")
+		mathjax.Call("typesetPromise")
+	}()
+	return app.Div().Class("container").Body(
+		app.Div().Class("container is-max-tablet").Body(
+			app.Section().Class("hero").Body(
+				app.Div().Class("hero-body is-centered").Body(
+					app.P().Class("title has-text-centered").Body(app.A().Text("Homomorpic Encryption").Href("/")),
+					app.P().Class("subtitle has-text-right").Body(
+						app.Text("by "), app.A().Text("VJ Patel").Href("https://vjpatel.me").Attr("target", "_blank"),
+					),
 				),
 			),
 		),

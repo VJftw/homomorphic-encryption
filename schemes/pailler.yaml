@@ -13,9 +13,9 @@ stages:
       preDescription: This phase sets up the keys that are used in both encryption and decryption.
       steps:
         - description: A random prime number
-          compute: p = generateRandomPrime()
+          compute: p = generateRandomPrime{}
         - description: A random prime number
-          compute: q = generateRandomPrime()
+          compute: q = generateRandomPrime{}
         - description: \(p \times q\)
           compute: n = p * q
           expose: true
@@ -24,7 +24,7 @@ stages:
         - description: \(\phi(p \times q)\)
           compute: l = (p - 1) * (q - 1)
         - description: \(l^{-1} \bmod n\)
-          compute: m = l $ n
+          compute: m = invmod{l, n}
       postDescription: The Public key consists of \((n)\) and the Private key consists of \((l, m)\).
   encryption:
     - name: Encryption
@@ -34,14 +34,14 @@ stages:
           compute: nSq = n * n
           expose: true
         - description: A random number such that \(0 < r < n\)
-          compute: aR = generateR(n)
+          compute: aR = generateR{n}
         - description: \((g^a \times aR^n) \bmod n^2\)
-          compute: aX = ((g & a,nSq) * (aR & n,nSq)) % nSq
+          compute: aX = mod{(expmod{g, a, nSq} * expmod{aR, n, nSq}), nSq}
           expose: true
         - description: A random number such that \(0 < r < n\)
-          compute: bR = generateR(n)
+          compute: bR = generateR{n}
         - description: \((g^b \times bR^n) \bmod n^2\)
-          compute: bX = ((g & b,nSq) * (bR & n,nSq)) % nSq
+          compute: bX = mod{(expmod{g, b, nSq} * expmod{bR, n, nSq}), nSq}
           expose: true
       postDescription: \(aX\) and \(bX\) are one way without knowledge of \(l\), as per the composite residuosity problem.
   backend:
@@ -50,16 +50,16 @@ stages:
       preDescription: Any computer in the cloud can calculate the following without being able to learn the values of \(a\) or \(b\).
       steps:
         - description: \(aX \times bX \bmod n^2\)
-          compute: cX = (aX * bX) % nSq
+          compute: cX = mod{(aX * bX), nSq}
       postDescription: The homomorphic property of this cryptosystem is \( D(aX \times bX \bmod n^2) = a + b\) where \(D\) is the decryption algorithm.
   decryption:
     - name: Decryption
       preDescription: Finally, using the decryption algorithm, we can get our answer for \(c\).
       steps:
         - description: \(cX^l \bmod n^2\)
-          compute: u = cX & l,nSq
+          compute: u = expmod{cX, l, nSq}
         - description: \(\frac{u - 1}{n}\)
           compute: v = (u - 1) / n
         - description: \( v \times m \bmod n \)
-          compute: c = ((u / n) * m) % n
+          compute: c = mod{((u / n) * m), n}
       postDescription: We are able to decrypt the returned \(cX\) because we know the value of \(l\) from our Private key.

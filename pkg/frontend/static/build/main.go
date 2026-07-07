@@ -34,6 +34,9 @@ func main() {
 		Styles: []string{
 			"https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css",
 		},
+		Scripts: []string{
+			"https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js",
+		},
 	}); err != nil {
 		log.Fatal(err)
 	}

@@ -23,54 +23,26 @@ type Schemes struct {
 }
 
 func (c *Schemes) Render() app.UI {
-
-	if scheme, ok := c.schemesByID[c.requestedSchemeId]; ok {
-		return c.Single(scheme)
-	}
-
-	return c.List()
-}
-
-func (c *Schemes) OnMount(ctx app.Context) {
-	slog.Info("OnMount")
-
 	if err := c.load(); err != nil {
 		slog.Error("onmount could not load schemes", slog.String("error", err.Error()))
 	}
+
+	if scheme, ok := c.schemesByID[c.requestedSchemeId]; ok {
+		return &SchemesSingle{scheme: scheme}
+	}
+
+	return &SchemesList{schemesByID: c.schemesByID}
 }
 
 func (c *Schemes) OnNav(ctx app.Context) {
 	c.requestedSchemeId = strings.TrimPrefix(ctx.Page().URL().Path, "/schemes/")
 }
 
-func (c *Schemes) List() app.UI {
-	// schemesJSON, err := json.MarshalIndent(c.schemesByID, "  ", "  ")
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-	return app.Div().Body(
-		app.Range(c.schemesByID).Map(func(k string) app.UI {
-			return app.Div().Body(
-				app.Button().Class("button is-primary").Value(c.schemesByID[k].ID).
-					OnClick(c.selectSchemeClickEvent).Text(c.schemesByID[k].Name),
-			)
-		}),
-	)
-
-	// return app.Div().Text(string(schemesJSON))
-}
-
-func (c *Schemes) selectSchemeClickEvent(ctx app.Context, e app.Event) {
-	v := ctx.JSSrc().Get("value")
-	ctx.Navigate("/schemes/" + v.String())
-}
-
-func (c *Schemes) Single(scheme Scheme) app.UI {
-	return app.Div().Text("Scheme: " + c.requestedSchemeId)
-}
-
 func (c *Schemes) load() error {
+	if len(c.schemesByID) > 0 {
+		return nil
+	}
+
 	c.schemesByID = map[string]Scheme{}
 	dirEntries, err := schemeConfigsFS.ReadDir("schemes")
 	if err != nil {

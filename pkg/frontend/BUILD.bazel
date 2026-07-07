@@ -9,13 +9,18 @@ go_library(
         "index.go",
         "routes.go",
         "schemes.go",
+        "schemes-list.go",
+        "schemes-single.go",
     ],
     embedsrcs = [":schemes"],
     importpath = "github.com/vjftw/homomorphic-encryption/pkg/frontend",
     visibility = ["//pkg/frontend:__subpackages__"],
     deps = [
+        "//api/v1:go",
+        "//pkg/compute",
         "@com_github_maxence_charriere_go_app_v10//pkg/app",
         "@in_gopkg_yaml_v3//:yaml_v3",
+        "@org_golang_google_protobuf//encoding/protojson",
     ],
 )
 

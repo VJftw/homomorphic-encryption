@@ -13,9 +13,9 @@ stages:
       preDescription: This phase sets up the keys that are used in both encryption and decryption.
       steps:
         - description: A random prime number
-          compute: p = generateRandomPrime()
+          compute: p = generateRandomPrime{}
         - description: A random prime number
-          compute: q = generateRandomPrime()
+          compute: q = generateRandomPrime{}
         - description: \(p \times q\)
           compute: m = p * q
       postDescription: The original paper uses \(p\) as a shared key among clients in a MANET. In this client-server model, we only have one client and so we only have a Secret key consisting of \((p, q, m)\).
@@ -24,14 +24,14 @@ stages:
       preDescription: Next, we calculate \(aX\) and \(bX\) as our encrypted values of \(a\) and \(b\).
       steps:
         - description: A random number
-          compute: aR = generateRandomPrime()
+          compute: aR = generateRandomPrime{}
         - description: \(a + aR \times p^q \bmod m\)
-          compute: aX = (a + (aR * (p & q,m))) % m
+          compute: aX = mod{a + (aR * expmod{p, q, m})), m)
           expose: true
         - description: A random number
-          compute: bR = generateRandomPrime()
+          compute: bR = generateRandomPrime{}
         - description: \(b + bR \times p^q \bmod m\)
-          compute: bX = (b + (bR * (p & q,m))) % m
+          compute: bX = mod{(b + (bR * expmod{p, q, m})), m)
           expose: true
       postDescription: \(aX\) and \(bX\) are one way as per the large number factorisation problem. In practice we would use much larger key-spaces (1024+ bit) to create a sufficiently hard enough problem.
   backend:
@@ -54,5 +54,5 @@ stages:
       preDescription: Finally, using the decryption algorithm, we can get our answer for \(c\).
       steps:
         - description: \(cX \bmod p\)
-          compute: c = cX % p
+          compute: c = mod{cX, p}
       postDescription: We are able to decrypt the returned \(cX\) becase we know the value of \(p\) from our Secret key (which would have been shared in a MANET).
